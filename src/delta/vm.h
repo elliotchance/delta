@@ -20,6 +20,7 @@ extern long start;
 int  delta_vm_init(DeltaCompiler *c);
 void delta_vm_print_ram(DeltaCompiler *c);
 int  delta_vm_prepare(DeltaCompiler *c);
+void delta_vm_print_variable(DeltaVariable *v);
 
 
 #endif

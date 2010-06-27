@@ -13,6 +13,8 @@
 #define DELTA_SHOW_BYTECODE 1
 
 static int var_temp = 0;
+static int arg_count = 0;
+static int* arg_ptr = NULL;
 
 
 DI new_DeltaInstruction0(DeltaByteCode bc)
@@ -27,7 +29,9 @@ DI new_DeltaInstruction1(DeltaByteCode bc, int destination)
 {
 	DI d;
 	d.bc = bc;
-	d.destination = destination;
+	d.args = 1;
+	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg[0] = destination;
 	return d;
 }
 
@@ -36,8 +40,10 @@ DI new_DeltaInstruction2(DeltaByteCode bc, int destination, int source1)
 {
 	DI d;
 	d.bc = bc;
-	d.destination = destination;
-	d.source1 = source1;
+	d.args = 2;
+	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg[0] = destination;
+	d.arg[1] = source1;
 	return d;
 }
 
@@ -46,9 +52,21 @@ DI new_DeltaInstruction3(DeltaByteCode bc, int destination, int source1, int sou
 {
 	DI d;
 	d.bc = bc;
-	d.destination = destination;
-	d.source1 = source1;
-	d.source2 = source2;
+	d.args = 3;
+	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg[0] = destination;
+	d.arg[1] = source1;
+	d.arg[2] = source2;
+	return d;
+}
+
+
+DI new_DeltaInstructionN(DeltaByteCode bc)
+{
+	DI d;
+	d.bc = bc;
+	d.args = arg_count;
+	d.arg = arg_ptr;
 	return d;
 }
 
@@ -247,7 +265,7 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 			found = *offset - orig;
 			break;
 		}
-		if(!isalnum(line[*offset]))
+		if(!isalnum(line[*offset]) && line[*offset] != '_')
 			break;
 	}
 	
@@ -272,7 +290,7 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		int result = delta_compile_line(c, r, strlen(r));
+		int result = 0; delta_compile_line(c, r, strlen(r));
 		printf("result = %d\n", result);
 		
 		// if there was a function, apply it now
@@ -307,7 +325,13 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 #if DELTA_SHOW_BYTECODE
 				printf("BYTECODE_OUT (%d, %d)\n", var_dest, var_id1);
 #endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_OUT, var_dest, var_id1));
+				DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_OUT));
+			}
+			else if(!strcmp(function_name, "array_push")) {
+#if DELTA_SHOW_BYTECODE
+				printf("BYTECODE_APH (%d, %d)\n", var_dest, var_id1);
+#endif
+				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_APH, var_dest, var_id1));
 			}
 			else {
 				printf("Can't find function '%s'!\n", function_name);
@@ -341,7 +365,7 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 	}
 	
 	for(; *offset < len; ++*offset) {
-		if(!isalnum(line[*offset]))
+		if(!isalnum(line[*offset]) && line[*offset] != '_')
 			break;
 	}
 	
@@ -351,16 +375,13 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 }
 
 
-int delta_compile_line(DeltaCompiler *c, char* line, int length)
+int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 {
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
-	int i = 0, j, k, total_tokens = 0;
-	
-	if(line[0] == '#')
-		return var_temp;
+	int i, j, k, total_tokens = 0;
 	
 	// first parse the line and look for variables and constants
-	while(i < length) {
+	for(i = 0; i < length; ) {
 		// skip any spaces before token
 		skip_spaces(line, &i);
 		
@@ -372,7 +393,7 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 			++var_temp;
 			c->constants[c->total_constants].type = DELTA_TYPE_STRING;
 			c->constants[c->total_constants].value.ptr =
-				delta_copy_substring(token, 1, strlen(token) - 2);
+			delta_copy_substring(token, 1, strlen(token) - 2);
 			c->constants[c->total_constants].ram_location = var_temp;
 			sprintf(token, "#%d", var_temp);
 			++c->total_constants;
@@ -401,14 +422,16 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 			tokens[total_tokens++] = token;
 	}
 	
-	if(total_tokens == 1) {
+	if(total_tokens == 0)
+		return var_temp;
+	else if(total_tokens == 1) {
 		// because we cant risk a constant being modified we will copy any constants out into a new
 		// address
 		int var_id1;
 		if(delta_is_declared(c, tokens[0]))
 			var_id1 = get_variable_id(c, tokens[0]);
 		else
-			var_id1 = var_temp - 1;
+			var_id1 = var_temp;
 		
 		return var_id1;
 	}
@@ -541,11 +564,6 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 		tokens[highest_op_pos - 1] = (char*) malloc(6);
 		sprintf(tokens[highest_op_pos - 1], "#%d", var_temp);
 		
-		/*for(k = 0; k < total_tokens; ++k) {
-			printf(" '%s'", tokens[k]);
-		}
-		printf("\n");*/
-		
 		for(k = 0; k < total_tokens - highest_op_pos - 2; ++k) {
 			tokens[highest_op_pos + k] = tokens[highest_op_pos + k + 2];
 		}
@@ -555,6 +573,42 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 	}
 	
 	return var_temp;
+}
+
+
+void delta_compile_line(DeltaCompiler *c, char* line, int length)
+{
+	// split the line on commas
+	printf("line = '%s'\n", line);
+	int total_parts = 0, i, last = -1;
+	int bcount1 = 0; // ()
+	char **parts = (char**) malloc(64 * sizeof(char*));
+	
+	for(i = 0; i < length; ++i) {
+		if(line[i] == '(')
+			++bcount1;
+		if(line[i] == ')')
+			--bcount1;
+		
+		if((line[i] == ',' && !bcount1) || i == length - 1) {
+			if(i == length - 1)
+				++i;
+				
+			parts[total_parts] = (char*) malloc(i - last);
+			strncpy(parts[total_parts], line + last + 1, i - last - 1);
+			++total_parts;
+			last = i;
+		}
+	}
+	
+	// for each part there will be a destination address
+	arg_count = total_parts + 1;
+	arg_ptr = (int*) calloc(arg_count, sizeof(int));
+	arg_ptr[0] = 0; // FIXME: this is the destination of the function
+	for(i = 0; i < total_parts; ++i) {
+		arg_ptr[i + 1] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
+		printf("part[%d] = '%s' -> %d\n", i, parts[i], arg_ptr[i + 1]);
+	}
 }
 
 

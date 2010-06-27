@@ -8,6 +8,14 @@
 #include "ins.h"
 #include "vm.h"
 #include <math.h>
+#include <string.h>
+
+
+#define DELTA_ARGS   (d->args - 1)
+#define DELTA_DEST   d->arg[0]
+#define DELTA_ARG0   d->arg[1]
+#define DELTA_ARG1   d->arg[2]
+#define DELTA_ARG(i) d->arg[i + 1]
 
 
 /**
@@ -33,9 +41,16 @@ inline double delta_cast_number(int address)
 	}
 	
 	if(ram[address].type == DELTA_TYPE_STRING) {
+		// TODO: do not cast if there is a loss of precision
 		ram[address].type == DELTA_TYPE_NUMBER;
 		ram[address].value.number = atof(ram[address].value.ptr);
 		return ram[address].value.number;
+	}
+	
+	if(ram[address].type == DELTA_TYPE_ARRAY) {
+		// arrays can never be converted into numbers so we only return the number of elements
+		// TODO: get the number of elements
+		return 0.0;
 	}
 	
 	// we should never get to this point but just in case
@@ -49,8 +64,8 @@ inline double delta_cast_number(int address)
 ins(ADD)
 {
 	// this is only numerical addition, so other types need to be cast to a number
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->source1) + delta_cast_number(d->source2);
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) + delta_cast_number(DELTA_ARG1);
 }
 
 
@@ -59,11 +74,11 @@ ins(ADD)
  */
 ins(CEQ)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) == delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) == delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -72,11 +87,11 @@ ins(CEQ)
  */
 ins(CGE)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) >= delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) >= delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -85,11 +100,11 @@ ins(CGE)
  */
 ins(CGT)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) > delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) > delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -98,11 +113,11 @@ ins(CGT)
  */
 ins(CLE)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) <= delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) <= delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -111,11 +126,11 @@ ins(CLE)
  */
 ins(CLT)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) < delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) < delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -124,11 +139,11 @@ ins(CLT)
  */
 ins(CNE)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(d->source1) != delta_cast_number(d->source2))
-		ram[d->destination].value.number = 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	if(delta_cast_number(DELTA_ARG0) != delta_cast_number(DELTA_ARG1))
+		ram[DELTA_DEST].value.number = 1;
 	else
-		ram[d->destination].value.number = 0;
+		ram[DELTA_DEST].value.number = 0;
 }
 
 
@@ -137,8 +152,8 @@ ins(CNE)
  */
 ins(DEC)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->destination) - 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_DEST) - 1;
 }
 
 
@@ -148,8 +163,8 @@ ins(DEC)
 ins(DIV)
 {
 	// this is only numerical division, so other types need to be cast to a number
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->source1) / delta_cast_number(d->source2);
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) / delta_cast_number(DELTA_ARG1);
 }
 
 
@@ -158,7 +173,7 @@ ins(DIV)
  */
 ins(GTO)
 {
-	stack_pos = d->destination;
+	stack_pos = DELTA_DEST;
 }
 
 
@@ -177,8 +192,8 @@ ins(IFS)
  */
 ins(INC)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->destination) + 1;
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_DEST) + 1;
 }
 
 
@@ -199,8 +214,8 @@ ins(LBL)
 ins(MUL)
 {
 	// this is only numerical multiplicaton, so other types need to be cast to a number
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->source1) * delta_cast_number(d->source2);
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) * delta_cast_number(DELTA_ARG1);
 }
 
 
@@ -219,17 +234,15 @@ ins(NUL)
  */
 ins(OUT)
 {
-	if(ram[d->source1].type == DELTA_TYPE_NULL)
-		printf("(null)");
-	else if(ram[d->source1].type == DELTA_TYPE_NUMBER)
-		printf("%g", ram[d->source1].value.number);
-	else if(ram[d->source1].type == DELTA_TYPE_STRING)
-		printf("%s", ram[d->source1].value.ptr);
+	int i;
+	for(i = 0; i < DELTA_ARGS; ++i) {
+		printf("DELTA_ARG(%d) = ", DELTA_ARG(i));
+		delta_vm_print_variable(&ram[DELTA_ARG(i)]);
+		printf("\n");
+	}
 	
 	// return null
-	ram[d->destination].type = DELTA_TYPE_NULL;
-	
-	printf("\n");
+	ram[DELTA_DEST].type = DELTA_TYPE_NULL;
 }
 
 
@@ -248,9 +261,9 @@ ins(RTN)
 ins(SET)
 {
 	// this copies the contents of a variable to a new location in RAM
-	ram[d->destination].type = ram[d->source1].type;
-	ram[d->destination].value.number = ram[d->source1].value.number;
-	ram[d->destination].value.ptr = ram[d->source1].value.ptr;
+	ram[DELTA_DEST].type = ram[DELTA_ARG0].type;
+	ram[DELTA_DEST].value.number = ram[DELTA_ARG0].value.number;
+	ram[DELTA_DEST].value.ptr = ram[DELTA_ARG0].value.ptr;
 }
 
 
@@ -259,8 +272,8 @@ ins(SET)
  */
 ins(SQT)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = sqrt(delta_cast_number(d->source1));
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = sqrt(delta_cast_number(DELTA_ARG0));
 }
 
 
@@ -269,8 +282,8 @@ ins(SQT)
  */
 ins(COS)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = cos(delta_cast_number(d->source1));
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = cos(delta_cast_number(DELTA_ARG0));
 }
 
 
@@ -279,8 +292,8 @@ ins(COS)
  */
 ins(SIN)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = sin(delta_cast_number(d->source1));
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = sin(delta_cast_number(DELTA_ARG0));
 }
 
 
@@ -289,8 +302,8 @@ ins(SIN)
  */
 ins(TAN)
 {
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = tan(delta_cast_number(d->source1));
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = tan(delta_cast_number(DELTA_ARG0));
 }
 
 
@@ -300,6 +313,37 @@ ins(TAN)
 ins(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
-	ram[d->destination].type = DELTA_TYPE_NUMBER;
-	ram[d->destination].value.number = delta_cast_number(d->source1) - delta_cast_number(d->source2);
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
+	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) - delta_cast_number(DELTA_ARG1);
+}
+
+
+/**
+ * @brief Push an element onto an array.
+ * If the type of variable is not an array its value will be taken and converted into the first
+ * element of the array resulting in a two element array.
+ */
+ins(APH)
+{
+	// first make sure source1 is an array
+	if(ram[DELTA_ARG0].type != DELTA_TYPE_ARRAY) {
+		ram[DELTA_ARG0].type = DELTA_TYPE_ARRAY;
+		ram[DELTA_ARG0].value.array.elements = 0;
+		ram[DELTA_ARG0].value.array.head = NULL;
+		ram[DELTA_ARG0].value.array.tail = NULL;
+	}
+	
+	// create the new element to push
+	DeltaArrayValue *dav = (DeltaArrayValue*) malloc(sizeof(DeltaArrayValue));
+	dav->key = (char*) malloc(6);
+	strcpy(dav->key, "hello");
+	dav->value = (char*) malloc(6);
+	strcpy(dav->value, "world");
+	
+	// push element
+	ram[DELTA_ARG0].value.array.head = dav;
+	ram[DELTA_ARG0].value.array.tail = dav;
+	
+	// increment the elements
+	++ram[DELTA_ARG0].value.array.elements;
 }

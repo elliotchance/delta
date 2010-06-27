@@ -10,6 +10,7 @@
 
 #define BYTECODE_NUL 0x0000 /* do nothing */
 
+
 //-----------------------------------------------
 // operators
 //-----------------------------------------------
@@ -42,15 +43,17 @@
 
 #define BYTECODE_RTN 0x0120 /* return */
 
+
 //-----------------------------------------------
 // functions
 //-----------------------------------------------
 
-#define BYTECODE_SQT 0x0200 /* sqrt()   square root */
-#define BYTECODE_OUT 0x0201 /* print()  print variable */
-#define BYTECODE_COS 0x0202 /* cos()    cosine (radians) */
-#define BYTECODE_SIN 0x0203 /* sin()    sin (radians) */
-#define BYTECODE_TAN 0x0204 /* tan()    tangent (radians) */
+#define BYTECODE_SQT 0x0200 // sqrt()        square root
+#define BYTECODE_OUT 0x0201 // print()       print variable
+#define BYTECODE_COS 0x0202 // cos()         cosine (radians)
+#define BYTECODE_SIN 0x0203 // sin()         sin (radians)
+#define BYTECODE_TAN 0x0204 // tan()         tangent (radians)
+#define BYTECODE_APH 0x0205 // array_push()  add item onto array
 
 
 #endif

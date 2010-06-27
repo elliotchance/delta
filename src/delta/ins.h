@@ -16,6 +16,7 @@
 double delta_cast_number(int address);
 
 ins(ADD); // +
+ins(APH); // array_push()
 ins(CEQ); // ==
 ins(CGE); // >=
 ins(CGT); // >

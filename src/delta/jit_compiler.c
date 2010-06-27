@@ -27,7 +27,7 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 	for(i = start; i < end; ++i) {
 		if(instructions[i].bc == BYTECODE_IFS) {
 			// copy in the boolean argument
-			jit_ldi_d(JIT_R0, &ram[instructions[i].source1].value.number);
+			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]].value.number);
 			jit_movi_d(JIT_R1, 0);
 			jit_bner_d(loop, JIT_R0, JIT_R1);
 		}
@@ -40,6 +40,7 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			
 			// these instructions are guaranteed to not change the stack position
 			     if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
+			else if(instructions[i].bc == BYTECODE_APH) jit_finish(ins_APH);
 			else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
 			else if(instructions[i].bc == BYTECODE_CGE) jit_finish(ins_CGE);
 			else if(instructions[i].bc == BYTECODE_CGT) jit_finish(ins_CGT);

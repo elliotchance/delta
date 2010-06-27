@@ -21,7 +21,23 @@ typedef char DeltaVariableType;
 #define DELTA_TYPE_NULL   0
 #define DELTA_TYPE_NUMBER 1
 #define DELTA_TYPE_STRING 2
-#define DELTA_TYPE_OBJECT 3
+#define DELTA_TYPE_ARRAY  3
+#define DELTA_TYPE_OBJECT 4
+
+
+typedef struct
+{
+	char* key;
+	char* value;
+} DeltaArrayValue;
+
+
+typedef struct
+{
+	int elements;
+	DeltaArrayValue *head;
+	DeltaArrayValue *tail;
+} DeltaArray;
 
 
 typedef struct
@@ -30,8 +46,14 @@ typedef struct
 	DeltaVariableType type;
 	union
 	{
+		//! Numerical value.
 		double number;
+		
+		//! String value.
 		char *ptr;
+		
+		//! Array value.
+		DeltaArray array;
 	} value;
 	int ram_location;
 } DeltaVariable;
@@ -52,9 +74,8 @@ struct DeltaInstruction
 {
 	stack_function f;
 	DeltaByteCode bc;
-	int destination;
-	int source1;
-	int source2;
+	int args;
+	int *arg;
 };
 typedef struct DeltaInstruction DI;
 
