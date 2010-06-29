@@ -33,7 +33,7 @@ DeltaObject*   new_DeltaObject(int total_functions);
 DeltaCompiler* new_DeltaCompiler();
 int            delta_compile_file(DeltaCompiler *c, const char* input_file);
 int            delta_compile_block(DeltaCompiler *c, char* block, int start, int end);
-void           delta_compile_line(DeltaCompiler *c, char* line, int length);
+int            delta_compile_line(DeltaCompiler *c, char* line, int length);
 void           delta_die(const char* msg);
 int            delta_is_string(char* test);
 char*          delta_copy_string(char* str);

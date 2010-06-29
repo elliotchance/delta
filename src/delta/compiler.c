@@ -11,10 +11,24 @@
 #include <ctype.h>
 
 #define DELTA_SHOW_BYTECODE 1
+#define DELTA_MAX_NESTED_FUNCTIONS 16
+#define DELTA_MAX_FUNCTION_ARGS 16
 
 static int var_temp = 0;
-static int arg_count = 0;
-static int* arg_ptr = NULL;
+static int *arg_count = NULL;
+static int **arg_ptr = NULL;
+static int arg_depth = 0;
+
+
+#define DELTA_ADD_BYTECODE(__BYTECODE) \
+	printf("BYTECODE_%s (", #__BYTECODE); \
+	int _k; \
+	arg_ptr[arg_depth][0] = var_dest; \
+	for(_k = 0; _k < arg_count[arg_depth]; ++_k) { \
+		printf(" %d", arg_ptr[arg_depth][_k]); \
+	} \
+	printf(" )\n"); \
+	DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
 
 
 DI new_DeltaInstruction0(DeltaByteCode bc)
@@ -65,8 +79,15 @@ DI new_DeltaInstructionN(DeltaByteCode bc)
 {
 	DI d;
 	d.bc = bc;
-	d.args = arg_count;
-	d.arg = arg_ptr;
+	
+	// we don't just assign the pointer we copy the data so that theres no danger of the vaues
+	// changing later and also it saves space.
+	d.args = arg_count[arg_depth];
+	d.arg = (int*) calloc(d.args, sizeof(int));
+	int i;
+	for(i = 0; i < d.args; ++i)
+		d.arg[i] = arg_ptr[arg_depth][i];
+	
 	return d;
 }
 
@@ -290,48 +311,30 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		int result = 0; delta_compile_line(c, r, strlen(r));
+		int result = delta_compile_line(c, r, strlen(r));
 		printf("result = %d\n", result);
 		
 		// if there was a function, apply it now
 		if(found > 0) {
-			int var_dest = ++var_temp, var_id1 = result;
+			int var_dest = ++var_temp; //, var_id1 = result;
 			
 			if(!strcmp(function_name, "sqrt")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_SQT (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_SQT, var_dest, var_id1));
+				DELTA_ADD_BYTECODE(SQT);
 			}
 			else if(!strcmp(function_name, "cos")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_COS (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_COS, var_dest, var_id1));
+				DELTA_ADD_BYTECODE(COS);
 			}
 			else if(!strcmp(function_name, "sin")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_SIN (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_SIN, var_dest, var_id1));
+				DELTA_ADD_BYTECODE(SIN);
 			}
 			else if(!strcmp(function_name, "tan")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_TAN (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_TAN, var_dest, var_id1));
+				DELTA_ADD_BYTECODE(TAN);
 			}
 			else if(!strcmp(function_name, "print")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_OUT (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_OUT));
+				DELTA_ADD_BYTECODE(OUT);
 			}
 			else if(!strcmp(function_name, "array_push")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_APH (%d, %d)\n", var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_APH, var_dest, var_id1));
+				DELTA_ADD_BYTECODE(APH);
 			}
 			else {
 				printf("Can't find function '%s'!\n", function_name);
@@ -495,16 +498,14 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
 			int var_dest = get_variable_id(c, tokens[highest_op_pos - 1]);
-			int var_id2 = get_variable_id(c, tokens[highest_op_pos + 1]);
+			int var_id1 = get_variable_id(c, tokens[highest_op_pos + 1]);
 			if(var_dest < 0) {
 				fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
 				exit(1);
 			}
 			
-#if DELTA_SHOW_BYTECODE
-			printf("BYTECODE_SET (%d, %d)\n", var_dest, var_id2);
-#endif
-			DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_SET, var_dest, var_id2));
+			arg_ptr[arg_depth][1] = var_id1;
+			DELTA_ADD_BYTECODE(SET);
 		}
 		
 		// 3 argument operators
@@ -576,10 +577,9 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 }
 
 
-void delta_compile_line(DeltaCompiler *c, char* line, int length)
+int delta_compile_line(DeltaCompiler *c, char* line, int length)
 {
 	// split the line on commas
-	printf("line = '%s'\n", line);
 	int total_parts = 0, i, last = -1;
 	int bcount1 = 0; // ()
 	char **parts = (char**) malloc(64 * sizeof(char*));
@@ -602,13 +602,17 @@ void delta_compile_line(DeltaCompiler *c, char* line, int length)
 	}
 	
 	// for each part there will be a destination address
-	arg_count = total_parts + 1;
-	arg_ptr = (int*) calloc(arg_count, sizeof(int));
-	arg_ptr[0] = 0; // FIXME: this is the destination of the function
+	arg_count[arg_depth] = total_parts + 1;
+	//arg_ptr = (int**) calloc(arg_count[arg_depth], sizeof(int));
+	arg_ptr[arg_depth][0] = 0; // FIXME: this is the destination of the function
 	for(i = 0; i < total_parts; ++i) {
-		arg_ptr[i + 1] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
-		printf("part[%d] = '%s' -> %d\n", i, parts[i], arg_ptr[i + 1]);
+		++arg_depth;
+		arg_ptr[arg_depth - 1][i + 1] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
+		--arg_depth;
+		//printf("part[%d] = '%s' -> %d\n", i, parts[i], arg_ptr[arg_depth][i + 1]);
 	}
+	
+	return arg_ptr[arg_depth][0];
 }
 
 
@@ -649,6 +653,11 @@ int delta_compile_file(DeltaCompiler *c, const char* input_file)
 	fread(whole_file, total_bytes, 1, f);
 	
 	// compile as a block
+	arg_count = (int*) calloc(DELTA_MAX_NESTED_FUNCTIONS, sizeof(int));
+	arg_ptr = (int**) calloc(DELTA_MAX_NESTED_FUNCTIONS, sizeof(int*));
+	int i;
+	for(i = 0; i < DELTA_MAX_NESTED_FUNCTIONS; ++i)
+		arg_ptr[i] = (int*) calloc(DELTA_MAX_FUNCTION_ARGS, sizeof(int));
 	delta_compile_block(c, whole_file, 0, total_bytes);
 	
 	// clean up

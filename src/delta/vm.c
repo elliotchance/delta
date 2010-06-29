@@ -26,10 +26,10 @@ void delta_vm_print_variable(DeltaVariable *v)
 	else if(v->type == DELTA_TYPE_ARRAY) {
 		// i don't know why, but if this second blank argument isn't in the printf() it will crash.
 		printf("Array\n(\n%s", "");
-		DeltaArrayValue *e = v->value.array.head;
+		/*DeltaArrayValue *e = v->value.array.head;
 		int i;
 		for(i = 0; i < v->value.array.elements; ++i)
-			printf("\t[%s] => %s\n", e->key, e->value);
+			printf("\t[%s] => %s\n", e->key, e->value);*/
 		printf(")");
 	}
 	else

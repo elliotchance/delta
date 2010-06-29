@@ -15,7 +15,6 @@
 
 int main()
 {
-	
 	// init the compiler
 	DeltaCompiler *c = new_DeltaCompiler();
 	

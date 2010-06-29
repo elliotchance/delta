@@ -17,6 +17,13 @@
 #define DELTA_ARG1   d->arg[2]
 #define DELTA_ARG(i) d->arg[i + 1]
 
+#define print_ins_args(__BYTECODE) \
+printf("*BYTECODE_%s (", #__BYTECODE); \
+int i; \
+for(i = 0; i < DELTA_ARGS + 1; ++i) \
+printf(" %d", d->arg[i]); \
+printf(" )\n");
+
 
 /**
  * @brief Attempt to cast a variable to a number.
@@ -63,6 +70,8 @@ inline double delta_cast_number(int address)
  */
 ins(ADD)
 {
+	print_ins_args(ADD);
+	
 	// this is only numerical addition, so other types need to be cast to a number
 	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
 	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) + delta_cast_number(DELTA_ARG1);
@@ -213,6 +222,7 @@ ins(LBL)
  */
 ins(MUL)
 {
+	print_ins_args(MUL);
 	// this is only numerical multiplicaton, so other types need to be cast to a number
 	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
 	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) * delta_cast_number(DELTA_ARG1);
@@ -234,9 +244,10 @@ ins(NUL)
  */
 ins(OUT)
 {
-	int i;
+	print_ins_args(OUT);
+	
 	for(i = 0; i < DELTA_ARGS; ++i) {
-		printf("DELTA_ARG(%d) = ", DELTA_ARG(i));
+		//printf("DELTA_ARG(%d) = ", DELTA_ARG(i));
 		delta_vm_print_variable(&ram[DELTA_ARG(i)]);
 		printf("\n");
 	}
@@ -272,6 +283,7 @@ ins(SET)
  */
 ins(SQT)
 {
+	print_ins_args(SQT);
 	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
 	ram[DELTA_DEST].value.number = sqrt(delta_cast_number(DELTA_ARG0));
 }
@@ -292,6 +304,7 @@ ins(COS)
  */
 ins(SIN)
 {
+	print_ins_args(SIN);
 	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
 	ram[DELTA_DEST].value.number = sin(delta_cast_number(DELTA_ARG0));
 }
