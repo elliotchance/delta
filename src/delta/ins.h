@@ -9,9 +9,32 @@
 #define _DELTA_INS_H
 
 #include "structs.h"
+#include "vm.h"
 
 
 #define ins(name) void ins_##name(DI *d)
+
+#define DELTA_ARGS   (d->args - 1)
+#define DELTA_DEST   d->arg[0]
+#define DELTA_ARG0   d->arg[1]
+#define DELTA_ARG1   d->arg[2]
+#define DELTA_ARG(i) d->arg[i + 1]
+
+#define DELTA_PRINT_INS_ARGS(__BYTECODE) \
+printf("*BYTECODE_%s (", #__BYTECODE); \
+int i; \
+for(i = 0; i < DELTA_ARGS + 1; ++i) \
+printf(" %d", d->arg[i]); \
+printf(" )\n");
+
+#define DELTA_RETURN_NULL \
+	ram[DELTA_DEST].type = DELTA_TYPE_NULL; \
+	return;
+
+#define DELTA_RETURN_NUMBER(return_value) \
+	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER; \
+	ram[DELTA_DEST].value.number = return_value; \
+	return;
 
 double delta_cast_number(int address);
 
