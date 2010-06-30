@@ -41,6 +41,7 @@
 #define BYTECODE_GTO 0x0111 // goto label
 #define BYTECODE_IFS 0x0112 // if
 #define BYTECODE_PAT 0x0113 // patch forward jump
+#define BYTECODE_JMP 0x0114 // jump forward
 
 #define BYTECODE_RTN 0x0120 /* return */
 

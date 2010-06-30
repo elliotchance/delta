@@ -641,6 +641,9 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 	if(identifier_len == 0) {
 		// do nothing
 	}
+	else if(!strcmp(short_identifier, "else")) {
+		// do nothing
+	}
 	else if(!strcmp(short_identifier, "if")) {
 		// if statement, get the conditional expression
 		int expr_start = delta_strpos(identifier, "(") + 1;
@@ -696,7 +699,15 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 	}
 	
 	// add forward patch
-	if(strlen(identifier) > 0) {
+	if(!strcmp(short_identifier, "if")) {
+		// add the jump for else
+		printf("BYTECODE_JMP ()\n");
+		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_JMP));
+		
+		printf("BYTECODE_PAT ()\n");
+		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_PAT));
+	}
+	else if(!strcmp(short_identifier, "else")) {
 		printf("BYTECODE_PAT ()\n");
 		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_PAT));
 	}
