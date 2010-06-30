@@ -28,12 +28,12 @@ printf(" %d", d->arg[i]); \
 printf(" )\n");
 
 #define DELTA_RETURN_NULL \
-	ram[DELTA_DEST].type = DELTA_TYPE_NULL; \
+	ram[DELTA_DEST]->type = DELTA_TYPE_NULL; \
 	return;
 
 #define DELTA_RETURN_NUMBER(return_value) \
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER; \
-	ram[DELTA_DEST].value.number = return_value; \
+	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
+	ram[DELTA_DEST]->value.number = return_value; \
 	return;
 
 double delta_cast_number(int address);
@@ -55,6 +55,7 @@ ins(LBL); // begin label
 ins(MUL); // *
 ins(NUL); // no action
 ins(OUT); // print()
+ins(OUL); // println()
 ins(RTN); // return
 ins(SET); // =
 ins(SIN); // sin()

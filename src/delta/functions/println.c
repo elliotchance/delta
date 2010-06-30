@@ -8,14 +8,16 @@
 
 
 /**
- * @brief Write one or more arguments to the stdout.
+ * @brief Write one or more arguments to the stdout with a new line after each argument.
  */
-ins(OUT)
+ins(OUL)
 {
-	DELTA_PRINT_INS_ARGS(OUT);
+	DELTA_PRINT_INS_ARGS(OUL);
 	
-	for(i = 0; i < DELTA_ARGS; ++i)
+	for(i = 0; i < DELTA_ARGS; ++i) {
 		delta_vm_print_variable(ram[DELTA_ARG(i)]);
+		printf("\n");
+	}
 	
 	DELTA_RETURN_NULL;
 }

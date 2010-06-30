@@ -27,12 +27,20 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 	for(i = start; i < end; ++i) {
 		if(instructions[i].bc == BYTECODE_IFS) {
 			// copy in the boolean argument
-			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]].value.number);
-			jit_movi_d(JIT_R1, 0);
-			jit_bner_d(loop, JIT_R0, JIT_R1);
+			//jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);
+			//jit_movi_d(JIT_R1, 0);
+			//jit_bner_d(loop, JIT_R0, JIT_R1);
+			
+			// copy in the boolean argument as a double
+			printf(">> loading %d\n", instructions[i].arg[1]);
+			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);
+			jit_truncr_d_i(JIT_R0, JIT_R0);
+			loop = jit_beqi_i(jit_forward(), JIT_R0, 0);
 		}
 		else if(instructions[i].bc == BYTECODE_LBL) {
 			loop = jit_get_label();
+		} else if(instructions[i].bc == BYTECODE_PAT) {
+			jit_patch(loop);
 		} else {
 			jit_movi_p(JIT_R0, &instructions[i]);
 			jit_prepare(1);
@@ -53,6 +61,7 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			else if(instructions[i].bc == BYTECODE_GTO) jit_finish(ins_GTO);
 			else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
 			else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);
+			else if(instructions[i].bc == BYTECODE_OUL) jit_finish(ins_OUL);
 			else if(instructions[i].bc == BYTECODE_OUT) jit_finish(ins_OUT);
 			else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
 			else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);

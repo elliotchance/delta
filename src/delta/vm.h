@@ -12,7 +12,7 @@
 #include "structs.h"
 
 
-extern DeltaVariable *ram;
+extern DeltaVariable **ram;
 extern int stack_pos;
 extern long start;
 

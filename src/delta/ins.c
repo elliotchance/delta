@@ -24,25 +24,25 @@
  */
 inline double delta_cast_number(int address)
 {
-	if(ram[address].type == DELTA_TYPE_NUMBER)
-		return ram[address].value.number;
+	if(ram[address]->type == DELTA_TYPE_NUMBER)
+		return ram[address]->value.number;
 	
-	if(ram[address].type == DELTA_TYPE_NULL) {
-		ram[address].type == DELTA_TYPE_NUMBER;
-		ram[address].value.number = 0.0;
+	if(ram[address]->type == DELTA_TYPE_NULL) {
+		ram[address]->type == DELTA_TYPE_NUMBER;
+		ram[address]->value.number = 0.0;
 		return 0.0;
 	}
 	
-	if(ram[address].type == DELTA_TYPE_STRING) {
+	if(ram[address]->type == DELTA_TYPE_STRING) {
 		// TODO: do not cast if there is a loss of precision
-		ram[address].type == DELTA_TYPE_NUMBER;
-		ram[address].value.number = atof(ram[address].value.ptr);
-		return ram[address].value.number;
+		ram[address]->type == DELTA_TYPE_NUMBER;
+		ram[address]->value.number = atof(ram[address]->value.ptr);
+		return ram[address]->value.number;
 	}
 	
-	if(ram[address].type == DELTA_TYPE_ARRAY) {
+	if(ram[address]->type == DELTA_TYPE_ARRAY) {
 		// arrays can never be converted into numbers so we only return the number of elements
-		return ram[address].value.array.elements;
+		return ram[address]->value.array.elements;
 	}
 	
 	// we should never get to this point but just in case
@@ -55,7 +55,7 @@ inline double delta_cast_number(int address)
  */
 ins(ADD)
 {
-	DELTA_PRINT_INS_ARGS(ADD);
+	//DELTA_PRINT_INS_ARGS(ADD);
 	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) + delta_cast_number(DELTA_ARG1));
 }
 
@@ -65,11 +65,7 @@ ins(ADD)
  */
 ins(CEQ)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) == delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) == delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -78,11 +74,7 @@ ins(CEQ)
  */
 ins(CGE)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) >= delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) >= delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -91,11 +83,7 @@ ins(CGE)
  */
 ins(CGT)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) > delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) > delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -104,11 +92,7 @@ ins(CGT)
  */
 ins(CLE)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) <= delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) <= delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -117,11 +101,7 @@ ins(CLE)
  */
 ins(CLT)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) < delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) < delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -130,11 +110,7 @@ ins(CLT)
  */
 ins(CNE)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	if(delta_cast_number(DELTA_ARG0) != delta_cast_number(DELTA_ARG1))
-		ram[DELTA_DEST].value.number = 1;
-	else
-		ram[DELTA_DEST].value.number = 0;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) != delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -143,8 +119,7 @@ ins(CNE)
  */
 ins(DEC)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_DEST) - 1;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_DEST) - 1);
 }
 
 
@@ -154,8 +129,7 @@ ins(DEC)
 ins(DIV)
 {
 	// this is only numerical division, so other types need to be cast to a number
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) / delta_cast_number(DELTA_ARG1);
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) / delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -183,8 +157,7 @@ ins(IFS)
  */
 ins(INC)
 {
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_DEST) + 1;
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_DEST) + 1);
 }
 
 
@@ -207,8 +180,7 @@ ins(MUL)
 	DELTA_PRINT_INS_ARGS(MUL);
 	
 	// this is only numerical multiplicaton, so other types need to be cast to a number
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) * delta_cast_number(DELTA_ARG1);
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) * delta_cast_number(DELTA_ARG1));
 }
 
 
@@ -237,9 +209,9 @@ ins(RTN)
 ins(SET)
 {
 	// this copies the contents of a variable to a new location in RAM
-	ram[DELTA_DEST].type = ram[DELTA_ARG0].type;
-	ram[DELTA_DEST].value.number = ram[DELTA_ARG0].value.number;
-	ram[DELTA_DEST].value.ptr = ram[DELTA_ARG0].value.ptr;
+	ram[DELTA_DEST]->type = ram[DELTA_ARG0]->type;
+	ram[DELTA_DEST]->value.number = ram[DELTA_ARG0]->value.number;
+	ram[DELTA_DEST]->value.ptr = ram[DELTA_ARG0]->value.ptr;
 }
 
 
@@ -249,6 +221,5 @@ ins(SET)
 ins(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
-	ram[DELTA_DEST].type = DELTA_TYPE_NUMBER;
-	ram[DELTA_DEST].value.number = delta_cast_number(DELTA_ARG0) - delta_cast_number(DELTA_ARG1);
+	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) - delta_cast_number(DELTA_ARG1));
 }

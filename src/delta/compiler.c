@@ -30,6 +30,10 @@ static int arg_depth = 0;
 	printf(" )\n"); \
 	DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
 
+#define DELTA_ADD_OPERATOR_BYTECODE(__BYTECODE) \
+	printf("BYTECODE_%s (%d, %d, %d)\n", #__BYTECODE, var_dest, var_id1, var_id2); \
+	DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
+
 
 DI new_DeltaInstruction0(DeltaByteCode bc)
 {
@@ -92,7 +96,7 @@ DI new_DeltaInstructionN(DeltaByteCode bc)
 }
 
 
-char* read_inv_token(char* line, int* offset)
+char* delta_read_inv_token(char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
 	
@@ -107,7 +111,7 @@ char* read_inv_token(char* line, int* offset)
 }
 
 
-void skip_spaces(char* line, int* offset)
+void delta_skip_spaces(char* line, int* offset)
 {
 	int len = strlen(line);
 	for(; *offset < len; ++*offset) {
@@ -145,7 +149,7 @@ int delta_is_number(char *word)
 }
 
 
-int get_variable_id(DeltaCompiler *c, char* name)
+int delta_get_variable_id(DeltaCompiler *c, char* name)
 {
 	// safety
 	if(name == NULL)
@@ -169,7 +173,7 @@ int get_variable_id(DeltaCompiler *c, char* name)
 }
 
 
-int get_operator_order(char* op)
+int delta_get_operator_order(char* op)
 {
 	if(!strcmp(op, "*") || !strcmp(op, "/"))
 		return 1;
@@ -183,7 +187,7 @@ int get_operator_order(char* op)
 }
 
 
-int push_label(DeltaCompiler *c, char *name)
+int delta_push_label(DeltaCompiler *c, char *name)
 {
 	return 0;
 }
@@ -275,7 +279,7 @@ char* delta_copy_substring(char* str, int start, int length)
 }
 
 
-char* read_token(DeltaCompiler *c, char* line, int* offset)
+char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
 	
@@ -316,10 +320,10 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 		
 		// if there was a function, apply it now
 		if(found > 0) {
-			int var_dest = ++var_temp; //, var_id1 = result;
+			int var_dest = ++var_temp;
 			
-			if(!strcmp(function_name, "sqrt")) {
-				DELTA_ADD_BYTECODE(SQT);
+			if(!strcmp(function_name, "array_push")) {
+				DELTA_ADD_BYTECODE(APH);
 			}
 			else if(!strcmp(function_name, "cos")) {
 				DELTA_ADD_BYTECODE(COS);
@@ -327,14 +331,17 @@ char* read_token(DeltaCompiler *c, char* line, int* offset)
 			else if(!strcmp(function_name, "sin")) {
 				DELTA_ADD_BYTECODE(SIN);
 			}
-			else if(!strcmp(function_name, "tan")) {
-				DELTA_ADD_BYTECODE(TAN);
+			else if(!strcmp(function_name, "sqrt")) {
+				DELTA_ADD_BYTECODE(SQT);
 			}
 			else if(!strcmp(function_name, "print")) {
 				DELTA_ADD_BYTECODE(OUT);
 			}
-			else if(!strcmp(function_name, "array_push")) {
-				DELTA_ADD_BYTECODE(APH);
+			else if(!strcmp(function_name, "println")) {
+				DELTA_ADD_BYTECODE(OUL);
+			}
+			else if(!strcmp(function_name, "tan")) {
+				DELTA_ADD_BYTECODE(TAN);
 			}
 			else {
 				printf("Can't find function '%s'!\n", function_name);
@@ -386,9 +393,9 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 	// first parse the line and look for variables and constants
 	for(i = 0; i < length; ) {
 		// skip any spaces before token
-		skip_spaces(line, &i);
+		delta_skip_spaces(line, &i);
 		
-		token = read_token(c, line, &i);
+		token = delta_read_token(c, line, &i);
 		if(strlen(token) > 0)
 			tokens[total_tokens++] = token;
 		
@@ -418,9 +425,9 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		}
 		
 		// skip any spaces before inverse token (aka operator)
-		skip_spaces(line, &i);
+		delta_skip_spaces(line, &i);
 		
-		token = read_inv_token(line, &i);
+		token = delta_read_inv_token(line, &i);
 		if(strlen(token) > 0)
 			tokens[total_tokens++] = token;
 	}
@@ -432,37 +439,11 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		// address
 		int var_id1;
 		if(delta_is_declared(c, tokens[0]))
-			var_id1 = get_variable_id(c, tokens[0]);
+			var_id1 = delta_get_variable_id(c, tokens[0]);
 		else
 			var_id1 = var_temp;
 		
 		return var_id1;
-	}
-	
-	if(!strcmp(tokens[0], "if")) {
-		int var_dest = var_temp++;
-		int var_id1 = get_variable_id(c, tokens[1]);
-		int var_id2 = get_variable_id(c, tokens[2]);
-		
-#if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_CLT (%d, %d, %d)\n", var_dest, var_id1, var_id2);
-#endif
-		DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_CLT, var_dest, var_id1, var_id2));
-		
-		var_id1 = var_dest;
-		var_dest = 0; // label_id
-#if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_IFS (%d, %d)\n", var_dest, var_id1);
-#endif
-		DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_IFS, var_dest, var_id1));
-	}
-	
-	if(!strcmp(tokens[0], "label")) {
-		int label_id = push_label(c, tokens[1]);
-#if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_LBL (%d)\n", label_id);
-#endif
-		DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_LBL, label_id));
 	}
 	
 	if(!strcmp(tokens[0], "return")) {
@@ -473,7 +454,7 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 #endif
 			DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_RTN, 0));
 		} else {
-			int var_id1 = get_variable_id(c, tokens[1]);
+			int var_id1 = delta_get_variable_id(c, tokens[1]);
 #if DELTA_SHOW_BYTECODE
 			printf("BYTECODE_RTN (%d)\n", var_id1);
 #endif
@@ -487,9 +468,8 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		// find the most important operator
 		int highest_op_pos = 1, highest_op_val = 100;
 		for(j = 1; j < total_tokens; j += 2) {
-			//printf("testing operator '%s' %d\n", tokens[j], get_operator_order(tokens[j]));
-			if(get_operator_order(tokens[j]) < highest_op_val) {
-				highest_op_val = get_operator_order(tokens[j]);
+			if(delta_get_operator_order(tokens[j]) < highest_op_val) {
+				highest_op_val = delta_get_operator_order(tokens[j]);
 				highest_op_pos = j;
 			}
 		}
@@ -497,57 +477,67 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		// 2 argument operators
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
-			int var_dest = get_variable_id(c, tokens[highest_op_pos - 1]);
-			int var_id1 = get_variable_id(c, tokens[highest_op_pos + 1]);
+			int var_dest = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
+			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);
 			if(var_dest < 0) {
 				fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
 				exit(1);
 			}
 			
-			arg_ptr[arg_depth][1] = var_id1;
-			DELTA_ADD_BYTECODE(SET);
+#if DELTA_SHOW_BYTECODE
+			printf("BYTECODE_SET (%d, %d)\n", var_dest, var_id1);
+#endif
+			DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_SET, var_dest, var_id1));
 		}
 		
 		// 3 argument operators
 		if(!strcmp(tokens[highest_op_pos], "+") ||
 		   !strcmp(tokens[highest_op_pos], "-") ||
 		   !strcmp(tokens[highest_op_pos], "*") ||
-		   !strcmp(tokens[highest_op_pos], "/")) {
+		   !strcmp(tokens[highest_op_pos], "/") ||
+		   !strcmp(tokens[highest_op_pos], "<") ||
+		   !strcmp(tokens[highest_op_pos], ">") ||
+		   !strcmp(tokens[highest_op_pos], "<=") ||
+		   !strcmp(tokens[highest_op_pos], ">=")) {
 			// resolve the address for the left and right
 			int var_dest = ++var_temp;
-			int var_id1 = get_variable_id(c, tokens[highest_op_pos - 1]);
-			int var_id2 = get_variable_id(c, tokens[highest_op_pos + 1]);
+			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
+			int var_id2 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);
 			
 			if(!strcmp(tokens[highest_op_pos], "+")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_ADD (%d, %d, %d)\n", var_dest, var_id1, var_id2);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_ADD, var_dest, var_id1, var_id2));
+				DELTA_ADD_OPERATOR_BYTECODE(ADD);
 			}
 			else if(!strcmp(tokens[highest_op_pos], "-")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_SUB (%d, %d, %d)\n", var_dest, var_id1, var_id2);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_SUB, var_dest, var_id1, var_id2));
+				DELTA_ADD_OPERATOR_BYTECODE(SUB);
 			}
 			else if(!strcmp(tokens[highest_op_pos], "*")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_MUL (%d, %d, %d)\n", var_dest, var_id1, var_id2);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_MUL, var_dest, var_id1, var_id2));
+				DELTA_ADD_OPERATOR_BYTECODE(MUL);
 			}
 			else if(!strcmp(tokens[highest_op_pos], "/")) {
-#if DELTA_SHOW_BYTECODE
-				printf("BYTECODE_DIV (%d, %d, %d)\n", var_dest, var_id1, var_id2);
-#endif
-				DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_DIV, var_dest, var_id1, var_id2));
+				DELTA_ADD_OPERATOR_BYTECODE(DIV);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "<")) {
+				DELTA_ADD_OPERATOR_BYTECODE(CLT);
+			}
+			else if(!strcmp(tokens[highest_op_pos], ">")) {
+				DELTA_ADD_OPERATOR_BYTECODE(CGT);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "<=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(CLE);
+			}
+			else if(!strcmp(tokens[highest_op_pos], ">=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(CGE);
 			}
 		}
 		
-		if(!strcmp(tokens[highest_op_pos], "+=")) {
+		if(!strcmp(tokens[highest_op_pos], "+=") ||
+		   !strcmp(tokens[highest_op_pos], "-=") ||
+		   !strcmp(tokens[highest_op_pos], "*=") ||
+		   !strcmp(tokens[highest_op_pos], "/=")) {
 			// resolve the address for the left and right
-			int var_id1 = get_variable_id(c, tokens[highest_op_pos - 1]);
-			int var_id2 = get_variable_id(c, tokens[highest_op_pos + 1]);
+			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
+			int var_id2 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);
+			int var_dest = var_id1;
 			
 			// var_id1 must resolve
 			if(var_id1 < 0) {
@@ -555,10 +545,18 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 				exit(1);
 			}
 			
-#if DELTA_SHOW_BYTECODE
-			printf("BYTECODE_ADD (%d, %d, %d)\n", var_id1, var_id1, var_id2);
-#endif
-			DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_ADD, var_id1, var_id1, var_id2));
+			if(!strcmp(tokens[highest_op_pos], "+=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(ADD);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "-=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(SUB);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "*=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(MUL);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "/=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(DIV);
+			}
 		}
 		
 		// reduce temp
@@ -603,33 +601,104 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 	
 	// for each part there will be a destination address
 	arg_count[arg_depth] = total_parts + 1;
-	//arg_ptr = (int**) calloc(arg_count[arg_depth], sizeof(int));
-	arg_ptr[arg_depth][0] = 0; // FIXME: this is the destination of the function
 	for(i = 0; i < total_parts; ++i) {
 		++arg_depth;
 		arg_ptr[arg_depth - 1][i + 1] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
 		--arg_depth;
-		//printf("part[%d] = '%s' -> %d\n", i, parts[i], arg_ptr[arg_depth][i + 1]);
 	}
+	arg_ptr[arg_depth][0] = var_temp++;
 	
 	return arg_ptr[arg_depth][0];
 }
 
 
-int delta_compile_block(DeltaCompiler *c, char* block, int start, int end)
+int delta_strpos(char *haystack, char *needle)
 {
+	char *p = strstr(haystack, needle);
+	if (p)
+		return p - haystack;
+	return -1;
+}
+
+
+int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int start, int end)
+{	
 	// prepare
 	char* line = (char*) malloc(1024);
-	int i, line_pos = 0;
+	int i, line_pos = 0, ii = 0;
+	
+	// compile identifier
+	delta_skip_spaces(identifier, &ii);
+	int identifier_len;
+	for(identifier_len = 0; identifier_len < strlen(identifier); ++identifier_len) {
+		if(!isalnum(identifier[identifier_len + ii]))
+			break;
+	}
+	
+	char *short_identifier = (char*) malloc(identifier_len + 1);
+	strncpy(short_identifier, identifier + ii, identifier_len);
+	
+	if(identifier_len == 0) {
+		// do nothing
+	}
+	else if(!strcmp(short_identifier, "if")) {
+		// if statement, get the conditional expression
+		int expr_start = delta_strpos(identifier, "(") + 1;
+		int expr_end = delta_strpos(identifier, ")");
+		char *expr = (char*) malloc(expr_end - expr_start + 1);
+		strncpy(expr, identifier + expr_start, expr_end - expr_start);
+		
+		// add label
+		/*int label_id = delta_push_label(c, "begin");
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_LBL (%d)\n", label_id);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_LBL, label_id));*/
+		
+		// evaluate expression
+		printf("expr = '%s'\n", expr);
+		int expr_eval = delta_compile_line(c, expr, expr_end - expr_start);
+		
+		// perform if statement
+		int label_id = 0;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_IFS (%d, %d)\n", label_id, expr_eval);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_IFS, label_id, expr_eval));
+	}
+	else {
+		printf("Unknown block identifier '%s'", short_identifier);
+		exit(0);
+	}
 	
 	// dissect lines
 	for(i = start; i < end; ++i) {
-		if(block[i] == ';') {
+		if(block[i] == '{') {
+			char *new_identifier = (char*) malloc(line_pos + 1);
+			strncpy(new_identifier, block + i - line_pos, line_pos);
+			
+			// read subblock
+			int orig = i + 1;
+			for(; i < end; ++i) {
+				if(block[i] == '}')
+					break;
+			}
+			delta_compile_block(c, new_identifier, block, orig, i - 1);
+			line_pos = 0;
+		}
+		else if(block[i] == ';') {
 			line[line_pos] = 0;
 			delta_compile_line(c, line, line_pos);
 			line_pos = 0;
-		} else
+		}
+		else
 			line[line_pos++] = block[i];
+	}
+	
+	// add forward patch
+	if(strlen(identifier) > 0) {
+		printf("BYTECODE_PAT ()\n");
+		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_PAT));
 	}
 	
 	// clean up
@@ -658,7 +727,7 @@ int delta_compile_file(DeltaCompiler *c, const char* input_file)
 	int i;
 	for(i = 0; i < DELTA_MAX_NESTED_FUNCTIONS; ++i)
 		arg_ptr[i] = (int*) calloc(DELTA_MAX_FUNCTION_ARGS, sizeof(int));
-	delta_compile_block(c, whole_file, 0, total_bytes);
+	delta_compile_block(c, "", whole_file, 0, total_bytes);
 	
 	// clean up
 	fclose(f);

@@ -7,7 +7,7 @@
 
 #include "vm.h"
 
-DeltaVariable *ram;
+DeltaVariable **ram;
 #define total_ram 30
 int stack_pos = 0;
 long start;
@@ -41,7 +41,7 @@ void delta_vm_print_ram(DeltaCompiler *c)
 	int i;
 	for(i = 0; i < total_ram; ++i) {
 		printf("ram[%d] = ", i);
-		delta_vm_print_variable(&ram[i]);
+		delta_vm_print_variable(ram[i]);
 		printf("\n");
 	}
 }
@@ -50,7 +50,10 @@ void delta_vm_print_ram(DeltaCompiler *c)
 int delta_vm_init(DeltaCompiler *c)
 {	
 	// allocate memory
-	ram = (DeltaVariable*) malloc(total_ram * sizeof(DeltaVariable));
+	ram = (DeltaVariable**) malloc(total_ram * sizeof(DeltaVariable*));
+	int i;
+	for(i = 0; i < total_ram; ++i)
+		ram[i] = (DeltaVariable*) malloc(sizeof(DeltaVariable));
 	
 	return DELTA_SUCCESS;
 }
@@ -65,7 +68,7 @@ int delta_vm_prepare(DeltaCompiler *c)
 		delta_vm_print_variable(&c->constants[i]);
 		printf("\n");
 		
-		ram[c->constants[i].ram_location] = c->constants[i];
+		ram[c->constants[i].ram_location] = &c->constants[i];
 	}
 	
 	return DELTA_SUCCESS;

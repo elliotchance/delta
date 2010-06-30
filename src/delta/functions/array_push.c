@@ -16,11 +16,11 @@
 ins(APH)
 {
 	// first make sure source1 is an array
-	if(ram[DELTA_ARG0].type != DELTA_TYPE_ARRAY) {
-		ram[DELTA_ARG0].type = DELTA_TYPE_ARRAY;
-		ram[DELTA_ARG0].value.array.elements = 0;
-		ram[DELTA_ARG0].value.array.head = NULL;
-		ram[DELTA_ARG0].value.array.tail = NULL;
+	if(ram[DELTA_ARG0]->type != DELTA_TYPE_ARRAY) {
+		ram[DELTA_ARG0]->type = DELTA_TYPE_ARRAY;
+		ram[DELTA_ARG0]->value.array.elements = 0;
+		ram[DELTA_ARG0]->value.array.head = NULL;
+		ram[DELTA_ARG0]->value.array.tail = NULL;
 	}
 	
 	// create the new element to push
@@ -31,9 +31,9 @@ ins(APH)
 	strcpy(dav->value, "world");
 	
 	// push element
-	ram[DELTA_ARG0].value.array.head = dav;
-	ram[DELTA_ARG0].value.array.tail = dav;
+	ram[DELTA_ARG0]->value.array.head = dav;
+	ram[DELTA_ARG0]->value.array.tail = dav;
 	
 	// increment the elements
-	++ram[DELTA_ARG0].value.array.elements;
+	++ram[DELTA_ARG0]->value.array.elements;
 }

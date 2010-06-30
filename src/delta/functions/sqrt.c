@@ -13,6 +13,6 @@
  */
 ins(SQT)
 {
-	DELTA_PRINT_INS_ARGS(SQT);
+	//DELTA_PRINT_INS_ARGS(SQT);
 	DELTA_RETURN_NUMBER(sqrt(delta_cast_number(DELTA_ARG0)));
 }
