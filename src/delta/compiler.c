@@ -219,7 +219,7 @@ DeltaCompiler* new_DeltaCompiler(int total_objects)
 	
 	c->alloc_vars = 100;
 	c->total_vars = 0;
-	c->vars = (DeltaVariable*) malloc(c->alloc_vars * sizeof(DeltaVariable));
+	c->vars = (struct DeltaVariable*) malloc(c->alloc_vars * sizeof(struct DeltaVariable));
 	
 	c->alloc_labels = 100;
 	c->total_labels = 0;
@@ -227,7 +227,7 @@ DeltaCompiler* new_DeltaCompiler(int total_objects)
 	
 	c->alloc_constants = 100;
 	c->total_constants = 0;
-	c->constants = (DeltaVariable*) malloc(c->alloc_constants * sizeof(DeltaVariable));
+	c->constants = (struct DeltaVariable*) malloc(c->alloc_constants * sizeof(struct DeltaVariable));
 	
 	return c;
 }

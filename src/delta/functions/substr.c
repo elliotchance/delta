@@ -15,7 +15,7 @@ delta_function(substr)
 {
 	// prepare incoming arguments
 	int release_arg0;
-	DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);
+	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);
 	int arg1 = (int) delta_cast_number(DELTA_ARG1);
 	int arg2;
 	

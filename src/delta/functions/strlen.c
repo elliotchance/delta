@@ -13,7 +13,7 @@
 delta_function(strlen)
 {
 	int release;
-	DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
+	struct DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
 	int r = v->size;
 	
 	if(release)

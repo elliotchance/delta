@@ -11,7 +11,7 @@
 #include "ins.h"
 
 
-DeltaVariable **ram;
+struct DeltaVariable **ram;
 #define total_ram 30
 int stack_pos = 0;
 long start;
@@ -20,7 +20,7 @@ int alloc_delta_functions;
 int total_delta_functions;
 
 
-void delta_vm_print_variable(DeltaVariable *v)
+void delta_vm_print_variable(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_NULL)
 		printf("(null)");
@@ -32,10 +32,13 @@ void delta_vm_print_variable(DeltaVariable *v)
 		printf("(object)");
 	else if(v->type == DELTA_TYPE_ARRAY) {
 		printf("Array\n(\n");
-		DeltaArrayValue *e = v->value.array.head;
+		struct DeltaArrayValue *e = v->value.array.head;
 		int i;
-		for(i = 0; i < v->value.array.elements; ++i)
-			printf("\t[%s] => %s\n", e->key, e->value);
+		for(i = 0; i < v->value.array.elements; ++i, e = e->next) {
+			printf("\t[%s] => ", e->key);
+			delta_vm_print_variable(e->value);
+			printf("\n");
+		}
 		printf(")");
 	}
 	else
@@ -70,6 +73,7 @@ int delta_vm_init(DeltaCompiler *c)
 	total_delta_functions = 0;
 	delta_functions = (DeltaFunction**) calloc(alloc_delta_functions, sizeof(DeltaFunction*));
 	
+	delta_vm_push_function(new_DeltaFunction("array",      func(array), 0, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("array_push", func(array_push), 2, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("print",      func(print), 1, DELTA_MAX_ARGS));
@@ -81,9 +85,9 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("tan",        func(tan), 1, 1));
 	
 	// allocate memory
-	ram = (DeltaVariable**) malloc(total_ram * sizeof(DeltaVariable*));
+	ram = (struct DeltaVariable**) malloc(total_ram * sizeof(struct DeltaVariable*));
 	for(i = 0; i < total_ram; ++i)
-		ram[i] = (DeltaVariable*) malloc(sizeof(DeltaVariable));
+		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
 	
 	return DELTA_SUCCESS;
 }

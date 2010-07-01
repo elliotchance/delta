@@ -56,7 +56,7 @@ inline double delta_cast_number(int address)
  *
  * @param address RAM location of the variable.
  */
-inline DeltaVariable* delta_cast_string(int address, int *free)
+inline struct DeltaVariable* delta_cast_string(int address, int *free)
 {
 	if(ram[address]->type == DELTA_TYPE_STRING) {
 		*free = DELTA_NO;

@@ -24,7 +24,7 @@ delta_function(array_push)
 	}
 	
 	// create the new element to push
-	DeltaArrayValue *dav = (DeltaArrayValue*) malloc(sizeof(DeltaArrayValue));
+	struct DeltaArrayValue *dav = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
 	dav->key = (char*) malloc(6);
 	strcpy(dav->key, "hello");
 	dav->value = (char*) malloc(6);

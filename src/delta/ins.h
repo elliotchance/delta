@@ -8,14 +8,16 @@
 #ifndef _DELTA_INS_H
 #define _DELTA_INS_H
 
-#include "structs.h"
-#include "vm.h"
-#include "cast.h"
-
 
 #define ins(name) void ins_##name(DI *d)
 #define delta_function(name) void delta_function_##name(DI *d)
 #define func(name) delta_function_##name
+
+#include "structs.h"
+#include "vm.h"
+#include "cast.h"
+#include "functions.h"
+
 
 #define DELTA_ARGS   (d->args - 1)
 #define DELTA_DEST   d->arg[0]
@@ -75,16 +77,6 @@ ins(NUL); // no action
 ins(RTN); // return
 ins(SET); // =
 ins(SUB); // -
-
-delta_function(array_push);
-delta_function(cos);
-delta_function(print);
-delta_function(println);
-delta_function(sin);
-delta_function(sqrt);
-delta_function(strlen);
-delta_function(substr);
-delta_function(tan);
 
 
 #endif

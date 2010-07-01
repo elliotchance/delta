@@ -26,22 +26,26 @@ typedef char DeltaVariableType;
 #define DELTA_TYPE_OBJECT 4
 
 
-typedef struct
+struct DeltaArrayValue;
+struct DeltaVariable;
+
+struct DeltaArrayValue
 {
-	char* key;
-	char* value;
-} DeltaArrayValue;
+	char *key;
+	struct DeltaVariable *value;
+	struct DeltaArrayValue *next;
+};
 
 
 typedef struct
 {
 	int elements;
-	DeltaArrayValue *head;
-	DeltaArrayValue *tail;
+	struct DeltaArrayValue *head;
+	struct DeltaArrayValue *tail;
 } DeltaArray;
 
 
-typedef struct
+struct DeltaVariable
 {
 	//! The name for this variable.
 	char* name;
@@ -67,7 +71,7 @@ typedef struct
 	
 	//! To make strings binary safe we have a separate size for ptr.
 	int size;
-} DeltaVariable;
+};
 
 
 typedef struct
@@ -106,13 +110,13 @@ typedef struct
 	DI *ins;
 	
 	int alloc_vars, total_vars;
-	DeltaVariable* vars;
+	struct DeltaVariable* vars;
 	
 	int alloc_labels, total_labels;
 	DeltaLabel* labels;
 	
 	int alloc_constants, total_constants;
-	DeltaVariable* constants;
+	struct DeltaVariable* constants;
 } DeltaCompiler;
 
 
