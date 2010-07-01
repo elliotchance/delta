@@ -1,8 +1,5 @@
 /*
- *  bytecode.h
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
+ *  Delta programming language
  */
 
 #ifndef _DELTA_BYTECODE_H

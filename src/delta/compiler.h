@@ -1,10 +1,5 @@
 /*
- *  bytecode_compiler.h
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
- *  Copyright 2010 Chance MEDIA Pty Ltd. All rights reserved.
- *
+ *  Delta programming language
  */
 
 #ifndef _DELTA_BYTECODE_COMPILER_H

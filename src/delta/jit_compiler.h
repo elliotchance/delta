@@ -1,8 +1,5 @@
 /*
- *  jit_compiler.h
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
+ *  Delta programming language
  */
 
 #ifndef _DELTA_JIT_COMPILER_H

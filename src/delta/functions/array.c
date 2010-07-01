@@ -1,7 +1,5 @@
 /*
  *  Delta programming language
- *
- *  Created by Elliot Chance on 01/07/10.
  */
 
 #include "ins.h"

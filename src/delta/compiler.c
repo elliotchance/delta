@@ -1,8 +1,5 @@
 /*
- *  bytecode_compiler.c
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
+ *  Delta programming language
  */
 
 #include "compiler.h"
@@ -10,9 +7,11 @@
 #include <string.h>
 #include <ctype.h>
 
+
 #define DELTA_SHOW_BYTECODE 1
 #define DELTA_MAX_NESTED_FUNCTIONS 16
 #define DELTA_MAX_FUNCTION_ARGS 16
+
 
 static int var_temp = 0;
 static int *arg_count = NULL;

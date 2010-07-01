@@ -1,15 +1,14 @@
 /*
- *  vm.h
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
+ *  Delta programming language
  */
 
 #ifndef _DELTA_VM_H
 #define _DELTA_VM_H
 
+
 #include "lightning.h"
 #include "structs.h"
+
 
 #define DELTA_MAX_ARGS 1024
 

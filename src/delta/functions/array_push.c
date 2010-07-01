@@ -1,7 +1,5 @@
 /*
  *  Delta programming language
- *
- *  Created by Elliot Chance on 25/06/10.
  */
 
 #include "ins.h"
@@ -27,8 +25,8 @@ delta_function(array_push)
 	struct DeltaArrayValue *dav = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
 	dav->key = (char*) malloc(6);
 	strcpy(dav->key, "hello");
-	dav->value = (char*) malloc(6);
-	strcpy(dav->value, "world");
+	//dav->value = (char*) malloc(6);
+	//strcpy(dav->value, "world");
 	
 	// push element
 	ram[DELTA_ARG0]->value.array.head = dav;

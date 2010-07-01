@@ -1,8 +1,5 @@
 /*
- *  vm.c
- *  jit
- *
- *  Created by Elliot Chance on 25/06/10.
+ *  Delta programming language
  */
 
 #include "vm.h"
@@ -73,8 +70,12 @@ int delta_vm_init(DeltaCompiler *c)
 	total_delta_functions = 0;
 	delta_functions = (DeltaFunction**) calloc(alloc_delta_functions, sizeof(DeltaFunction*));
 	
+	delta_vm_push_function(new_DeltaFunction("abs",        func(abs), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("acos",       func(acos), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("array",      func(array), 0, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("array_push", func(array_push), 2, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("asin",       func(asin), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("atan",       func(atan), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("print",      func(print), 1, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("println",    func(println), 1, DELTA_MAX_ARGS));
