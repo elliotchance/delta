@@ -35,13 +35,24 @@ printf(" %d", d->arg[i]); \
 printf(" )\n");
 
 #define DELTA_RETURN_NULL \
+{ \
 	ram[DELTA_DEST]->type = DELTA_TYPE_NULL; \
-	return;
+	return;\
+}
+
+#define DELTA_RETURN_NAN \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
+	ram[DELTA_DEST]->value.number = NAN; \
+	return;\
+}
 
 #define DELTA_RETURN_NUMBER(return_value) \
+{ \
 	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
 	ram[DELTA_DEST]->value.number = return_value; \
-	return;
+	return; \
+}
 
 double delta_cast_number(int address);
 

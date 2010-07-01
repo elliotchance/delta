@@ -142,7 +142,7 @@ int delta_is_number(char *word)
 {
 	int i, len = strlen(word);
 	for(i = 0; i < len; ++i) {
-		if(!isnumber(word[i]) && word[i] != '.')
+		if(!isnumber(word[i]) && word[i] != '.' && word[i] != '-')
 			return 0;
 	}
 	return 1;
@@ -290,7 +290,8 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 			found = *offset - orig;
 			break;
 		}
-		if(!isalnum(line[*offset]) && line[*offset] != '_')
+		if(!isalnum(line[*offset]) && line[*offset] != '_' &&
+		   line[*offset] != '+' && line[*offset] != '-')
 			break;
 	}
 	
