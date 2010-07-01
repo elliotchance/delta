@@ -11,7 +11,7 @@
 /**
  * @brief Fetch a substring.
  */
-ins(SST)
+delta_function(substr)
 {
 	// prepare incoming arguments
 	int release_arg0;

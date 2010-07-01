@@ -14,6 +14,8 @@
 
 
 #define ins(name) void ins_##name(DI *d)
+#define delta_function(name) void delta_function_##name(DI *d)
+#define func(name) delta_function_##name
 
 #define DELTA_ARGS   (d->args - 1)
 #define DELTA_DEST   d->arg[0]
@@ -28,11 +30,11 @@
 #define DELTA_ARG(i) d->arg[i + 1]
 
 #define DELTA_PRINT_INS_ARGS(__BYTECODE) \
-printf("*BYTECODE_%s (", #__BYTECODE); \
-int i; \
-for(i = 0; i < DELTA_ARGS + 1; ++i) \
-printf(" %d", d->arg[i]); \
-printf(" )\n");
+	printf("*BYTECODE_%s (", #__BYTECODE); \
+	int i; \
+	for(i = 0; i < DELTA_ARGS + 1; ++i) \
+	printf(" %d", d->arg[i]); \
+	printf(" )\n");
 
 #define DELTA_RETURN_NULL \
 { \
@@ -57,14 +59,12 @@ printf(" )\n");
 double delta_cast_number(int address);
 
 ins(ADD); // +
-ins(APH); // array_push()
 ins(CEQ); // ==
 ins(CGE); // >=
 ins(CGT); // >
 ins(CLE); // <=
 ins(CLT); // <
 ins(CNE); // !=
-ins(COS); // cos()
 ins(DEC); // --
 ins(DIV); // /
 ins(GTO); // goto label
@@ -72,16 +72,19 @@ ins(INC); // ++
 ins(LBL); // begin label
 ins(MUL); // *
 ins(NUL); // no action
-ins(OUT); // print()
-ins(OUL); // println()
 ins(RTN); // return
 ins(SET); // =
-ins(SIN); // sin()
-ins(SLN); // strlen()
-ins(SQT); // sqrt()
-ins(SST); // substr()
 ins(SUB); // -
-ins(TAN); // tan()
+
+delta_function(array_push);
+delta_function(cos);
+delta_function(print);
+delta_function(println);
+delta_function(sin);
+delta_function(sqrt);
+delta_function(strlen);
+delta_function(substr);
+delta_function(tan);
 
 
 #endif

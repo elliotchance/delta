@@ -10,7 +10,7 @@
 /**
  * @brief Get the length of a string.
  */
-ins(SLN)
+delta_function(strlen)
 {
 	int release;
 	DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);

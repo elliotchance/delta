@@ -11,8 +11,7 @@
 /**
  * @brief Tangent (radians).
  */
-ins(TAN)
+delta_function(tan)
 {
-	DELTA_PRINT_INS_ARGS(TAN);
 	DELTA_RETURN_NUMBER(tan(delta_cast_number(DELTA_ARG0)));
 }

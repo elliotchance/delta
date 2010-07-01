@@ -9,6 +9,7 @@
 #include "vm.h"
 #include "bytecode.h"
 #include "ins.h"
+#include <string.h>
 
 jit_insn codeBuffer[1024];
 
@@ -49,32 +50,44 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			jit_prepare(1);
 			jit_pusharg_p(JIT_R0);
 			
-			// these instructions are guaranteed to not change the stack position
-			     if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
-			else if(instructions[i].bc == BYTECODE_APH) jit_finish(ins_APH);
-			else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
-			else if(instructions[i].bc == BYTECODE_CGE) jit_finish(ins_CGE);
-			else if(instructions[i].bc == BYTECODE_CGT) jit_finish(ins_CGT);
-			else if(instructions[i].bc == BYTECODE_CLE) jit_finish(ins_CLE);
-			else if(instructions[i].bc == BYTECODE_CLT) jit_finish(ins_CLT);
-			else if(instructions[i].bc == BYTECODE_CNE) jit_finish(ins_CNE);
-			else if(instructions[i].bc == BYTECODE_COS) jit_finish(ins_COS);
-			else if(instructions[i].bc == BYTECODE_DEC) jit_finish(ins_DEC);
-			else if(instructions[i].bc == BYTECODE_DIV) jit_finish(ins_DIV);
-			else if(instructions[i].bc == BYTECODE_GTO) jit_finish(ins_GTO);
-			else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
-			else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);
-			else if(instructions[i].bc == BYTECODE_OUL) jit_finish(ins_OUL);
-			else if(instructions[i].bc == BYTECODE_OUT) jit_finish(ins_OUT);
-			else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
-			else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
-			else if(instructions[i].bc == BYTECODE_SIN) jit_finish(ins_SIN);
-			else if(instructions[i].bc == BYTECODE_SLN) jit_finish(ins_SLN);
-			else if(instructions[i].bc == BYTECODE_SQT) jit_finish(ins_SQT);
-			else if(instructions[i].bc == BYTECODE_SST) jit_finish(ins_SST);
-			else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
-			else if(instructions[i].bc == BYTECODE_TAN) jit_finish(ins_TAN);
-			else                                        jit_finish(ins_NUL);
+			// link the function by its name
+			if(instructions[i].func != NULL) {
+				int j, linked = -1;
+				for(j = 0; j < total_delta_functions; ++j) {
+					if(!strcmp(delta_functions[j]->name, instructions[i].func)) {
+						// TODO: check argument count is with acceptable range
+						linked = j;
+						break;
+					}
+				}
+				
+				if(linked < 0) {
+					printf("Delta VM Runtime Error: Cannot link function '%s' (bytecode = 0x%x)\n",
+						   instructions[i].func, instructions[i].bc);
+					exit(1);
+				}
+				
+				jit_finish(delta_functions[linked]->function_ptr);
+			}
+			else {
+				// mostly operator instructions
+					 if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
+				else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
+				else if(instructions[i].bc == BYTECODE_CGE) jit_finish(ins_CGE);
+				else if(instructions[i].bc == BYTECODE_CGT) jit_finish(ins_CGT);
+				else if(instructions[i].bc == BYTECODE_CLE) jit_finish(ins_CLE);
+				else if(instructions[i].bc == BYTECODE_CLT) jit_finish(ins_CLT);
+				else if(instructions[i].bc == BYTECODE_CNE) jit_finish(ins_CNE);
+				else if(instructions[i].bc == BYTECODE_DEC) jit_finish(ins_DEC);
+				else if(instructions[i].bc == BYTECODE_DIV) jit_finish(ins_DIV);
+				else if(instructions[i].bc == BYTECODE_GTO) jit_finish(ins_GTO);
+				else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
+				else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);
+				else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
+				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
+				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
+				else                                        jit_finish(ins_NUL);
+			}
 		}
 	}
 	jit_ret();

@@ -11,8 +11,7 @@
 /**
  * @brief Sine (radians).
  */
-ins(SIN)
+delta_function(sin)
 {
-	DELTA_PRINT_INS_ARGS(SIN);
 	DELTA_RETURN_NUMBER(sin(delta_cast_number(DELTA_ARG0)));
 }

@@ -83,7 +83,7 @@ typedef void (*stack_function)(struct DeltaInstruction*);
 
 struct DeltaInstruction
 {
-	stack_function f;
+	char* func;
 	DeltaByteCode bc;
 	int args;
 	int *arg;
@@ -93,22 +93,15 @@ typedef struct DeltaInstruction DI;
 
 typedef struct
 {
-	int dummy;
+	char* name;
+	void (*function_ptr)(struct DeltaInstruction *d);
+	int min_args;
+	int max_args;
 } DeltaFunction;
 
 
 typedef struct
 {
-	int total_functions;
-	DeltaFunction **f;
-} DeltaObject;
-
-
-typedef struct
-{
-	//int total_objects;
-	//DeltaObject **o;
-	
 	int alloc_ins, total_ins;
 	DI *ins;
 	

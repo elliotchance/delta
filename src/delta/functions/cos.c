@@ -11,8 +11,7 @@
 /**
  * @brief Cosine (radians).
  */
-ins(COS)
+delta_function(cos)
 {
-	DELTA_PRINT_INS_ARGS(COS);
 	DELTA_RETURN_NUMBER(cos(delta_cast_number(DELTA_ARG0)));
 }

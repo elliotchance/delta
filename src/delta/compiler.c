@@ -32,56 +32,65 @@ static int arg_depth = 0;
 
 #define DELTA_ADD_OPERATOR_BYTECODE(__BYTECODE) \
 	printf("BYTECODE_%s (%d, %d, %d)\n", #__BYTECODE, var_dest, var_id1, var_id2); \
-	DeltaFunction_push(c, new_DeltaInstruction3(BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
+	DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
 
 
-DI new_DeltaInstruction0(DeltaByteCode bc)
+DI new_DeltaInstruction0(char *name, DeltaByteCode bc)
 {
 	DI d;
+	d.func = name;
 	d.bc = bc;
+	
 	return d;
 }
 
 
-DI new_DeltaInstruction1(DeltaByteCode bc, int destination)
+DI new_DeltaInstruction1(char *name, DeltaByteCode bc, int destination)
 {
 	DI d;
+	d.func = name;
 	d.bc = bc;
 	d.args = 1;
 	d.arg = (int*) malloc(d.args * sizeof(int));
 	d.arg[0] = destination;
+	
 	return d;
 }
 
 
-DI new_DeltaInstruction2(DeltaByteCode bc, int destination, int source1)
+DI new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int source1)
 {
 	DI d;
+	d.func = name;
 	d.bc = bc;
 	d.args = 2;
 	d.arg = (int*) malloc(d.args * sizeof(int));
 	d.arg[0] = destination;
 	d.arg[1] = source1;
+	
 	return d;
 }
 
 
-DI new_DeltaInstruction3(DeltaByteCode bc, int destination, int source1, int source2)
+DI new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int source1, int source2)
 {
 	DI d;
+	d.func = name;
 	d.bc = bc;
 	d.args = 3;
 	d.arg = (int*) malloc(d.args * sizeof(int));
 	d.arg[0] = destination;
 	d.arg[1] = source1;
 	d.arg[2] = source2;
+	
 	return d;
 }
 
 
-DI new_DeltaInstructionN(DeltaByteCode bc)
+DI new_DeltaInstructionN(char *name, DeltaByteCode bc)
 {
 	DI d;
+	d.func = name;
 	d.bc = bc;
 	
 	// we don't just assign the pointer we copy the data so that theres no danger of the vaues
@@ -179,7 +188,8 @@ int delta_get_operator_order(char* op)
 		return 1;
 	if(!strcmp(op, "+") || !strcmp(op, "-"))
 		return 2;
-	if(!strcmp(op, "=") || !strcmp(op, "+="))
+	if(!strcmp(op, "=") || !strcmp(op, "+=") || !strcmp(op, "-=") || !strcmp(op, "*=") ||
+	   !strcmp(op, "/="))
 		return 3;
 	
 	// unknown operators are always performed with the lowest priority
@@ -193,30 +203,9 @@ int delta_push_label(DeltaCompiler *c, char *name)
 }
 
 
-DeltaFunction* new_DeltaFunction()
-{
-	DeltaFunction *f = (DeltaFunction*) malloc(sizeof(DeltaFunction));	
-	return f;
-}
-
-
 void DeltaFunction_push(DeltaCompiler* c, DI ins)
 {
 	c->ins[c->total_ins++] = ins;
-}
-
-
-DeltaObject* new_DeltaObject(int total_functions)
-{
-	DeltaObject *o = (DeltaObject*) malloc(sizeof(DeltaObject));
-	o->total_functions = total_functions;
-	o->f = (DeltaFunction**) malloc(o->total_functions * sizeof(DeltaFunction*));
-	
-	int i;
-	for(i = 0; i < o->total_functions; ++i)
-		o->f[i] = new_DeltaFunction();
-	
-	return o;
 }
 
 
@@ -323,37 +312,14 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 		if(found > 0) {
 			int var_dest = ++var_temp;
 			
-			if(!strcmp(function_name, "array_push")) {
-				DELTA_ADD_BYTECODE(APH);
+			printf("BYTECODE_CAL %s(", function_name);
+			int _k;
+			arg_ptr[arg_depth][0] = var_dest;
+			for(_k = 0; _k < arg_count[arg_depth]; ++_k) {
+				printf(" %d", arg_ptr[arg_depth][_k]);
 			}
-			else if(!strcmp(function_name, "cos")) {
-				DELTA_ADD_BYTECODE(COS);
-			}
-			else if(!strcmp(function_name, "sin")) {
-				DELTA_ADD_BYTECODE(SIN);
-			}
-			else if(!strcmp(function_name, "sqrt")) {
-				DELTA_ADD_BYTECODE(SQT);
-			}
-			else if(!strcmp(function_name, "strlen")) {
-				DELTA_ADD_BYTECODE(SLN);
-			}
-			else if(!strcmp(function_name, "substr")) {
-				DELTA_ADD_BYTECODE(SST);
-			}
-			else if(!strcmp(function_name, "print")) {
-				DELTA_ADD_BYTECODE(OUT);
-			}
-			else if(!strcmp(function_name, "println")) {
-				DELTA_ADD_BYTECODE(OUL);
-			}
-			else if(!strcmp(function_name, "tan")) {
-				DELTA_ADD_BYTECODE(TAN);
-			}
-			else {
-				printf("Can't find function '%s'!\n", function_name);
-				exit(1);
-			}
+			printf(" )\n");
+			DeltaFunction_push(c, new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
 			r = (char*) malloc(8);
 			sprintf(r, "#%d", var_dest);
@@ -460,13 +426,13 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 #if DELTA_SHOW_BYTECODE
 			printf("BYTECODE_RTN (%d)\n", 0);
 #endif
-			DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_RTN, 0));
+			DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_RTN, 0));
 		} else {
 			int var_id1 = delta_get_variable_id(c, tokens[1]);
 #if DELTA_SHOW_BYTECODE
 			printf("BYTECODE_RTN (%d)\n", var_id1);
 #endif
-			DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_RTN, var_id1));
+			DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_RTN, var_id1));
 		}
 	}
 	
@@ -495,7 +461,7 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 #if DELTA_SHOW_BYTECODE
 			printf("BYTECODE_SET (%d, %d)\n", var_dest, var_id1);
 #endif
-			DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_SET, var_dest, var_id1));
+			DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
 		}
 		
 		// 3 argument operators
@@ -675,7 +641,7 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 #if DELTA_SHOW_BYTECODE
 		printf("BYTECODE_IFS (%d, %d)\n", label_id, expr_eval);
 #endif
-		DeltaFunction_push(c, new_DeltaInstruction2(BYTECODE_IFS, label_id, expr_eval));
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, expr_eval));
 	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);
@@ -710,14 +676,14 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 	if(!strcmp(short_identifier, "if")) {
 		// add the jump for else
 		printf("BYTECODE_JMP ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_JMP));
+		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_JMP));
 		
 		printf("BYTECODE_PAT ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_PAT));
+		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_PAT));
 	}
 	else if(!strcmp(short_identifier, "else")) {
 		printf("BYTECODE_PAT ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(BYTECODE_PAT));
+		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_PAT));
 	}
 	
 	// clean up

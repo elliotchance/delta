@@ -6,11 +6,18 @@
  */
 
 #include "vm.h"
+#include "bytecode.h"
+#include "functions.h"
+#include "ins.h"
+
 
 DeltaVariable **ram;
 #define total_ram 30
 int stack_pos = 0;
 long start;
+DeltaFunction **delta_functions;
+int alloc_delta_functions;
+int total_delta_functions;
 
 
 void delta_vm_print_variable(DeltaVariable *v)
@@ -47,11 +54,34 @@ void delta_vm_print_ram(DeltaCompiler *c)
 }
 
 
+int delta_vm_push_function(DeltaFunction* f)
+{
+	delta_functions[total_delta_functions++] = f;
+	return DELTA_SUCCESS;
+}
+
+
 int delta_vm_init(DeltaCompiler *c)
 {	
+	int i;
+	
+	// prepare built-in functions
+	alloc_delta_functions = 20;
+	total_delta_functions = 0;
+	delta_functions = (DeltaFunction**) calloc(alloc_delta_functions, sizeof(DeltaFunction*));
+	
+	delta_vm_push_function(new_DeltaFunction("array_push", func(array_push), 2, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("print",      func(print), 1, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("println",    func(println), 1, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("sin",        func(sin), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("sqrt",       func(sqrt), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("strlen",     func(substr), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("substr",     func(substr), 2, 3));
+	delta_vm_push_function(new_DeltaFunction("tan",        func(tan), 1, 1));
+	
 	// allocate memory
 	ram = (DeltaVariable**) malloc(total_ram * sizeof(DeltaVariable*));
-	int i;
 	for(i = 0; i < total_ram; ++i)
 		ram[i] = (DeltaVariable*) malloc(sizeof(DeltaVariable));
 	

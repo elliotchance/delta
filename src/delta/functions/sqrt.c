@@ -11,7 +11,7 @@
 /**
  * @brief Square root.
  */
-ins(SQT)
+delta_function(sqrt)
 {
 	double temp = delta_cast_number(DELTA_ARG0);
 	if(temp < 0)

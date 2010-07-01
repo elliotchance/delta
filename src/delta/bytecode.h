@@ -8,7 +8,7 @@
 #ifndef _DELTA_BYTECODE_H
 #define _DELTA_BYTECODE_H
 
-#define BYTECODE_NUL 0x0000 /* do nothing */
+#define BYTECODE_NUL 0x0000 // do nothing
 
 
 //-----------------------------------------------
@@ -42,23 +42,9 @@
 #define BYTECODE_IFS 0x0112 // if
 #define BYTECODE_PAT 0x0113 // patch forward jump
 #define BYTECODE_JMP 0x0114 // jump forward
+#define BYTECODE_CAL 0x0115 // call function, linked at JIT compile time
 
-#define BYTECODE_RTN 0x0120 /* return */
-
-
-//-----------------------------------------------
-// functions
-//-----------------------------------------------
-
-#define BYTECODE_SQT 0x0200 // sqrt()        square root
-#define BYTECODE_OUT 0x0201 // print()       print variables
-#define BYTECODE_COS 0x0202 // cos()         cosine (radians)
-#define BYTECODE_SIN 0x0203 // sin()         sin (radians)
-#define BYTECODE_TAN 0x0204 // tan()         tangent (radians)
-#define BYTECODE_APH 0x0205 // array_push()  add item onto array
-#define BYTECODE_OUL 0x0206 // println()     print variables with new lines
-#define BYTECODE_SLN 0x0207 // strlen()      get the length of a string variable
-#define BYTECODE_SST 0x0208 // substr()      fetch a substring
+#define BYTECODE_RTN 0x0120 // return
 
 
 #endif
