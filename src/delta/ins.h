@@ -19,6 +19,12 @@
 #define DELTA_DEST   d->arg[0]
 #define DELTA_ARG0   d->arg[1]
 #define DELTA_ARG1   d->arg[2]
+#define DELTA_ARG2   d->arg[3]
+#define DELTA_ARG3   d->arg[4]
+#define DELTA_ARG4   d->arg[5]
+#define DELTA_ARG5   d->arg[6]
+#define DELTA_ARG6   d->arg[7]
+#define DELTA_ARG7   d->arg[8]
 #define DELTA_ARG(i) d->arg[i + 1]
 
 #define DELTA_PRINT_INS_ARGS(__BYTECODE) \
@@ -62,6 +68,7 @@ ins(SET); // =
 ins(SIN); // sin()
 ins(SLN); // strlen()
 ins(SQT); // sqrt()
+ins(SST); // substr()
 ins(SUB); // -
 ins(TAN); // tan()
 

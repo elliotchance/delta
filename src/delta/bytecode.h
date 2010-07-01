@@ -58,6 +58,7 @@
 #define BYTECODE_APH 0x0205 // array_push()  add item onto array
 #define BYTECODE_OUL 0x0206 // println()     print variables with new lines
 #define BYTECODE_SLN 0x0207 // strlen()      get the length of a string variable
+#define BYTECODE_SST 0x0208 // substr()      fetch a substring
 
 
 #endif

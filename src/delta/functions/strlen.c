@@ -12,6 +12,11 @@
  */
 ins(SLN)
 {
-	delta_cast_string(DELTA_ARG0);
-	DELTA_RETURN_NUMBER(ram[DELTA_ARG0]->size);
+	int release;
+	DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
+	int r = v->size;
+	
+	if(release)
+		free(v);
+	DELTA_RETURN_NUMBER(r);
 }

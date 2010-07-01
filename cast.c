@@ -7,6 +7,7 @@
 #include "cast.h"
 #include "structs.h"
 #include "vm.h"
+#include <string.h>
 
 
 /**
@@ -49,18 +50,30 @@ inline double delta_cast_number(int address)
 
 
 /**
- * @brief Attemp to convert a variable to a string.
+ * @brief Attemp to cast a variable to a string.
  * 
  * Variables will only be cast when there is no preicion lost.
  *
  * @param address RAM location of the variable.
- * @return int Either DELTA_SUCCESS or DELTA_FAILURE;
  */
-inline int delta_cast_string(int address)
+inline DeltaVariable* delta_cast_string(int address, int *free)
 {
-	if(ram[address]->type == DELTA_TYPE_STRING)
-		return DELTA_SUCCESS;
+	if(ram[address]->type == DELTA_TYPE_STRING) {
+		*free = DELTA_NO;
+		return ram[address];
+	}
+	
+	if(ram[address]->type == DELTA_TYPE_NUMBER) {
+		// convert floating point to string
+		ram[address]->type = DELTA_TYPE_STRING;
+		ram[address]->value.ptr = (char*) malloc(16);
+		sprintf(ram[address]->value.ptr, "%g", ram[address]->value.number);
+		ram[address]->size = strlen(ram[address]->value.ptr);
+		
+		*free = DELTA_NO;
+		return ram[address];
+	}
 	
 	// hopefully we will never get to here
-	return DELTA_FAILURE;
+	return NULL;
 }

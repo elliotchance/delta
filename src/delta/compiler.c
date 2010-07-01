@@ -337,6 +337,9 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 			else if(!strcmp(function_name, "strlen")) {
 				DELTA_ADD_BYTECODE(SLN);
 			}
+			else if(!strcmp(function_name, "substr")) {
+				DELTA_ADD_BYTECODE(SST);
+			}
 			else if(!strcmp(function_name, "print")) {
 				DELTA_ADD_BYTECODE(OUT);
 			}
