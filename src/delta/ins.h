@@ -16,17 +16,29 @@
 #include "functions.h"
 
 
-#define DELTA_ARGS   (d->args - 1)
-#define DELTA_DEST   d->arg[0]
-#define DELTA_ARG0   d->arg[1]
-#define DELTA_ARG1   d->arg[2]
-#define DELTA_ARG2   d->arg[3]
-#define DELTA_ARG3   d->arg[4]
-#define DELTA_ARG4   d->arg[5]
-#define DELTA_ARG5   d->arg[6]
-#define DELTA_ARG6   d->arg[7]
-#define DELTA_ARG7   d->arg[8]
-#define DELTA_ARG(i) d->arg[i + 1]
+#define DELTA_ARGS        ((d->args - 1) / 2)
+#define DELTA_DEST        d->arg[0]
+
+#define DELTA_ARG0        d->arg[2]
+#define DELTA_ARG1        d->arg[4]
+#define DELTA_ARG2        d->arg[6]
+#define DELTA_ARG3        d->arg[8]
+#define DELTA_ARG4        d->arg[10]
+#define DELTA_ARG5        d->arg[12]
+#define DELTA_ARG6        d->arg[14]
+#define DELTA_ARG7        d->arg[16]
+
+#define DELTA_ARG0_NAME   d->arg[1]
+#define DELTA_ARG1_NAME   d->arg[3]
+#define DELTA_ARG2_NAME   d->arg[5]
+#define DELTA_ARG3_NAME   d->arg[7]
+#define DELTA_ARG4_NAME   d->arg[9]
+#define DELTA_ARG5_NAME   d->arg[11]
+#define DELTA_ARG6_NAME   d->arg[13]
+#define DELTA_ARG7_NAME   d->arg[15]
+
+#define DELTA_ARG(i)      d->arg[(i * 2) + 2]
+#define DELTA_ARG_NAME(i) d->arg[(i * 2) + 1]
 
 #define DELTA_PRINT_INS_ARGS(__BYTECODE) \
 	printf("*BYTECODE_%s (", #__BYTECODE); \

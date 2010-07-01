@@ -3,6 +3,7 @@
  */
 
 #include "ins.h"
+#include <string.h>
 
 
 /**
@@ -20,8 +21,11 @@ delta_function(array)
 	for(i = 0; i < DELTA_ARGS; ++i) {
 		// create the array element
 		struct DeltaArrayValue *dav = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
-		dav->key = (char*) malloc(8);
-		sprintf(dav->key, "%d", i);
+		int release;
+		
+		struct DeltaVariable *v = delta_cast_string(DELTA_ARG_NAME(i), &release);
+		dav->key = (char*) malloc(v->size + 1);
+		strncpy(dav->key, v->value.ptr, v->size);
 		dav->value = ram[DELTA_ARG(i)];
 		
 		// push the element onto the tail
@@ -32,5 +36,9 @@ delta_function(array)
 		
 		ram[DELTA_DEST]->value.array.tail->next = dav;
 		ram[DELTA_DEST]->value.array.tail = dav;
+		
+		// clean up
+		if(release)
+			free(v);
 	}
 }

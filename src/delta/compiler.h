@@ -33,6 +33,8 @@ char*          delta_copy_string(char* str);
 char*          delta_copy_substring(char* str, int start, int length);
 DI             new_DeltaInstructionN(char *name, DeltaByteCode bc);
 int            delta_strpos(char *haystack, char *needle);
+int            delta_push_constant(DeltaCompiler *c, char *token);
+char*          delta_extract_argument_key(char *arg);
 
 
 #endif

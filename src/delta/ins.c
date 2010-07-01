@@ -14,7 +14,7 @@
 ins(ADD)
 {
 	//DELTA_PRINT_INS_ARGS(ADD);
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) + delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) + delta_cast_number(d->arg[2]));
 }
 
 
@@ -23,7 +23,7 @@ ins(ADD)
  */
 ins(CEQ)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) == delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) == delta_cast_number(d->arg[2]));
 }
 
 
@@ -32,7 +32,7 @@ ins(CEQ)
  */
 ins(CGE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) >= delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) >= delta_cast_number(d->arg[2]));
 }
 
 
@@ -41,7 +41,7 @@ ins(CGE)
  */
 ins(CGT)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) > delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) > delta_cast_number(d->arg[2]));
 }
 
 
@@ -50,7 +50,7 @@ ins(CGT)
  */
 ins(CLE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) <= delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) <= delta_cast_number(d->arg[2]));
 }
 
 
@@ -59,7 +59,7 @@ ins(CLE)
  */
 ins(CLT)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) < delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) < delta_cast_number(d->arg[2]));
 }
 
 
@@ -68,7 +68,7 @@ ins(CLT)
  */
 ins(CNE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) != delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) != delta_cast_number(d->arg[2]));
 }
 
 
@@ -87,7 +87,7 @@ ins(DEC)
 ins(DIV)
 {
 	// this is only numerical division, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) / delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) / delta_cast_number(d->arg[2]));
 }
 
 
@@ -135,10 +135,8 @@ ins(LBL)
  */
 ins(MUL)
 {
-	DELTA_PRINT_INS_ARGS(MUL);
-	
 	// this is only numerical multiplicaton, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) * delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) * delta_cast_number(d->arg[2]));
 }
 
 
@@ -162,14 +160,16 @@ ins(RTN)
 
 
 /**
- * @brief Copy a variable from location to another.
+ * @brief Copy a variable from one location to another.
  */
 ins(SET)
 {
-	// this copies the contents of a variable to a new location in RAM
-	ram[DELTA_DEST]->type = ram[DELTA_ARG0]->type;
-	ram[DELTA_DEST]->value.number = ram[DELTA_ARG0]->value.number;
-	ram[DELTA_DEST]->value.ptr = ram[DELTA_ARG0]->value.ptr;
+	// TODO: assigning any type except object requires a complete recursive copy of the variable.
+	ram[DELTA_DEST]->type = ram[d->arg[1]]->type;
+	ram[DELTA_DEST]->size = ram[d->arg[1]]->size;
+	ram[DELTA_DEST]->value.number = ram[d->arg[1]]->value.number;
+	ram[DELTA_DEST]->value.ptr = ram[d->arg[1]]->value.ptr;
+	ram[DELTA_DEST]->value.array = ram[d->arg[1]]->value.array;
 }
 
 
@@ -179,5 +179,5 @@ ins(SET)
 ins(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_ARG0) - delta_cast_number(DELTA_ARG1));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) - delta_cast_number(d->arg[2]));
 }

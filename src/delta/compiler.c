@@ -4,6 +4,7 @@
 
 #include "compiler.h"
 #include "bytecode.h"
+#include "vm.h"
 #include <string.h>
 #include <ctype.h>
 
@@ -260,7 +261,7 @@ char* delta_copy_string(char* str)
 
 char* delta_copy_substring(char* str, int start, int length)
 {
-	int len = length - start + 1;
+	int len = length - start;
 	char *r = (char*) malloc(len + 1);
 	strncpy(r, str + start, len);
 	return r;
@@ -305,7 +306,6 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
 		int result = delta_compile_line(c, r, strlen(r));
-		printf("result = %d\n", result);
 		
 		// if there was a function, apply it now
 		if(found > 0) {
@@ -357,6 +357,18 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 }
 
 
+int delta_push_constant(DeltaCompiler *c, char *token)
+{
+	++var_temp;
+	c->constants[c->total_constants].type = DELTA_TYPE_STRING;
+	c->constants[c->total_constants].value.ptr = token;
+	c->constants[c->total_constants].ram_location = var_temp;
+	c->constants[c->total_constants].size = strlen(token);
+	++c->total_constants;
+	return var_temp;
+}
+
+
 int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 {
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
@@ -372,20 +384,14 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 			tokens[total_tokens++] = token;
 		
 		if(delta_is_string(token)) {
-			++var_temp;
-			c->constants[c->total_constants].type = DELTA_TYPE_STRING;
-			c->constants[c->total_constants].value.ptr =
-			delta_copy_substring(token, 1, strlen(token) - 2);
-			c->constants[c->total_constants].ram_location = var_temp;
-			c->constants[c->total_constants].size = strlen(token) - 2;
-			sprintf(token, "#%d", var_temp);
-			++c->total_constants;
-		}
-		else if(delta_is_number(token)) {
+			sprintf(token, "#%d", delta_push_constant(c, delta_copy_substring(token, 1, strlen(token) - 1)));
+		} else if(delta_is_number(token)) {
 			++var_temp;
 			c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
 			c->constants[c->total_constants].value.number = atof(token);
 			c->constants[c->total_constants].ram_location = var_temp;
+			delta_vm_print_variable(&c->constants[c->total_constants]);
+			printf("\n");
 			sprintf(token, "#%d", var_temp);
 			++c->total_constants;
 		}
@@ -548,6 +554,33 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 }
 
 
+char* delta_extract_argument_key(char *arg)
+{
+	// look for the operator
+	int i, len = strlen(arg), found = -1;
+	for(i = 0; i < len - 1; ++i) {
+		if(arg[i] == '=' && arg[i + 1] == '>') {
+			found = i;
+			break;
+		}
+	}
+	
+	// a key was found
+	if(found >= 0) {
+		// chop the key off
+		char *r = delta_copy_substring(arg, 0, found);
+		
+		// TODO: memory leak
+		arg = delta_copy_substring(arg, found + 2, len);
+		
+		return r;
+	}
+	
+	// no key was found
+	return NULL;
+}
+
+
 int delta_compile_line(DeltaCompiler *c, char* line, int length)
 {
 	// split the line on commas
@@ -573,10 +606,24 @@ int delta_compile_line(DeltaCompiler *c, char* line, int length)
 	}
 	
 	// for each part there will be a destination address
-	arg_count[arg_depth] = total_parts + 1;
+	arg_count[arg_depth] = (total_parts * 2) + 1;
 	for(i = 0; i < total_parts; ++i) {
 		++arg_depth;
-		arg_ptr[arg_depth - 1][i + 1] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
+		
+		// create the argument key
+		char *key = delta_extract_argument_key(parts[i]);
+		int key_addr;
+		if(key == NULL) {
+			key = (char*) malloc(8);
+			sprintf(key, "%d", i);
+			key_addr = delta_push_constant(c, key);
+		}
+		else
+			key_addr = delta_compile_line_part(c, key, strlen(key));
+
+		
+		arg_ptr[arg_depth - 1][(i * 2) + 1] = key_addr;
+		arg_ptr[arg_depth - 1][(i * 2) + 2] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
 		--arg_depth;
 	}
 	arg_ptr[arg_depth][0] = var_temp++;
@@ -623,13 +670,6 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 		int expr_end = delta_strpos(identifier, ")");
 		char *expr = (char*) malloc(expr_end - expr_start + 1);
 		strncpy(expr, identifier + expr_start, expr_end - expr_start);
-		
-		// add label
-		/*int label_id = delta_push_label(c, "begin");
-#if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_LBL (%d)\n", label_id);
-#endif
-		DeltaFunction_push(c, new_DeltaInstruction1(BYTECODE_LBL, label_id));*/
 		
 		// evaluate expression
 		printf("expr = '%s'\n", expr);

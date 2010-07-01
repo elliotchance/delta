@@ -9,7 +9,7 @@
 
 
 struct DeltaVariable **ram;
-#define total_ram 30
+#define total_ram 100
 int stack_pos = 0;
 long start;
 DeltaFunction **delta_functions;
@@ -99,11 +99,11 @@ int delta_vm_prepare(DeltaCompiler *c)
 	// load constants
 	int i;
 	for(i = 0; i < c->total_constants; ++i) {
-		printf("ram[%d] = ", c->constants[i].ram_location);
-		delta_vm_print_variable(&c->constants[i]);
-		printf("\n");
-		
 		ram[c->constants[i].ram_location] = &c->constants[i];
+		
+		/*printf("ram[%d] = ", c->constants[i].ram_location);
+		delta_vm_print_variable(ram[c->constants[i].ram_location]);
+		printf("\n");*/
 	}
 	
 	return DELTA_SUCCESS;
