@@ -10,6 +10,7 @@
 
 #include "structs.h"
 #include "vm.h"
+#include "cast.h"
 
 
 #define ins(name) void ins_##name(DI *d)
@@ -59,6 +60,7 @@ ins(OUL); // println()
 ins(RTN); // return
 ins(SET); // =
 ins(SIN); // sin()
+ins(SLN); // strlen()
 ins(SQT); // sqrt()
 ins(SUB); // -
 ins(TAN); // tan()

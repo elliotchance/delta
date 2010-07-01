@@ -334,6 +334,9 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 			else if(!strcmp(function_name, "sqrt")) {
 				DELTA_ADD_BYTECODE(SQT);
 			}
+			else if(!strcmp(function_name, "strlen")) {
+				DELTA_ADD_BYTECODE(SLN);
+			}
 			else if(!strcmp(function_name, "print")) {
 				DELTA_ADD_BYTECODE(OUT);
 			}
@@ -405,6 +408,7 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 			c->constants[c->total_constants].value.ptr =
 			delta_copy_substring(token, 1, strlen(token) - 2);
 			c->constants[c->total_constants].ram_location = var_temp;
+			c->constants[c->total_constants].size = strlen(token) - 2;
 			sprintf(token, "#%d", var_temp);
 			++c->total_constants;
 		}

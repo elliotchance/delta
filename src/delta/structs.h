@@ -11,7 +11,8 @@
 #include "lightning.h"
 
 
-#define DELTA_SUCCESS 0
+#define DELTA_SUCCESS 1
+#define DELTA_FAILURE 0
 #define DELTA_YES     1
 #define DELTA_NO      0
 
@@ -42,8 +43,13 @@ typedef struct
 
 typedef struct
 {
+	//! The name for this variable.
 	char* name;
+	
+	//! The data type for this variable.
 	DeltaVariableType type;
+	
+	//! Variable value.
 	union
 	{
 		//! Numerical value.
@@ -55,7 +61,12 @@ typedef struct
 		//! Array value.
 		DeltaArray array;
 	} value;
+	
+	//! RAM location of this variable.
 	int ram_location;
+	
+	//! To make strings binary safe we have a separate size for ptr.
+	int size;
 } DeltaVariable;
 
 

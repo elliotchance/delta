@@ -69,6 +69,7 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
 			else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
 			else if(instructions[i].bc == BYTECODE_SIN) jit_finish(ins_SIN);
+			else if(instructions[i].bc == BYTECODE_SLN) jit_finish(ins_SLN);
 			else if(instructions[i].bc == BYTECODE_SQT) jit_finish(ins_SQT);
 			else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
 			else if(instructions[i].bc == BYTECODE_TAN) jit_finish(ins_TAN);
