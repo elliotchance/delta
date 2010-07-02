@@ -30,9 +30,9 @@ delta_function(atanh);
 delta_function(cos);
 delta_function(sin);
 delta_function(sqrt);
-delta_function(strlen);
-delta_function(substr);
 delta_function(tan);
+delta_function(ceil);
+delta_function(floor);
 
 // string
 delta_function(strlen);

@@ -94,6 +94,8 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("sin",        func(sin), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("sqrt",       func(sqrt), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("tan",        func(tan), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ceil",       func(ceil), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("floor",      func(floor), 1, 1));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",     func(strlen), 1, 1));
