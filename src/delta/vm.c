@@ -68,25 +68,35 @@ int delta_vm_init(DeltaCompiler *c)
 	int i;
 	
 	// prepare built-in functions
-	alloc_delta_functions = 20;
+	alloc_delta_functions = 200;
 	total_delta_functions = 0;
 	delta_functions = (DeltaFunction**) calloc(alloc_delta_functions, sizeof(DeltaFunction*));
 	
-	delta_vm_push_function(new_DeltaFunction("abs",        func(abs), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("acos",       func(acos), 1, 1));
+	// array
 	delta_vm_push_function(new_DeltaFunction("array",      func(array), 0, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("array_push", func(array_push), 2, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("asin",       func(asin), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("atan",       func(atan), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("count",      func(count), 1, 1));
+	
+	// io
 	delta_vm_push_function(new_DeltaFunction("print",      func(print), 1, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("println",    func(println), 1, DELTA_MAX_ARGS));
+	
+	// math
+	delta_vm_push_function(new_DeltaFunction("abs",        func(abs), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("acos",       func(acos), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("acosh",      func(acosh), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("asin",       func(asin), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("asinh",      func(asinh), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("atan",       func(atan), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("atanh",      func(atanh), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("sin",        func(sin), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("sqrt",       func(sqrt), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("strlen",     func(substr), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("substr",     func(substr), 2, 3));
 	delta_vm_push_function(new_DeltaFunction("tan",        func(tan), 1, 1));
+	
+	// string
+	delta_vm_push_function(new_DeltaFunction("strlen",     func(strlen), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("substr",     func(substr), 2, 3));
 	
 	// allocate memory
 	ram = (struct DeltaVariable**) malloc(total_ram * sizeof(struct DeltaVariable*));
