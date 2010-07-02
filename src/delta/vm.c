@@ -79,6 +79,7 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("asin",       func(asin), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("atan",       func(atan), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("cos",        func(cos), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("count",      func(count), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("print",      func(print), 1, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("println",    func(println), 1, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("sin",        func(sin), 1, 1));

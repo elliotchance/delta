@@ -1,2 +1,4 @@
 build/*
 *.xcodeproj
+cloc.pl
+sloc.sh
