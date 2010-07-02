@@ -35,7 +35,9 @@ int main()
 	// execute
 	delta_vm_prepare(c);
 	start = clock();
+	printf("\n\n==> BEGIN\n");
 	f(NULL);
+	printf("==> END\n\n");
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	
 	// show ram

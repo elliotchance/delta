@@ -47,9 +47,11 @@ void delta_vm_print_ram(DeltaCompiler *c)
 {
 	int i;
 	for(i = 0; i < total_ram; ++i) {
-		printf("ram[%d] = ", i);
-		delta_vm_print_variable(ram[i]);
-		printf("\n");
+		if(ram[i]->type != DELTA_TYPE_NULL) {
+			printf("ram[%d] = ", i);
+			delta_vm_print_variable(ram[i]);
+			printf("\n");
+		}
 	}
 }
 

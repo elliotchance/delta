@@ -70,6 +70,8 @@
 double delta_cast_number(int address);
 
 ins(ADD); // +
+ins(AG1); // Get first dimention array
+ins(AS1); // Assign first dimention array
 ins(CEQ); // ==
 ins(CGE); // >=
 ins(CGT); // >

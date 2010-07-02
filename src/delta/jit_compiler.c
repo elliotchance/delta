@@ -68,7 +68,9 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			}
 			else {
 				// mostly operator instructions
-					 if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
+				     if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
+				else if(instructions[i].bc == BYTECODE_AG1) jit_finish(ins_AG1);
+				else if(instructions[i].bc == BYTECODE_AS1) jit_finish(ins_AS1);
 				else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
 				else if(instructions[i].bc == BYTECODE_CGE) jit_finish(ins_CGE);
 				else if(instructions[i].bc == BYTECODE_CGT) jit_finish(ins_CGT);

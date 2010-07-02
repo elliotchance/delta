@@ -164,6 +164,17 @@ int delta_get_variable_id(DeltaCompiler *c, char* name)
 	if(name == NULL)
 		return -1;
 	
+	// strip off array element
+	char *element = NULL;
+	int pos = delta_strpos(name, "[");
+	if(pos >= 0) {
+		int end = delta_strpos(name, "]");
+		element = (char*) malloc(end - pos);
+		strncpy(element, name + pos + 1, end - pos - 1);
+		name[pos] = 0;
+	}
+	printf("looking for '%s' [%s]\n", name, element);
+	
 	// a register address
 	if(name[0] == '#') {
 		int temp = -1;
@@ -171,14 +182,29 @@ int delta_get_variable_id(DeltaCompiler *c, char* name)
 		return temp;
 	}
 	
-	int i;
+	int i, location = -1;
 	for(i = 0; i < c->total_vars; ++i) {
-		if(!strcmp(name, c->vars[i].name))
-			return c->vars[i].ram_location;
+		if(!strcmp(name, c->vars[i].name)) {
+			location = c->vars[i].ram_location;
+			break;
+		}
+	}
+	
+	// if the variable is found and we need to only access one element we have to copy the array
+	// value out into a temp place
+	if(location >= 0 && element != NULL) {
+		int var_dest = var_temp++;
+		int var_dimention = delta_compile_line_part(c, element, strlen(element));
+		
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_AG1 ( %d %d %d )\n", var_dest, location, var_dimention);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location, var_dimention));
+		return var_dest;
 	}
 	
 	// variable not found
-	return -1;
+	return location;
 }
 
 
@@ -275,7 +301,14 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 	// look for () with function
 	int found = -1;
 	for(; *offset < len; ++*offset) {
-		if(line[*offset] == '(') {
+		if(line[*offset] == '[') {
+			for(; *offset < len; ++*offset) {
+				if(line[*offset] == ']')
+					break;
+			}
+			++*offset;
+		}
+		else if(line[*offset] == '(') {
 			found = *offset - orig;
 			break;
 		}
@@ -305,7 +338,7 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		int result = delta_compile_line(c, r, strlen(r));
+		delta_compile_line(c, r, strlen(r));
 		
 		// if there was a function, apply it now
 		if(found > 0) {
@@ -456,17 +489,37 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		// 2 argument operators
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
-			int var_dest = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
+			//printf("'%s' = '%s'\n", tokens[highest_op_pos - 1], tokens[highest_op_pos + 1]);
+			int var_dest;
 			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);
-			if(var_dest < 0) {
-				fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
-				exit(1);
-			}
 			
+			if(delta_strpos(tokens[highest_op_pos - 1], "[") > 0) {
+				var_dest = delta_get_variable_id(c, "a");
+				if(var_dest < 0) {
+					fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
+					exit(1);
+				}
+				
+				// TODO: fixme
+				char *line2 = "15";
+				int var_dimention = delta_compile_line_part(c, line2, 2);
+				
 #if DELTA_SHOW_BYTECODE
-			printf("BYTECODE_SET (%d, %d)\n", var_dest, var_id1);
+				printf("BYTECODE_AS1 ( %d %d %d )\n", var_dest, var_dimention, var_id1);
 #endif
-			DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
+				DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest, var_dimention, var_id1));
+			} else {
+				var_dest = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
+				if(var_dest < 0) {
+					fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
+					exit(1);
+				}
+				
+#if DELTA_SHOW_BYTECODE
+				printf("BYTECODE_SET (%d, %d)\n", var_dest, var_id1);
+#endif
+				DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
+			}
 		}
 		
 		// 3 argument operators

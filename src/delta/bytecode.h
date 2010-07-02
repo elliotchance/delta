@@ -29,6 +29,10 @@
 #define BYTECODE_INC 0x0040 /* ++ */
 #define BYTECODE_DEC 0x0041 /* -- */
 
+#define BYTECODE_AS1 0x0050 // Set first dimension array
+
+#define BYTECODE_AG1 0x0060 // Get first dimension array
+
 
 //-----------------------------------------------
 // statements, functions and blocks

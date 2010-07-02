@@ -181,3 +181,72 @@ ins(SUB)
 	// this is only numerical subtraction, so other types need to be cast to a number
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) - delta_cast_number(d->arg[2]));
 }
+
+
+/**
+ * @brief Assign the first dimension of an array.
+ */
+ins(AS1)
+{
+	// FIXME: we must be an array
+	
+	int release_key;
+	struct DeltaVariable *v = delta_cast_string(d->arg[1], &release_key);
+	
+	// try and find the key
+	int i, found = 0;
+	struct DeltaArrayValue *element = ram[DELTA_DEST]->value.array.head;
+	for(i = 0; i < ram[DELTA_DEST]->value.array.elements; ++i, element = element->next) {
+		if(!strcmp(v->value.ptr, element->key)) {
+			element->value->type = DELTA_TYPE_NUMBER;
+			element->value->value.number = ram[d->arg[2]]->value.number;
+			found = 1;
+			break;
+		}
+	}
+	
+	// if the key doesn't exist then push the element
+	if(!found) {
+		struct DeltaArrayValue *next = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
+		next->key = v->value.ptr;
+		next->value = ram[d->arg[2]];
+		ram[DELTA_DEST]->value.array.tail->next = next;
+		++ram[DELTA_DEST]->value.array.elements;
+	}
+	
+	// clean up
+	if(release_key)
+		free(v);
+}
+
+
+/**
+ * @brief Get the first dimension of an array.
+ */
+ins(AG1)
+{
+	// FIXME: we must be an array
+	
+	int release_key;
+	struct DeltaVariable *v = delta_cast_string(d->arg[2], &release_key);
+	
+	// try and find the key
+	int i, found = 0;
+	struct DeltaArrayValue *element = ram[d->arg[1]]->value.array.head;
+	for(i = 0; i < ram[d->arg[1]]->value.array.elements; ++i, element = element->next) {
+		if(!strcmp(v->value.ptr, element->key)) {
+			ram[DELTA_DEST]->type = element->value->type;
+			ram[DELTA_DEST]->value.number = element->value->value.number;
+			found = 1;
+			break;
+		}
+	}
+	
+	// if the key doesn't exist then return NULL
+	if(!found)
+		ram[DELTA_DEST]->type = DELTA_TYPE_NULL;
+	
+	// clean up
+	if(release_key)
+		free(v);
+}
