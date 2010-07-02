@@ -25,6 +25,7 @@ delta_function(acosh);
 delta_function(asin);
 delta_function(asinh);
 delta_function(atan);
+delta_function(atan2);
 delta_function(atanh);
 delta_function(cos);
 delta_function(sin);
