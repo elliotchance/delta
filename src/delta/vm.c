@@ -104,6 +104,8 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("hypot",      func(hypot), 2, 2));
 	delta_vm_push_function(new_DeltaFunction("deg2rad",    func(deg2rad), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("rad2deg",    func(rad2deg), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("srand",      func(srand), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("rand",       func(rand), 0, 0));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",     func(strlen), 1, 1));

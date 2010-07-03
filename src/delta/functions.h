@@ -41,6 +41,8 @@ delta_function(pow);
 delta_function(hypot);
 delta_function(deg2rad);
 delta_function(rad2deg);
+delta_function(srand);
+delta_function(rand);
 
 // string
 delta_function(strlen);
