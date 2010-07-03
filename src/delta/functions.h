@@ -39,6 +39,8 @@ delta_function(pi);
 delta_function(log10);
 delta_function(pow);
 delta_function(hypot);
+delta_function(deg2rad);
+delta_function(rad2deg);
 
 // string
 delta_function(strlen);
