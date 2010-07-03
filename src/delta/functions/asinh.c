@@ -7,7 +7,17 @@
 
 
 /**
- * @brief Arc hyperbolic sine.
+ * @brief Inverse hyperbolic sine.
+ * @syntax number asinh ( number arg )
+ *
+ * Returns the inverse hyperbolic sine of arg, i.e. the value whose hyperbolic sine is arg.
+ *
+ * @param arg The argument to process.
+ * @return The inverse hyperbolic sine of arg.
+ * @see sinh
+ * @see asin
+ * @see acosh
+ * @see atanh
  */
 delta_function(asinh)
 {
