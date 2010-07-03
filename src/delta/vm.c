@@ -96,6 +96,9 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("tan",        func(tan), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("ceil",       func(ceil), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("floor",      func(floor), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("exp",        func(exp), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("log",        func(log), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("pi",         func(pi), 0, 0));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",     func(strlen), 1, 1));

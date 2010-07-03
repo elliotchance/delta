@@ -2,3 +2,5 @@ build/*
 *.xcodeproj
 cloc.pl
 sloc.sh
+doc*
+

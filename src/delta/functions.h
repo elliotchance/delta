@@ -33,6 +33,9 @@ delta_function(sqrt);
 delta_function(tan);
 delta_function(ceil);
 delta_function(floor);
+delta_function(exp);
+delta_function(log);
+delta_function(pi);
 
 // string
 delta_function(strlen);
