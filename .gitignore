@@ -3,4 +3,4 @@ build/*
 cloc.pl
 sloc.sh
 doc*
-
+test/*

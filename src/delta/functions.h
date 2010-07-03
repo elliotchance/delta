@@ -43,6 +43,9 @@ delta_function(deg2rad);
 delta_function(rad2deg);
 delta_function(srand);
 delta_function(rand);
+delta_function(sinh);
+delta_function(cosh);
+delta_function(tanh);
 
 // string
 delta_function(strlen);
