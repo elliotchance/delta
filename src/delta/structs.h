@@ -35,6 +35,13 @@ struct DeltaArrayValue
 };
 
 
+struct DeltaDefine
+{
+	char *name;
+	char *value;
+};
+
+
 typedef struct
 {
 	int elements;

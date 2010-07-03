@@ -402,6 +402,18 @@ int delta_push_constant(DeltaCompiler *c, char *token)
 }
 
 
+char* delta_replace_constant(char *token)
+{
+	int i;
+	for(i = 0; i < total_delta_defines; ++i) {
+		if(!strcmp(token, delta_defines[i].name))
+			return delta_copy_string(delta_defines[i].value);
+	}
+	
+	return token;
+}
+
+
 int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 {
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
@@ -413,6 +425,7 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 		delta_skip_spaces(line, &i);
 		
 		token = delta_read_token(c, line, &i);
+		token = delta_replace_constant(token);
 		if(strlen(token) > 0)
 			tokens[total_tokens++] = token;
 		

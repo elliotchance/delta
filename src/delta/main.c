@@ -21,6 +21,7 @@ int main()
 {
 	// init the compiler
 	DeltaCompiler *c = new_DeltaCompiler();
+	delta_vm_init(c);
 	
 	// take input files
 	delta_compile_file(c, "test.delta");
@@ -29,7 +30,6 @@ int main()
 	delta_save_file(c, "test.dc");
 	
 	// compile bytecode to jit
-	delta_vm_init(c);
 	stack_function f = delta_compile_jit(c, 0, c->total_ins);
 	
 	// execute

@@ -36,6 +36,7 @@ int            delta_strpos(char *haystack, char *needle);
 int            delta_push_constant(DeltaCompiler *c, char *token);
 char*          delta_extract_argument_key(char *arg);
 int            delta_compile_line_part(DeltaCompiler *c, char* line, int length);
+char*          delta_replace_constant(char *token);
 
 
 #endif
