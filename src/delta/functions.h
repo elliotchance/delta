@@ -36,6 +36,9 @@ delta_function(floor);
 delta_function(exp);
 delta_function(log);
 delta_function(pi);
+delta_function(log10);
+delta_function(pow);
+delta_function(hypot);
 
 // string
 delta_function(strlen);
