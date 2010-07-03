@@ -313,7 +313,7 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 			break;
 		}
 		if(!isalnum(line[*offset]) && line[*offset] != '_' &&
-		   line[*offset] != '+' && line[*offset] != '-')
+		   line[*offset] != '+' && line[*offset] != '-' && line[*offset] != '.')
 			break;
 	}
 	
