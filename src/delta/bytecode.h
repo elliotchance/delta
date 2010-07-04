@@ -44,6 +44,7 @@
 #define BYTECODE_PAT 0x0113 // patch forward jump
 #define BYTECODE_JMP 0x0114 // jump forward
 #define BYTECODE_CAL 0x0115 // call function, linked at JIT compile time
+#define BYTECODE_LOP 0x0116 // loop
 
 #define BYTECODE_RTN 0x0120 // return
 

@@ -34,11 +34,18 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 			jit_truncr_d_i(JIT_R0, JIT_R0);
 			loop[0] = jit_bnei_i(jit_forward(), JIT_R0, 0);
 		}
+		else if(instructions[i].bc == BYTECODE_LOP) {
+			// copy in the boolean argument as a double
+			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);
+			jit_truncr_d_i(JIT_R0, JIT_R0);
+			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 0);
+		}
 		else if(instructions[i].bc == BYTECODE_LBL)
-			loop[loop_id] = jit_get_label();
+			loop[instructions[i].arg[1]] = jit_get_label();
+		else if(instructions[i].bc == BYTECODE_GTO)
+			jit_jmpi(loop[instructions[i].arg[1]]);
 		else if(instructions[i].bc == BYTECODE_PAT) {
-			jit_patch(loop[loop_id]);
-			++loop_id;
+			jit_patch(loop[instructions[i].arg[0]]);
 		} else if(instructions[i].bc == BYTECODE_JMP) {
 			jit_movi_i(JIT_R0, 1);
 			loop[1] = jit_beqi_i(jit_forward(), JIT_R0, 1);

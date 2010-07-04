@@ -18,6 +18,7 @@ static int var_temp = 0;
 static int *arg_count = NULL;
 static int **arg_ptr = NULL;
 static int arg_depth = 0;
+static int label_id = 0;
 
 
 #define DELTA_ADD_BYTECODE(__BYTECODE) \
@@ -173,7 +174,7 @@ int delta_get_variable_id(DeltaCompiler *c, char* name)
 		strncpy(element, name + pos + 1, end - pos - 1);
 		name[pos] = 0;
 	}
-	printf("looking for '%s' [%s]\n", name, element);
+	//printf("looking for '%s' [%s]\n", name, element);
 	
 	// a register address
 	if(name[0] == '#') {
@@ -285,11 +286,11 @@ char* delta_copy_string(char* str)
 }
 
 
-char* delta_copy_substring(char* str, int start, int length)
+char* delta_copy_substring(char* str, int at, int length)
 {
-	int len = length - start;
+	int len = length - at;
 	char *r = (char*) malloc(len + 1);
-	strncpy(r, str + start, len);
+	strncpy(r, str + at, len);
 	return r;
 }
 
@@ -707,7 +708,7 @@ int delta_strpos(char *haystack, char *needle)
 }
 
 
-int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int start, int end)
+int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int at, int end)
 {	
 	// prepare
 	char* line = (char*) malloc(1024);
@@ -732,21 +733,41 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 	}
 	else if(!strcmp(short_identifier, "if")) {
 		// if statement, get the conditional expression
-		int expr_start = delta_strpos(identifier, "(") + 1;
+		int expr_at = delta_strpos(identifier, "(") + 1;
 		int expr_end = delta_strpos(identifier, ")");
-		char *expr = (char*) malloc(expr_end - expr_start + 1);
-		strncpy(expr, identifier + expr_start, expr_end - expr_start);
+		char *expr = (char*) malloc(expr_end - expr_at + 1);
+		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
 		// evaluate expression
-		printf("expr = '%s'\n", expr);
-		int expr_eval = delta_compile_line(c, expr, expr_end - expr_start);
+		int expr_eval = delta_compile_line(c, expr, expr_end - expr_at);
 		
 		// perform if statement
-		int label_id = 0;
+		++label_id;
 #if DELTA_SHOW_BYTECODE
 		printf("BYTECODE_IFS (%d, %d)\n", label_id, expr_eval);
 #endif
 		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, expr_eval));
+	}
+	else if(!strcmp(short_identifier, "while")) {
+		// if statement, get the conditional expression
+		int expr_at = delta_strpos(identifier, "(") + 1;
+		int expr_end = delta_strpos(identifier, ")");
+		char *expr = (char*) malloc(expr_end - expr_at + 1);
+		strncpy(expr, identifier + expr_at, expr_end - expr_at);
+		
+		// loop label
+		printf("BYTECODE_LBL ( %d )\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
+		
+		// evaluate expression
+		int expr_eval = delta_compile_line(c, expr, expr_end - expr_at);
+		
+		// perform if statement
+		++label_id;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_LOP (%d, %d)\n", label_id, expr_eval);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, expr_eval));
 	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);
@@ -754,7 +775,7 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 	}
 	
 	// dissect lines
-	for(i = start; i < end; ++i) {
+	for(i = at; i < end; ++i) {
 		if(block[i] == '{') {
 			char *new_identifier = (char*) malloc(line_pos + 1);
 			strncpy(new_identifier, block + i - line_pos, line_pos);
@@ -783,12 +804,21 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int sta
 		printf("BYTECODE_JMP ()\n");
 		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_JMP));
 		
-		printf("BYTECODE_PAT ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_PAT));
+		printf("BYTECODE_PAT ( %d )\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 	}
 	else if(!strcmp(short_identifier, "else")) {
-		printf("BYTECODE_PAT ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_PAT));
+		printf("BYTECODE_PAT ( %d )\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+	}
+	else if(!strcmp(short_identifier, "while")) {
+		// jump back to the while expression for the next iteration
+		printf("BYTECODE_GTO ( %d )\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id));
+		
+		// patch the forward jump when the loops ends
+		printf("BYTECODE_PAT ( %d )\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 	}
 	
 	// clean up
