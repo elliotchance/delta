@@ -53,6 +53,9 @@ delta_function(tanh);
 delta_function(getrandmax);
 delta_function(min);
 delta_function(max);
+delta_function(mt_getrandmax);
+delta_function(mt_srand);
+delta_function(mt_rand);
 
 // string
 delta_function(strlen);
