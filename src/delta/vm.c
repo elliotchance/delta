@@ -155,6 +155,12 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("fmod",          func(fmod), 2, 2));
 	delta_vm_push_function(new_DeltaFunction("lcg_value",     func(lcg_value), 0, 0));
 	delta_vm_push_function(new_DeltaFunction("base_convert",  func(base_convert), 3, 3));
+	delta_vm_push_function(new_DeltaFunction("bindec",        func(bindec), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("decbin",        func(decbin), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("dechex",        func(dechex), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("decoct",        func(decoct), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("hexdec",        func(hexdec), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("octdec",        func(octdec), 1, 1));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",        func(strlen), 1, 1));

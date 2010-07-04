@@ -61,6 +61,12 @@ delta_function(log1p);
 delta_function(fmod);
 delta_function(lcg_value);
 delta_function(base_convert);
+delta_function(bindec);
+delta_function(decbin);
+delta_function(dechex);
+delta_function(decoct);
+delta_function(hexdec);
+delta_function(octdec);
 
 // string
 delta_function(strlen);

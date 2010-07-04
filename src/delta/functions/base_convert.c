@@ -20,6 +20,23 @@ int base_convert_chr2int(char ch)
 }
 
 
+char* base_convert(char* in, int base1, int base2)
+{
+	int in_len = strlen(in);
+	
+	// convert the incoming base to base 10
+	int r = 0;
+	for(int i = in_len - 1, j = 0; i >= 0; --i, ++j)
+		r += base_convert_chr2int(in[i]) * (int) pow((double) base1, (double) j);
+	
+	// convert base 10 to outgoing base
+	char *out = (char*) malloc(32);
+	itoa(r, out, base2);
+	
+	return out;
+}
+
+
 /**
  * @brief Convert a number between arbitrary bases.
  * @syntax string base_convert ( string number , int frombase , int tobase )
@@ -40,19 +57,11 @@ delta_function(base_convert)
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);
 	double base1 = delta_cast_number(DELTA_ARG1);
 	double base2 = delta_cast_number(DELTA_ARG2);
-	
-	// convert the incoming base to base 10
-	int r = 0;
-	for(int i = arg0->size - 1, j = 0; i >= 0; --i, ++j)
-		r += base_convert_chr2int(arg0->value.ptr[i]) * (int) pow((double) base1, (double) j);
-	
-	// convert base 10 to outgoing base
-	char *out = (char*) malloc(32);
-	itoa(r, out, base2);
+	char *r = base_convert(arg0->value.ptr, base1, base2);
 	
 	// clean up
 	if(release_arg0)
 		free(arg0);
 	
-	DELTA_RETURN_STRING(out);
+	DELTA_RETURN_STRING(r);
 }
