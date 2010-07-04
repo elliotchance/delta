@@ -67,6 +67,14 @@
 	return; \
 }
 
+#define DELTA_RETURN_STRING(return_value) \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_STRING; \
+	ram[DELTA_DEST]->value.ptr = return_value; \
+	return; \
+}
+
+
 double delta_cast_number(int address);
 
 ins(ADD); // +

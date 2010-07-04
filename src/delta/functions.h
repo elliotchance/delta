@@ -59,6 +59,8 @@ delta_function(mt_rand);
 delta_function(expm1);
 delta_function(log1p);
 delta_function(fmod);
+delta_function(lcg_value);
+delta_function(base_convert);
 
 // string
 delta_function(strlen);
