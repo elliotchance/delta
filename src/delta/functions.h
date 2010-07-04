@@ -56,6 +56,8 @@ delta_function(max);
 delta_function(mt_getrandmax);
 delta_function(mt_srand);
 delta_function(mt_rand);
+delta_function(expm1);
+delta_function(log1p);
 
 // string
 delta_function(strlen);
