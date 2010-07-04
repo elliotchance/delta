@@ -144,6 +144,9 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("cosh",       func(cosh), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("sinh",       func(sinh), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("tanh",       func(tanh), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("getrandmax", func(getrandmax), 0, 0));
+	delta_vm_push_function(new_DeltaFunction("min",        func(min), 1, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("max",        func(max), 1, DELTA_MAX_ARGS));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",     func(strlen), 1, 1));

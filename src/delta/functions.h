@@ -6,6 +6,10 @@
 #include "ins.h"
 
 
+#define delta_enumerate_array(__array, __element, __element_id) \
+	for(__element_id = 0; i < __array->elements; ++__element_id, __element = __element->next)
+
+
 DeltaFunction* new_DeltaFunction(char *name, void (*function_ptr)(struct DeltaInstruction *d),
 								 int min_args, int max_args);
 
@@ -46,6 +50,9 @@ delta_function(rand);
 delta_function(sinh);
 delta_function(cosh);
 delta_function(tanh);
+delta_function(getrandmax);
+delta_function(min);
+delta_function(max);
 
 // string
 delta_function(strlen);

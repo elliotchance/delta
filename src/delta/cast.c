@@ -47,6 +47,34 @@ inline double delta_cast_number(int address)
 }
 
 
+inline double delta_cast_number_var(struct DeltaVariable *v)
+{
+	if(v->type == DELTA_TYPE_NUMBER)
+		return v->value.number;
+	
+	if(v->type == DELTA_TYPE_NULL) {
+		v->type == DELTA_TYPE_NUMBER;
+		v->value.number = 0.0;
+		return 0.0;
+	}
+	
+	if(v->type == DELTA_TYPE_STRING) {
+		// TODO: do not cast if there is a loss of precision
+		v->type == DELTA_TYPE_NUMBER;
+		v->value.number = atof(v->value.ptr);
+		return v->value.number;
+	}
+	
+	if(v->type == DELTA_TYPE_ARRAY) {
+		// arrays can never be converted into numbers so we only return the number of elements
+		return v->value.array.elements;
+	}
+	
+	// we should never get to this point but just in case
+	return 0.0;
+}
+
+
 /**
  * @brief Attemp to cast a variable to a string.
  * 
