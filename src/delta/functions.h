@@ -58,6 +58,7 @@ delta_function(mt_srand);
 delta_function(mt_rand);
 delta_function(expm1);
 delta_function(log1p);
+delta_function(fmod);
 
 // string
 delta_function(strlen);

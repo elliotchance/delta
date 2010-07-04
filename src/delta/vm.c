@@ -152,6 +152,7 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("mt_rand",       func(mt_rand), 0, 0));
 	delta_vm_push_function(new_DeltaFunction("expm1",         func(expm1), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("log1p",         func(log1p), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("fmod",          func(fmod), 2, 2));
 	
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",        func(strlen), 1, 1));
