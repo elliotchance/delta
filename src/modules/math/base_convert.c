@@ -3,7 +3,7 @@
  */
 
 #include "ins.h"
-#include "../../modules/xtoa.h"
+#include "xtoa.h"
 #include <math.h>
 #include <string.h>
 

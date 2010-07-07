@@ -3,7 +3,7 @@
  */
 
 #include "ins.h"
-#include "../../modules/file.h"
+#include "file.h"
 
 
 /**

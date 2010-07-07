@@ -128,6 +128,7 @@ int delta_vm_init(DeltaCompiler *c)
 	// io
 	delta_vm_push_function(new_DeltaFunction("print",         func(print), 1, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("println",       func(println), 1, DELTA_MAX_ARGS));
+	delta_vm_push_function(new_DeltaFunction("echo",          func(echo), 1, DELTA_MAX_ARGS));
 	
 	// math
 	delta_vm_push_function(new_DeltaFunction("abs",           func(abs), 1, 1));

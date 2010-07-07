@@ -21,14 +21,15 @@ delta_function(count);
 // date
 delta_function(time);
 
-// io
-delta_function(print);
-delta_function(println);
-
 // file
 delta_function(fopen);
 delta_function(fwrite);
 delta_function(fclose);
+
+// io
+delta_function(print);
+delta_function(println);
+delta_function(echo);
 
 // math
 delta_function(abs);
