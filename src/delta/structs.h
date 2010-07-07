@@ -13,6 +13,8 @@
 #define DELTA_FAILURE 0
 #define DELTA_YES     1
 #define DELTA_NO      0
+#define DELTA_TRUE    1
+#define DELTA_FALSE   0
 
 
 typedef unsigned short DeltaByteCode;

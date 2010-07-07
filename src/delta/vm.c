@@ -24,12 +24,16 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_NULL)
 		printf("(null)");
+	else if(v->type == DELTA_TYPE_BOOLEAN)
+		printf("%s", (v->value.number ? "1" : ""));
 	else if(v->type == DELTA_TYPE_NUMBER)
 		printf("%g", v->value.number);
 	else if(v->type == DELTA_TYPE_STRING)
 		printf("%s", v->value.ptr);
 	else if(v->type == DELTA_TYPE_OBJECT)
 		printf("(object)");
+	else if(v->type == DELTA_TYPE_RESOURCE)
+		printf("(resource: %d)", v->value.resource.id);
 	else if(v->type == DELTA_TYPE_ARRAY) {
 		printf("Array\n(\n");
 		struct DeltaArrayValue *e = v->value.array.head;
@@ -174,6 +178,19 @@ int delta_vm_init(DeltaCompiler *c)
 	// string
 	delta_vm_push_function(new_DeltaFunction("strlen",        func(strlen), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("substr",        func(substr), 2, 3));
+	
+	// vars
+	delta_vm_push_function(new_DeltaFunction("ctype_alnum",   func(ctype_alnum), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_alpha",   func(ctype_alpha), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_cntrl",   func(ctype_cntrl), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_digit",   func(ctype_digit), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_graph",   func(ctype_graph), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_lower",   func(ctype_lower), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_print",   func(ctype_print), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_punct",   func(ctype_punct), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_space",   func(ctype_space), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_upper",   func(ctype_upper), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("ctype_xdigit",   func(ctype_xdigit), 1, 1));
 	
 	// allocate memory
 	ram = (struct DeltaVariable**) malloc(total_ram * sizeof(struct DeltaVariable*));

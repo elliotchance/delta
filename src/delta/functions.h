@@ -79,3 +79,16 @@ delta_function(octdec);
 // string
 delta_function(strlen);
 delta_function(substr);
+
+// vars
+delta_function(ctype_alnum);
+delta_function(ctype_alpha);
+delta_function(ctype_cntrl);
+delta_function(ctype_digit);
+delta_function(ctype_graph);
+delta_function(ctype_lower);
+delta_function(ctype_print);
+delta_function(ctype_punct);
+delta_function(ctype_space);
+delta_function(ctype_upper);
+delta_function(ctype_xdigit);
