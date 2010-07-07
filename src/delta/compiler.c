@@ -12,6 +12,7 @@
 #define DELTA_SHOW_BYTECODE 1
 #define DELTA_MAX_NESTED_FUNCTIONS 16
 #define DELTA_MAX_FUNCTION_ARGS 16
+#define DELTA_INF 1e2000
 
 
 static int var_temp = 0;
@@ -152,7 +153,8 @@ int delta_is_number(char *word)
 {
 	int i, len = strlen(word);
 	for(i = 0; i < len; ++i) {
-		if(!isnumber(word[i]) && word[i] != '.' && word[i] != '-')
+		if(!isnumber(word[i]) && word[i] != '.' && word[i] != '-' && word[i] != '+' &&
+		   word[i] != 'e')
 			return 0;
 	}
 	return 1;
@@ -314,7 +316,8 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 			break;
 		}
 		if(!isalnum(line[*offset]) && line[*offset] != '_' &&
-		   line[*offset] != '+' && line[*offset] != '-' && line[*offset] != '.')
+		   line[*offset] != '+' && line[*offset] != '-' && line[*offset] != '.' &&
+		   line[*offset] != 'e')
 			break;
 	}
 	
@@ -403,6 +406,16 @@ int delta_push_constant(DeltaCompiler *c, char *token)
 }
 
 
+int delta_push_number_constant(DeltaCompiler *c, double value)
+{
+	++var_temp;
+	c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
+	c->constants[c->total_constants].value.number = value;
+	++c->total_constants;
+	return var_temp;
+}
+
+
 char* delta_replace_constant(char *token)
 {
 	int i;
@@ -419,6 +432,16 @@ int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
 {
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
 	int i, j, k, total_tokens = 0;
+	
+	// check for negation
+	if(line[0] == '-') {
+		// FIXME: leak
+		char *new_line = (char*) malloc(length + 2);
+		new_line[0] = '0';
+		strncpy(new_line + 1, line, length);
+		line = new_line;
+	}
+	printf("line = '%s'\n", line);
 	
 	// first parse the line and look for variables and constants
 	for(i = 0; i < length; ) {

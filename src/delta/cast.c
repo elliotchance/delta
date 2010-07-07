@@ -24,6 +24,9 @@ inline double delta_cast_number(int address)
 	if(ram[address]->type == DELTA_TYPE_NUMBER)
 		return ram[address]->value.number;
 	
+	if(ram[address]->type == DELTA_TYPE_BOOLEAN)
+		return ram[address]->value.number;
+	
 	if(ram[address]->type == DELTA_TYPE_NULL) {
 		ram[address]->type == DELTA_TYPE_NUMBER;
 		ram[address]->value.number = 0.0;
@@ -50,6 +53,9 @@ inline double delta_cast_number(int address)
 inline double delta_cast_number_var(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_NUMBER)
+		return v->value.number;
+	
+	if(v->type == DELTA_TYPE_BOOLEAN)
 		return v->value.number;
 	
 	if(v->type == DELTA_TYPE_NULL) {
@@ -89,10 +95,23 @@ inline struct DeltaVariable* delta_cast_string(int address, int *free)
 		return ram[address];
 	}
 	
+	if(ram[address]->type == DELTA_TYPE_BOOLEAN) {
+		// convert boolean to string
+		ram[address]->type = DELTA_TYPE_STRING;
+		ram[address]->value.ptr = (char*) malloc(2);
+		// TODO: this is always true
+		sprintf(ram[address]->value.ptr, "1", ram[address]->value.number);
+		ram[address]->size = strlen(ram[address]->value.ptr);
+		
+		*free = DELTA_NO;
+		return ram[address];
+	}
+	
 	if(ram[address]->type == DELTA_TYPE_NUMBER) {
 		// convert floating point to string
 		ram[address]->type = DELTA_TYPE_STRING;
 		ram[address]->value.ptr = (char*) malloc(16);
+		// TODO: is this dangerous using a union this way?
 		sprintf(ram[address]->value.ptr, "%g", ram[address]->value.number);
 		ram[address]->size = strlen(ram[address]->value.ptr);
 		

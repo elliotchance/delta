@@ -10,7 +10,7 @@
 
 jit_insn codeBuffer[1024];
 
-stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
+stack_function delta_compile_jit(DeltaCompiler *c, int at, int end)
 {
 	// pointer to generated code
 	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);
@@ -22,7 +22,7 @@ stack_function delta_compile_jit(DeltaCompiler *c, int start, int end)
 	jit_leaf(0);
 	
 	// compile instructions
-	for(i = start; i < end; ++i) {
+	for(i = at; i < end; ++i) {
 		if(instructions[i].bc == BYTECODE_IFS) {
 			// copy in the boolean argument
 			//jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);

@@ -18,9 +18,17 @@ delta_function(array);
 delta_function(array_push);
 delta_function(count);
 
+// date
+delta_function(time);
+
 // io
 delta_function(print);
 delta_function(println);
+
+// file
+delta_function(fopen);
+delta_function(fwrite);
+delta_function(fclose);
 
 // math
 delta_function(abs);

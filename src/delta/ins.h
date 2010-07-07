@@ -60,10 +60,24 @@
 	return;\
 }
 
+#define DELTA_RETURN_BOOLEAN(return_value) \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
+	ram[DELTA_DEST]->value.number = (return_value == 0 ? 0 : 1); \
+	return; \
+}
+
 #define DELTA_RETURN_NUMBER(return_value) \
 { \
 	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
 	ram[DELTA_DEST]->value.number = return_value; \
+	return; \
+}
+
+#define DELTA_RETURN_ZERO \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
+	ram[DELTA_DEST]->value.number = 0; \
 	return; \
 }
 
@@ -74,8 +88,14 @@
 	return; \
 }
 
+#define DELTA_RETURN_RESOURCE(return_value, resource_id) \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_RESOURCE; \
+	ram[DELTA_DEST]->value.resource.ptr = (char*) return_value; \
+	ram[DELTA_DEST]->value.resource.id = resource_id; \
+	return; \
+}
 
-double delta_cast_number(int address);
 
 ins(ADD); // +
 ins(AG1); // Get first dimention array

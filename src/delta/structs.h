@@ -17,11 +17,13 @@
 
 typedef unsigned short DeltaByteCode;
 typedef char DeltaVariableType;
-#define DELTA_TYPE_NULL   0
-#define DELTA_TYPE_NUMBER 1
-#define DELTA_TYPE_STRING 2
-#define DELTA_TYPE_ARRAY  3
-#define DELTA_TYPE_OBJECT 4
+#define DELTA_TYPE_NULL     0
+#define DELTA_TYPE_BOOLEAN  1
+#define DELTA_TYPE_NUMBER   2
+#define DELTA_TYPE_STRING   3
+#define DELTA_TYPE_ARRAY    4
+#define DELTA_TYPE_RESOURCE 5
+#define DELTA_TYPE_OBJECT   6
 
 
 struct DeltaArrayValue;
@@ -50,6 +52,13 @@ typedef struct
 } DeltaArray;
 
 
+struct DeltaResource
+{
+	char* ptr;
+	int id;
+};
+
+
 struct DeltaVariable
 {
 	//! The name for this variable.
@@ -69,6 +78,9 @@ struct DeltaVariable
 		
 		//! Array value.
 		DeltaArray array;
+		
+		//! Resource value
+		struct DeltaResource resource;
 	} value;
 	
 	//! RAM location of this variable.

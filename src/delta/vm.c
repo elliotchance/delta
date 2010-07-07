@@ -101,6 +101,7 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_define("M_SQRT1_2",  "0.70710678118654752440");
 	delta_vm_push_define("M_LNPI",     "1.14472988584940017414");
 	delta_vm_push_define("M_EULER",    "0.57721566490153286061");
+	delta_vm_push_define("INF",        "1e2000");
 	
 	// prepare built-in functions
 	alloc_delta_functions = 200;
@@ -111,6 +112,14 @@ int delta_vm_init(DeltaCompiler *c)
 	delta_vm_push_function(new_DeltaFunction("array",         func(array), 0, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("array_push",    func(array_push), 2, DELTA_MAX_ARGS));
 	delta_vm_push_function(new_DeltaFunction("count",         func(count), 1, 1));
+	
+	// date
+	delta_vm_push_function(new_DeltaFunction("time",          func(time), 0, 0));
+	
+	// file
+	delta_vm_push_function(new_DeltaFunction("fopen",         func(fopen), 2, 2));
+	delta_vm_push_function(new_DeltaFunction("fwrite",        func(fwrite), 2, 2));
+	delta_vm_push_function(new_DeltaFunction("fclose",        func(fclose), 1, 1));
 	
 	// io
 	delta_vm_push_function(new_DeltaFunction("print",         func(print), 1, DELTA_MAX_ARGS));
