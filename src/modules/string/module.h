@@ -8,5 +8,7 @@
 void delta_load_module_string();
 
 
+DELTA_FUNCTION(md5);
+DELTA_FUNCTION(sha1);
 DELTA_FUNCTION(strlen);
 DELTA_FUNCTION(substr);

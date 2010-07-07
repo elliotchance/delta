@@ -14,6 +14,8 @@ struct DeltaFunction* new_DeltaFunction(char *name,
 
 void delta_load_module_string()
 {
+	delta_vm_push_function(new_DeltaFunction("md5",    FUNC(md5), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("sha1",   FUNC(sha1), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("strlen", FUNC(strlen), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("substr", FUNC(substr), 2, 3));
 }
