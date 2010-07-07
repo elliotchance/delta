@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <sys/time.h>
 
 
@@ -16,7 +16,7 @@
  * @see date
  * @see microtime
  */
-delta_function(time)
+DELTA_FUNCTION(time)
 {
 	DELTA_RETURN_NUMBER(time(NULL));
 }

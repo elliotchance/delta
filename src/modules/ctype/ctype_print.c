@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -17,7 +17,7 @@
  * Returns FALSE if text contains control characters or characters that do not have any output or
  * control function at all.
  */
-delta_function(ctype_print)
+DELTA_FUNCTION(ctype_print)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

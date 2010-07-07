@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -24,7 +24,7 @@
  * @see gmp_abs
  * @see gmp_sign
  */
-delta_function(abs)
+DELTA_FUNCTION(abs)
 {
 	double number = delta_cast_number(DELTA_ARG0);
 	DELTA_RETURN_NUMBER((number < 0) ? -number : number);

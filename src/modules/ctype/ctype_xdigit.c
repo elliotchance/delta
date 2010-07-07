@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -16,7 +16,7 @@
  * @return Returns TRUE if every character in text is a hexadecimal 'digit', that is a decimal digit
  *         or a character from [A-Fa-f] , FALSE otherwise.
  */
-delta_function(ctype_xdigit)
+DELTA_FUNCTION(ctype_xdigit)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

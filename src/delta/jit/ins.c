@@ -4,6 +4,7 @@
 
 #include "ins.h"
 #include "vm.h"
+#include "../macros.h"
 #include <math.h>
 #include <string.h>
 
@@ -11,7 +12,7 @@
 /**
  * @brief Numerical addition.
  */
-ins(ADD)
+DELTA_INS(ADD)
 {
 	//DELTA_PRINT_INS_ARGS(ADD);
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) + delta_cast_number(d->arg[2]));
@@ -21,7 +22,7 @@ ins(ADD)
 /**
  * @brief Equal to.
  */
-ins(CEQ)
+DELTA_INS(CEQ)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) == delta_cast_number(d->arg[2]));
 }
@@ -30,7 +31,7 @@ ins(CEQ)
 /**
  * @brief Greater than or equal to.
  */
-ins(CGE)
+DELTA_INS(CGE)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) >= delta_cast_number(d->arg[2]));
 }
@@ -39,7 +40,7 @@ ins(CGE)
 /**
  * @brief Greater then.
  */
-ins(CGT)
+DELTA_INS(CGT)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) > delta_cast_number(d->arg[2]));
 }
@@ -48,7 +49,7 @@ ins(CGT)
 /**
  * @brief Less than or equal to.
  */
-ins(CLE)
+DELTA_INS(CLE)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) <= delta_cast_number(d->arg[2]));
 }
@@ -57,7 +58,7 @@ ins(CLE)
 /**
  * @brief Less than.
  */
-ins(CLT)
+DELTA_INS(CLT)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) < delta_cast_number(d->arg[2]));
 }
@@ -66,7 +67,7 @@ ins(CLT)
 /**
  * @brief Not equal to.
  */
-ins(CNE)
+DELTA_INS(CNE)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) != delta_cast_number(d->arg[2]));
 }
@@ -75,7 +76,7 @@ ins(CNE)
 /**
  * @brief Decrement (subtract 1)
  */
-ins(DEC)
+DELTA_INS(DEC)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_DEST) - 1);
 }
@@ -84,7 +85,7 @@ ins(DEC)
 /**
  * @brief Numerical division.
  */
-ins(DIV)
+DELTA_INS(DIV)
 {
 	// this is only numerical division, so other types need to be cast to a number
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) / delta_cast_number(d->arg[2]));
@@ -94,7 +95,7 @@ ins(DIV)
 /**
  * @brief Goto label.
  */
-ins(GTO)
+DELTA_INS(GTO)
 {
 	stack_pos = DELTA_DEST;
 }
@@ -104,7 +105,7 @@ ins(GTO)
  * @brief if statement.
  * This is translated into jit so this function should never be called, if it is it will do nothing.
  */
-ins(IFS)
+DELTA_INS(IFS)
 {
 	// done in jit
 }
@@ -113,7 +114,7 @@ ins(IFS)
 /**
  * @brief Increment (add 1)
  */
-ins(INC)
+DELTA_INS(INC)
 {
 	DELTA_RETURN_NUMBER(delta_cast_number(DELTA_DEST) + 1);
 }
@@ -124,7 +125,7 @@ ins(INC)
  * This bytecode is for marking a label for the jit compiler, this function itself should never be
  * called, however if it does nothing will happen.
  */
-ins(LBL)
+DELTA_INS(LBL)
 {
 	// this shouldn't even be called but i'll but it in just in case.
 }
@@ -133,7 +134,7 @@ ins(LBL)
 /**
  * @brief Numerical multiplication.
  */
-ins(MUL)
+DELTA_INS(MUL)
 {
 	// this is only numerical multiplicaton, so other types need to be cast to a number
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) * delta_cast_number(d->arg[2]));
@@ -144,7 +145,7 @@ ins(MUL)
  * @brief NULL action.
  * This is purposly designed to take no action.
  */
-ins(NUL)
+DELTA_INS(NUL)
 {
 	// does nothing
 }
@@ -153,7 +154,7 @@ ins(NUL)
 /**
  * @brief Return statement.
  */
-ins(RTN)
+DELTA_INS(RTN)
 {
 	// currently does nothing
 }
@@ -162,7 +163,7 @@ ins(RTN)
 /**
  * @brief Copy a variable from one location to another.
  */
-ins(SET)
+DELTA_INS(SET)
 {
 	// TODO: assigning any type except object requires a complete recursive copy of the variable.
 	ram[DELTA_DEST]->type = ram[d->arg[1]]->type;
@@ -176,7 +177,7 @@ ins(SET)
 /**
  * @brief Numerical subtraction.
  */
-ins(SUB)
+DELTA_INS(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) - delta_cast_number(d->arg[2]));
@@ -186,7 +187,7 @@ ins(SUB)
 /**
  * @brief Assign the first dimension of an array.
  */
-ins(AS1)
+DELTA_INS(AS1)
 {
 	// FIXME: we must be an array
 	
@@ -223,7 +224,7 @@ ins(AS1)
 /**
  * @brief Get the first dimension of an array.
  */
-ins(AG1)
+DELTA_INS(AG1)
 {
 	// FIXME: we must be an array
 	

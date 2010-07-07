@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 #include <string.h>
 
@@ -24,7 +24,7 @@ char* base_convert(char* in, int base1, int base2);
  * @see dechex
  * @see base_convert
  */
-delta_function(decbin)
+DELTA_FUNCTION(decbin)
 {
 	int release_arg0;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);

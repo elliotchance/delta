@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -21,7 +21,7 @@
  * @return The arc tangent of y/x in radians.
  * @see atan
  */
-delta_function(atan2)
+DELTA_FUNCTION(atan2)
 {
 	DELTA_RETURN_NUMBER(atan2(delta_cast_number(DELTA_ARG0), delta_cast_number(DELTA_ARG1)));
 }

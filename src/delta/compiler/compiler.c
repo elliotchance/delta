@@ -5,6 +5,7 @@
 #include "compiler.h"
 #include "bytecode.h"
 #include "vm.h"
+#include "../macros.h"
 #include <string.h>
 #include <ctype.h>
 
@@ -22,24 +23,9 @@ static int arg_depth = 0;
 static int label_id = 0;
 
 
-#define DELTA_ADD_BYTECODE(__BYTECODE) \
-	printf("BYTECODE_%s (", #__BYTECODE); \
-	int _k; \
-	arg_ptr[arg_depth][0] = var_dest; \
-	for(_k = 0; _k < arg_count[arg_depth]; ++_k) { \
-		printf(" %d", arg_ptr[arg_depth][_k]); \
-	} \
-	printf(" )\n"); \
-	DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
-
-#define DELTA_ADD_OPERATOR_BYTECODE(__BYTECODE) \
-	printf("BYTECODE_%s (%d, %d, %d)\n", #__BYTECODE, var_dest, var_id1, var_id2); \
-	DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
-
-
-DI new_DeltaInstruction0(char *name, DeltaByteCode bc)
+struct DeltaInstruction new_DeltaInstruction0(char *name, DeltaByteCode bc)
 {
-	DI d;
+	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
 	
@@ -47,9 +33,9 @@ DI new_DeltaInstruction0(char *name, DeltaByteCode bc)
 }
 
 
-DI new_DeltaInstruction1(char *name, DeltaByteCode bc, int destination)
+struct DeltaInstruction new_DeltaInstruction1(char *name, DeltaByteCode bc, int destination)
 {
-	DI d;
+	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
 	d.args = 1;
@@ -60,9 +46,9 @@ DI new_DeltaInstruction1(char *name, DeltaByteCode bc, int destination)
 }
 
 
-DI new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int source1)
+struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int source1)
 {
-	DI d;
+	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
 	d.args = 2;
@@ -74,9 +60,9 @@ DI new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int sour
 }
 
 
-DI new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int source1, int source2)
+struct DeltaInstruction new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int source1, int source2)
 {
-	DI d;
+	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
 	d.args = 3;
@@ -89,9 +75,9 @@ DI new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int sour
 }
 
 
-DI new_DeltaInstructionN(char *name, DeltaByteCode bc)
+struct DeltaInstruction new_DeltaInstructionN(char *name, DeltaByteCode bc)
 {
-	DI d;
+	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
 	
@@ -138,7 +124,7 @@ int delta_is_keyword(char* word)
 }
 
 
-int delta_is_declared(DeltaCompiler *c, char* varname)
+int delta_is_declared(struct DeltaCompiler *c, char* varname)
 {
 	int i;
 	for(i = 0; i < c->total_vars; ++i) {
@@ -161,7 +147,7 @@ int delta_is_number(char *word)
 }
 
 
-int delta_get_variable_id(DeltaCompiler *c, char* name)
+int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 {
 	// safety
 	if(name == NULL)
@@ -226,25 +212,25 @@ int delta_get_operator_order(char* op)
 }
 
 
-int delta_push_label(DeltaCompiler *c, char *name)
+int delta_push_label(struct DeltaCompiler *c, char *name)
 {
 	return 0;
 }
 
 
-void DeltaFunction_push(DeltaCompiler* c, DI ins)
+void DeltaFunction_push(struct DeltaCompiler* c, struct DeltaInstruction ins)
 {
 	c->ins[c->total_ins++] = ins;
 }
 
 
-DeltaCompiler* new_DeltaCompiler(int total_objects)
+struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 {
-	DeltaCompiler *c = (DeltaCompiler*) malloc(sizeof(DeltaCompiler));
+	struct DeltaCompiler *c = (struct DeltaCompiler*) malloc(sizeof(struct DeltaCompiler));
 	
 	c->alloc_ins = 100;
 	c->total_ins = 0;
-	c->ins = (DI*) malloc(c->alloc_ins * sizeof(struct DeltaInstruction));
+	c->ins = (struct DeltaInstruction*) malloc(c->alloc_ins * sizeof(struct DeltaInstruction));
 	
 	c->alloc_vars = 100;
 	c->total_vars = 0;
@@ -252,7 +238,7 @@ DeltaCompiler* new_DeltaCompiler(int total_objects)
 	
 	c->alloc_labels = 100;
 	c->total_labels = 0;
-	c->labels = (DeltaLabel*) malloc(c->alloc_labels * sizeof(DeltaLabel));
+	c->labels = (struct DeltaLabel*) malloc(c->alloc_labels * sizeof(struct DeltaLabel));
 	
 	c->alloc_constants = 100;
 	c->total_constants = 0;
@@ -297,7 +283,7 @@ char* delta_copy_substring(char* str, int at, int length)
 }
 
 
-char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
+char* delta_read_token(struct DeltaCompiler *c, char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
 	
@@ -394,7 +380,7 @@ char* delta_read_token(DeltaCompiler *c, char* line, int* offset)
 }
 
 
-int delta_push_constant(DeltaCompiler *c, char *token)
+int delta_push_constant(struct DeltaCompiler *c, char *token)
 {
 	++var_temp;
 	c->constants[c->total_constants].type = DELTA_TYPE_STRING;
@@ -406,7 +392,7 @@ int delta_push_constant(DeltaCompiler *c, char *token)
 }
 
 
-int delta_push_number_constant(DeltaCompiler *c, double value)
+int delta_push_number_constant(struct DeltaCompiler *c, double value)
 {
 	++var_temp;
 	c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
@@ -428,7 +414,7 @@ char* delta_replace_constant(char *token)
 }
 
 
-int delta_compile_line_part(DeltaCompiler *c, char* line, int length)
+int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 {
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
 	int i, j, k, total_tokens = 0;
@@ -671,7 +657,7 @@ char* delta_extract_argument_key(char *arg)
 }
 
 
-int delta_compile_line(DeltaCompiler *c, char* line, int length)
+int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 {
 	// split the line on commas
 	int total_parts = 0, i, last = -1;
@@ -731,7 +717,7 @@ int delta_strpos(char *haystack, char *needle)
 }
 
 
-int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int at, int end)
+int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, int at, int end)
 {	
 	// prepare
 	char* line = (char*) malloc(1024);
@@ -850,7 +836,7 @@ int delta_compile_block(DeltaCompiler *c, char *identifier, char *block, int at,
 }
 
 
-int delta_compile_file(DeltaCompiler *c, const char* input_file)
+int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 {
 	// prepare
 	FILE *f = fopen(input_file, "r");
@@ -877,3 +863,19 @@ int delta_compile_file(DeltaCompiler *c, const char* input_file)
 	free(whole_file);
 	return DELTA_SUCCESS;
 }
+
+
+struct DeltaFunction* new_DeltaFunction(char *name,
+										void (*function_ptr)(struct DeltaInstruction *d),
+										int min_args, int max_args)
+{
+	struct DeltaFunction *f = (struct DeltaFunction*) malloc(sizeof(struct DeltaFunction));
+	
+	f->name = name;
+	f->function_ptr = function_ptr;
+	f->min_args = min_args;
+	f->max_args = max_args;
+	
+	return f;
+}
+

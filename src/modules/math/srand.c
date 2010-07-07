@@ -2,14 +2,14 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
 /**
  * @brief Seed the random number generator.
  */
-delta_function(srand)
+DELTA_FUNCTION(srand)
 {
 	srand(delta_cast_number(DELTA_ARG0));
 	DELTA_RETURN_NULL;

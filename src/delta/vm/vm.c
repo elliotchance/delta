@@ -4,15 +4,15 @@
 
 #include "vm.h"
 #include "bytecode.h"
-#include "functions.h"
 #include "ins.h"
+#include "modules.h"
 
 
 struct DeltaVariable **ram;
 #define total_ram 100
 int stack_pos = 0;
 long start;
-DeltaFunction **delta_functions;
+struct DeltaFunction **delta_functions;
 int alloc_delta_functions;
 int total_delta_functions;
 struct DeltaDefine *delta_defines;
@@ -50,7 +50,7 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 }
 
 
-void delta_vm_print_ram(DeltaCompiler *c)
+void delta_vm_print_ram(struct DeltaCompiler *c)
 {
 	int i;
 	for(i = 0; i < total_ram; ++i) {
@@ -63,7 +63,7 @@ void delta_vm_print_ram(DeltaCompiler *c)
 }
 
 
-int delta_vm_push_function(DeltaFunction* f)
+int delta_vm_push_function(struct DeltaFunction* f)
 {
 	delta_functions[total_delta_functions++] = f;
 	return DELTA_SUCCESS;
@@ -79,7 +79,7 @@ int delta_vm_push_define(char *name, char *value)
 }
 
 
-int delta_vm_init(DeltaCompiler *c)
+int delta_vm_init(struct DeltaCompiler *c)
 {	
 	int i;
 	
@@ -110,88 +110,9 @@ int delta_vm_init(DeltaCompiler *c)
 	// prepare built-in functions
 	alloc_delta_functions = 200;
 	total_delta_functions = 0;
-	delta_functions = (DeltaFunction**) calloc(alloc_delta_functions, sizeof(DeltaFunction*));
+	delta_functions = (struct DeltaFunction**) calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
 	
-	// array
-	delta_vm_push_function(new_DeltaFunction("array",         func(array), 0, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("array_push",    func(array_push), 2, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("count",         func(count), 1, 1));
-	
-	// date
-	delta_vm_push_function(new_DeltaFunction("time",          func(time), 0, 0));
-	
-	// file
-	delta_vm_push_function(new_DeltaFunction("fopen",         func(fopen), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("fwrite",        func(fwrite), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("fclose",        func(fclose), 1, 1));
-	
-	// io
-	delta_vm_push_function(new_DeltaFunction("print",         func(print), 1, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("println",       func(println), 1, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("echo",          func(echo), 1, DELTA_MAX_ARGS));
-	
-	// math
-	delta_vm_push_function(new_DeltaFunction("abs",           func(abs), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("acos",          func(acos), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("acosh",         func(acosh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("asin",          func(asin), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("asinh",         func(asinh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("atan",          func(atan), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("atan2",         func(atan2), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("atanh",         func(atanh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("cos",           func(cos), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("sin",           func(sin), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("sqrt",          func(sqrt), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("tan",           func(tan), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ceil",          func(ceil), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("floor",         func(floor), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("exp",           func(exp), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("log",           func(log), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("pi",            func(pi), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("log10",         func(log10), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("pow",           func(pow), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("hypot",         func(hypot), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("deg2rad",       func(deg2rad), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("rad2deg",       func(rad2deg), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("srand",         func(srand), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("rand",          func(rand), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("cosh",          func(cosh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("sinh",          func(sinh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("tanh",          func(tanh), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("getrandmax",    func(getrandmax), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("min",           func(min), 1, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("max",           func(max), 1, DELTA_MAX_ARGS));
-	delta_vm_push_function(new_DeltaFunction("mt_getrandmax", func(getrandmax), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("mt_srand",      func(mt_srand), 0, 1));
-	delta_vm_push_function(new_DeltaFunction("mt_rand",       func(mt_rand), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("expm1",         func(expm1), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("log1p",         func(log1p), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("fmod",          func(fmod), 2, 2));
-	delta_vm_push_function(new_DeltaFunction("lcg_value",     func(lcg_value), 0, 0));
-	delta_vm_push_function(new_DeltaFunction("base_convert",  func(base_convert), 3, 3));
-	delta_vm_push_function(new_DeltaFunction("bindec",        func(bindec), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("decbin",        func(decbin), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("dechex",        func(dechex), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("decoct",        func(decoct), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("hexdec",        func(hexdec), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("octdec",        func(octdec), 1, 1));
-	
-	// string
-	delta_vm_push_function(new_DeltaFunction("strlen",        func(strlen), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("substr",        func(substr), 2, 3));
-	
-	// vars
-	delta_vm_push_function(new_DeltaFunction("ctype_alnum",   func(ctype_alnum), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_alpha",   func(ctype_alpha), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_cntrl",   func(ctype_cntrl), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_digit",   func(ctype_digit), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_graph",   func(ctype_graph), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_lower",   func(ctype_lower), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_print",   func(ctype_print), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_punct",   func(ctype_punct), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_space",   func(ctype_space), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_upper",   func(ctype_upper), 1, 1));
-	delta_vm_push_function(new_DeltaFunction("ctype_xdigit",   func(ctype_xdigit), 1, 1));
+	delta_load_modules();
 	
 	// allocate memory
 	ram = (struct DeltaVariable**) malloc(total_ram * sizeof(struct DeltaVariable*));
@@ -202,7 +123,7 @@ int delta_vm_init(DeltaCompiler *c)
 }
 
 
-int delta_vm_prepare(DeltaCompiler *c)
+int delta_vm_prepare(struct DeltaCompiler *c)
 {
 	// load constants
 	int i;

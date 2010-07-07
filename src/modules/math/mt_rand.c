@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include "mt.h"
 #include <sys/time.h>
 
@@ -29,7 +29,7 @@
  * @see mt_getrandmax
  * @see rand
  */
-delta_function(mt_rand)
+DELTA_FUNCTION(mt_rand)
 {
 	unsigned long * b = mt_buffer;
     int idx = mt_index;

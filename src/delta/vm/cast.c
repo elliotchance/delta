@@ -5,6 +5,7 @@
 #include "cast.h"
 #include "structs.h"
 #include "vm.h"
+#include "../macros.h"
 #include <string.h>
 
 

@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include "xtoa.h"
 #include <math.h>
 #include <string.h>
@@ -51,7 +51,7 @@ char* base_convert(char* in, int base1, int base2)
  * @param tobase The base to convert number to.
  * @return number converted to base tobase.
  */
-delta_function(base_convert)
+DELTA_FUNCTION(base_convert)
 {
 	int release_arg0;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);

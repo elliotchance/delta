@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include "mt.h"
 #include <sys/time.h>
 
@@ -17,7 +17,7 @@
  * @param seed An optional seed value.
  * @return No value is returned.
  */
-delta_function(mt_srand)
+DELTA_FUNCTION(mt_srand)
 {
 	int seed;
 	if(DELTA_ARGS == 0)

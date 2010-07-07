@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -17,7 +17,7 @@
  *         otherwise. Besides the blank character this also includes tab, vertical tab, line feed,
  *         carriage return and form feed characters.
  */
-delta_function(ctype_space)
+DELTA_FUNCTION(ctype_space)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

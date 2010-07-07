@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include "file.h"
 
 
@@ -10,7 +10,7 @@
  * @brief Write to a file handle.
  * @syntax int fwrite ( resource handle , string string [, int length ] )
  */
-delta_function(fwrite)
+DELTA_FUNCTION(fwrite)
 {
 	// check for correct resource type
 	if(ram[DELTA_ARG0]->type != DELTA_TYPE_RESOURCE ||

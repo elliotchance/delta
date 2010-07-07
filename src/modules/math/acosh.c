@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -19,7 +19,7 @@
  * @see asinh
  * @see atanh
  */
-delta_function(acosh)
+DELTA_FUNCTION(acosh)
 {
 	DELTA_RETURN_NUMBER(acosh(delta_cast_number(DELTA_ARG0)));
 }

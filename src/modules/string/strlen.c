@@ -2,13 +2,13 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 
 
 /**
  * @brief Get the length of a string.
  */
-delta_function(strlen)
+DELTA_FUNCTION(strlen)
 {
 	int release;
 	struct DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);

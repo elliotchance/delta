@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -17,7 +17,7 @@
  * @see srand
  * @see mt_getrandmax
  */
-delta_function(getrandmax)
+DELTA_FUNCTION(getrandmax)
 {
 	DELTA_RETURN_NUMBER(RAND_MAX);
 }

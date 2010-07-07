@@ -9,23 +9,8 @@
 #include "lightning.h"
 
 
-#define DELTA_SUCCESS 1
-#define DELTA_FAILURE 0
-#define DELTA_YES     1
-#define DELTA_NO      0
-#define DELTA_TRUE    1
-#define DELTA_FALSE   0
-
-
 typedef unsigned short DeltaByteCode;
 typedef char DeltaVariableType;
-#define DELTA_TYPE_NULL     0
-#define DELTA_TYPE_BOOLEAN  1
-#define DELTA_TYPE_NUMBER   2
-#define DELTA_TYPE_STRING   3
-#define DELTA_TYPE_ARRAY    4
-#define DELTA_TYPE_RESOURCE 5
-#define DELTA_TYPE_OBJECT   6
 
 
 struct DeltaArrayValue;
@@ -46,12 +31,12 @@ struct DeltaDefine
 };
 
 
-typedef struct
+struct DeltaArray
 {
 	int elements;
 	struct DeltaArrayValue *head;
 	struct DeltaArrayValue *tail;
-} DeltaArray;
+};
 
 
 struct DeltaResource
@@ -79,7 +64,7 @@ struct DeltaVariable
 		char *ptr;
 		
 		//! Array value.
-		DeltaArray array;
+		struct DeltaArray array;
 		
 		//! Resource value
 		struct DeltaResource resource;
@@ -93,11 +78,11 @@ struct DeltaVariable
 };
 
 
-typedef struct
+struct DeltaLabel
 {
 	char* name;
 	jit_insn *begin;
-} DeltaLabel;
+};
 
 
 struct DeltaInstruction;
@@ -111,32 +96,31 @@ struct DeltaInstruction
 	int args;
 	int *arg;
 };
-typedef struct DeltaInstruction DI;
 
 
-typedef struct
+struct DeltaFunction
 {
 	char* name;
 	void (*function_ptr)(struct DeltaInstruction *d);
 	int min_args;
 	int max_args;
-} DeltaFunction;
+};
 
 
-typedef struct
+struct DeltaCompiler
 {
 	int alloc_ins, total_ins;
-	DI *ins;
+	struct DeltaInstruction *ins;
 	
 	int alloc_vars, total_vars;
 	struct DeltaVariable* vars;
 	
 	int alloc_labels, total_labels;
-	DeltaLabel* labels;
+	struct DeltaLabel* labels;
 	
 	int alloc_constants, total_constants;
 	struct DeltaVariable* constants;
-} DeltaCompiler;
+};
 
 
 #endif

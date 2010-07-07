@@ -5,6 +5,7 @@
 #ifndef _DELTA_BYTECODE_H
 #define _DELTA_BYTECODE_H
 
+
 #define BYTECODE_NUL 0x0000 // do nothing
 
 

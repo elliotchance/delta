@@ -2,13 +2,13 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 
 
 /**
  * @brief Write one or more arguments to the stdout with a new line after each argument.
  */
-delta_function(println)
+DELTA_FUNCTION(println)
 {
 	int i;
 	for(i = 0; i < DELTA_ARGS; ++i) {

@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -19,7 +19,7 @@
  * @return Returns TRUE if every character in text is a letter from the current locale, FALSE
  *         otherwise.
  */
-delta_function(ctype_alpha)
+DELTA_FUNCTION(ctype_alpha)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

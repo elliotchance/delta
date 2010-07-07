@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -23,7 +23,7 @@
  *
  * @see pow
  */
-delta_function(sqrt)
+DELTA_FUNCTION(sqrt)
 {
 	double temp = delta_cast_number(DELTA_ARG0);
 	if(temp < 0)

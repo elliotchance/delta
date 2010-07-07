@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -16,7 +16,7 @@
  * @return Returns TRUE if every character in text is printable, but neither letter, digit or blank,
  * FALSE otherwise.
  */
-delta_function(ctype_punct)
+DELTA_FUNCTION(ctype_punct)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -19,10 +19,10 @@
  * @see max
  * @see count
  */
-delta_function(min)
+DELTA_FUNCTION(min)
 {
 	if(ram[DELTA_ARG0]->type == DELTA_TYPE_ARRAY) {
-		DeltaArray *array = &ram[DELTA_ARG0]->value.array;
+		struct DeltaArray *array = &ram[DELTA_ARG0]->value.array;
 		struct DeltaArrayValue *e = array->head;
 		double lowest = delta_cast_number_var(e->value);
 		e = e->next;

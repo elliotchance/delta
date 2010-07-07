@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <ctype.h>
 
 
@@ -15,7 +15,7 @@
  * @param text The tested string.
  * @return Returns TRUE if every character in text is a lowercase letter in the current locale.
  */
-delta_function(ctype_lower)
+DELTA_FUNCTION(ctype_lower)
 {
 	int release0, r = DELTA_TRUE, i;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

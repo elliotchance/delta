@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -18,7 +18,7 @@
  * @param y The divisor.
  * @return The floating point remainder of x/y.
  */
-delta_function(fmod)
+DELTA_FUNCTION(fmod)
 {
 	DELTA_RETURN_NUMBER(fmod(delta_cast_number(DELTA_ARG0), delta_cast_number(DELTA_ARG1)));
 }

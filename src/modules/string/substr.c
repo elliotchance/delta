@@ -2,14 +2,14 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <string.h>
 
 
 /**
  * @brief Fetch a substring.
  */
-delta_function(substr)
+DELTA_FUNCTION(substr)
 {
 	// prepare incoming arguments
 	int release_arg0;

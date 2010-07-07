@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -27,7 +27,7 @@
  * @see tan
  * @see deg2rad
  */
-delta_function(sin)
+DELTA_FUNCTION(sin)
 {
 	DELTA_RETURN_NUMBER(sin(delta_cast_number(DELTA_ARG0)));
 }

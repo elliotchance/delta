@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -20,7 +20,7 @@
  * @see log1p
  * @see exp
  */
-delta_function(expm1)
+DELTA_FUNCTION(expm1)
 {
 	DELTA_RETURN_NUMBER(expm1(delta_cast_number(DELTA_ARG0)));
 }

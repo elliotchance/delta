@@ -20,7 +20,7 @@
 int main()
 {
 	// init the compiler
-	DeltaCompiler *c = new_DeltaCompiler();
+	struct DeltaCompiler *c = new_DeltaCompiler();
 	delta_vm_init(c);
 	
 	// take input files

@@ -2,14 +2,14 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <string.h>
 
 
 /**
  * @brief Create an array.
  */
-delta_function(array)
+DELTA_FUNCTION(array)
 {
 	ram[DELTA_DEST]->type = DELTA_TYPE_ARRAY;
 	ram[DELTA_DEST]->value.array.elements = DELTA_ARGS;

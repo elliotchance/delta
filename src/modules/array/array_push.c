@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <string.h>
 
 
@@ -11,7 +11,7 @@
  * If the type of variable is not an array its value will be taken and converted into the first
  * element of the array resulting in a two element array.
  */
-delta_function(array_push)
+DELTA_FUNCTION(array_push)
 {
 	// first make sure source1 is an array
 	if(ram[DELTA_ARG0]->type != DELTA_TYPE_ARRAY) {

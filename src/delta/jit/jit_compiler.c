@@ -8,9 +8,11 @@
 #include "ins.h"
 #include <string.h>
 
+
 jit_insn codeBuffer[1024];
 
-stack_function delta_compile_jit(DeltaCompiler *c, int at, int end)
+
+stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 {
 	// pointer to generated code
 	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);

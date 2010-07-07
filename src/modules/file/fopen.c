@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include "file.h"
 
 
@@ -10,7 +10,7 @@
  * @brief Opens file handle.
  * @syntax resource fopen ( string filename , string mode )
  */
-delta_function(fopen)
+DELTA_FUNCTION(fopen)
 {
 	int release0, release1;
 	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release0);

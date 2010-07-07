@@ -2,14 +2,14 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 
 
 /**
  * @brief Write one or more arguments to the stdout.
  * This does the same thing as print()
  */
-delta_function(echo)
+DELTA_FUNCTION(echo)
 {
 	int i;
 	for(i = 0; i < DELTA_ARGS; ++i)

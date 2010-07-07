@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -17,7 +17,7 @@
  * @see mt_srand
  * @see getrandmax
  */
-delta_function(mt_getrandmax)
+DELTA_FUNCTION(mt_getrandmax)
 {
 	// the Mersenne twister will use the same max random as the standard rand()
 	DELTA_RETURN_NUMBER(RAND_MAX);

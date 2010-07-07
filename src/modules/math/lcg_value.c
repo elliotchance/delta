@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "ins.h"
+#include "delta/delta.h"
 #include <math.h>
 
 
@@ -20,7 +20,7 @@
  * @see rand
  * @see mt_rand
  */
-delta_function(lcg_value)
+DELTA_FUNCTION(lcg_value)
 {
 	DELTA_RETURN_NUMBER((double) rand() / (double) RAND_MAX);
 }
