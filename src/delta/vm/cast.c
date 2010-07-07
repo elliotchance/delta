@@ -22,54 +22,43 @@
  */
 inline double delta_cast_number(int address)
 {
-	if(ram[address]->type == DELTA_TYPE_NUMBER)
-		return ram[address]->value.number;
-	
-	if(ram[address]->type == DELTA_TYPE_BOOLEAN)
-		return ram[address]->value.number;
-	
-	if(ram[address]->type == DELTA_TYPE_NULL) {
-		ram[address]->type == DELTA_TYPE_NUMBER;
-		ram[address]->value.number = 0.0;
-		return 0.0;
-	}
-	
-	if(ram[address]->type == DELTA_TYPE_STRING) {
-		// TODO: do not cast if there is a loss of precision
-		ram[address]->type == DELTA_TYPE_NUMBER;
-		ram[address]->value.number = atof(ram[address]->value.ptr);
-		return ram[address]->value.number;
-	}
-	
-	if(ram[address]->type == DELTA_TYPE_ARRAY) {
-		// arrays can never be converted into numbers so we only return the number of elements
-		return ram[address]->value.array.elements;
-	}
-	
-	// we should never get to this point but just in case
-	return 0.0;
+	return delta_cast_number_var(ram[address]);
 }
 
 
+/**
+ * @brief Cast a live variable to a number.
+ *
+ * This function works the same way as delta_cast_number() except it takes a variable instead of a
+ * RAM location.
+ */
 inline double delta_cast_number_var(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_NUMBER)
 		return v->value.number;
 	
 	if(v->type == DELTA_TYPE_BOOLEAN)
-		return v->value.number;
-	
-	if(v->type == DELTA_TYPE_NULL) {
-		v->type == DELTA_TYPE_NUMBER;
-		v->value.number = 0.0;
-		return 0.0;
-	}
+		return (v->value.number ? 1 : 0);
 	
 	if(v->type == DELTA_TYPE_STRING) {
-		// TODO: do not cast if there is a loss of precision
-		v->type == DELTA_TYPE_NUMBER;
-		v->value.number = atof(v->value.ptr);
-		return v->value.number;
+		// a string can be cast to a number only if there is no loss in precision. we test this by
+		// converting the string to a number and then back into a string, if the double converted
+		// string is equal to the current value then there is no loss of precision casting.
+		char *temp = (char*) malloc(32);
+		double temp2 = atof(v->value.ptr);
+		sprintf(temp, "%g", temp2);
+		
+		// check for lost precision
+		if(!strcmp(temp, v->value.ptr)) {
+			v->type == DELTA_TYPE_NUMBER;
+			v->value.number = temp2;
+			free(temp);
+			return v->value.number;
+		}
+		
+		// just because it could not be cast doesn't mean there is no numerical value to return
+		free(temp);
+		return temp2;
 	}
 	
 	if(v->type == DELTA_TYPE_ARRAY) {
@@ -77,47 +66,104 @@ inline double delta_cast_number_var(struct DeltaVariable *v)
 		return v->value.array.elements;
 	}
 	
-	// we should never get to this point but just in case
+	// objects, resources and NULL must return 0
 	return 0.0;
 }
 
 
-/**
- * @brief Attemp to cast a variable to a string.
- * 
- * Variables will only be cast when there is no preicion lost.
- *
- * @param address RAM location of the variable.
- */
 inline struct DeltaVariable* delta_cast_string(int address, int *release)
 {
-	if(ram[address]->type == DELTA_TYPE_STRING) {
+	return delta_cast_string_var(ram[address], release);
+}
+
+
+/**
+ * @brief Attempt to cast a variable to a string.
+ * 
+ * Variables will only be cast when there is no preicion lost. The reason this function returns a
+ * DeltaVariable* instead of a char* is because strings in Delta are NUL safe meaning a string can
+ * contain binary and even NUL characters. The only way this can work is if a string length is also
+ * provided.
+ *
+ * @param address RAM location of the variable.
+ * @param release This will be set to 0 or 1. If set to 1 then the returned DeltaVariable* must be
+ *        have free() invoked when you are finished with it to prevent memory leaks.
+ */
+inline struct DeltaVariable* delta_cast_string_var(struct DeltaVariable* v, int *release)
+{
+	if(v->type == DELTA_TYPE_STRING) {
 		*release = DELTA_NO;
-		return ram[address];
+		return v;
 	}
 	
-	if(ram[address]->type == DELTA_TYPE_BOOLEAN) {
+	if(v->type == DELTA_TYPE_NULL) {
+		struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+		r->type = DELTA_TYPE_STRING;
+		r->value.ptr = NULL;
+		r->size = 0;
+		
+		*release = DELTA_YES;
+		return r;
+	}
+	
+	if(v->type == DELTA_TYPE_BOOLEAN) {
 		// convert boolean to string
-		ram[address]->type = DELTA_TYPE_STRING;
-		ram[address]->value.ptr = (char*) malloc(2);
-		// TODO: this is always true
-		sprintf(ram[address]->value.ptr, "1", ram[address]->value.number);
-		ram[address]->size = strlen(ram[address]->value.ptr);
+		struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+		r->type = DELTA_TYPE_STRING;
+		r->value.ptr = (char*) malloc(2);
+		sprintf(r->value.ptr, "%s", (v->value.number ? "1" : ""));
+		r->size = strlen(v->value.ptr);
 		
-		*release = DELTA_NO;
-		return ram[address];
+		*release = DELTA_YES;
+		return r;
 	}
 	
-	if(ram[address]->type == DELTA_TYPE_NUMBER) {
-		// convert floating point to string
-		ram[address]->type = DELTA_TYPE_STRING;
-		ram[address]->value.ptr = (char*) malloc(16);
-		// TODO: is this dangerous using a union this way?
-		sprintf(ram[address]->value.ptr, "%g", ram[address]->value.number);
-		ram[address]->size = strlen(ram[address]->value.ptr);
+	if(v->type == DELTA_TYPE_NUMBER) {
+		// numbers are always cast into a string
+		v->type = DELTA_TYPE_STRING;
+		double old_value = v->value.number;
+		v->value.ptr = (char*) malloc(24);
+		sprintf(v->value.ptr, "%g", old_value);
+		v->size = strlen(v->value.ptr);
 		
 		*release = DELTA_NO;
-		return ram[address];
+		return v;
+	}
+	
+	if(v->type == DELTA_TYPE_ARRAY) {
+		// arrays can never be cast
+		struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+		r->type = DELTA_TYPE_STRING;
+		r->value.ptr = (char*) malloc(6);
+		strcpy(r->value.ptr, "Array");
+		r->size = strlen(v->value.ptr);
+		
+		*release = DELTA_YES;
+		return r;
+	}
+	
+	if(v->type == DELTA_TYPE_OBJECT) {
+		// objects can never be cast
+		struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+		r->type = DELTA_TYPE_STRING;
+		r->value.ptr = (char*) malloc(9);
+		strcpy(r->value.ptr, "(object)");
+		r->size = strlen(v->value.ptr);
+		
+		*release = DELTA_YES;
+		return r;
+	}
+	
+	if(v->type == DELTA_TYPE_RESOURCE) {
+		// resources can never be cast
+		struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+		r->type = DELTA_TYPE_STRING;
+		r->value.ptr = (char*) malloc(11);
+		strcpy(r->value.ptr, "(resource)");
+		r->size = strlen(v->value.ptr);
+		
+		*release = DELTA_YES;
+		return r;
 	}
 	
 	// hopefully we will never get to here
