@@ -5,6 +5,9 @@
 #include "delta/delta.h"
 
 
+void delta_load_module_ctype();
+
+
 DELTA_FUNCTION(ctype_alnum);
 DELTA_FUNCTION(ctype_alpha);
 DELTA_FUNCTION(ctype_cntrl);

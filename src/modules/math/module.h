@@ -5,6 +5,9 @@
 #include "delta/delta.h"
 
 
+void delta_load_module_math();
+
+
 DELTA_FUNCTION(abs);
 DELTA_FUNCTION(acos);
 DELTA_FUNCTION(acosh);

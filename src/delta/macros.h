@@ -106,28 +106,49 @@
 }
 
 
-#define DELTA_ARGS        ((d->args - 1) / 2)
-#define DELTA_DEST        d->arg[0]
+/**
+ * @brief Returns the number of arguments sent to the function.
+ */
+#define DELTA_ARGS ((d->args - 1) / 2)
 
-#define DELTA_ARG0        d->arg[2]
-#define DELTA_ARG1        d->arg[4]
-#define DELTA_ARG2        d->arg[6]
-#define DELTA_ARG3        d->arg[8]
-#define DELTA_ARG4        d->arg[10]
-#define DELTA_ARG5        d->arg[12]
-#define DELTA_ARG6        d->arg[14]
-#define DELTA_ARG7        d->arg[16]
 
-#define DELTA_ARG0_NAME   d->arg[1]
-#define DELTA_ARG1_NAME   d->arg[3]
-#define DELTA_ARG2_NAME   d->arg[5]
-#define DELTA_ARG3_NAME   d->arg[7]
-#define DELTA_ARG4_NAME   d->arg[9]
-#define DELTA_ARG5_NAME   d->arg[11]
-#define DELTA_ARG6_NAME   d->arg[13]
-#define DELTA_ARG7_NAME   d->arg[15]
+/**
+ * @brief The RAM address of the destination variable.
+ */
+#define DELTA_DEST d->arg[0]
 
-#define DELTA_ARG(i)      d->arg[(i * 2) + 2]
+
+// Argument addresses
+#define DELTA_ARG0 d->arg[2]
+#define DELTA_ARG1 d->arg[4]
+#define DELTA_ARG2 d->arg[6]
+#define DELTA_ARG3 d->arg[8]
+#define DELTA_ARG4 d->arg[10]
+#define DELTA_ARG5 d->arg[12]
+#define DELTA_ARG6 d->arg[14]
+#define DELTA_ARG7 d->arg[16]
+
+
+// Argument name addresses
+#define DELTA_ARG0_NAME d->arg[1]
+#define DELTA_ARG1_NAME d->arg[3]
+#define DELTA_ARG2_NAME d->arg[5]
+#define DELTA_ARG3_NAME d->arg[7]
+#define DELTA_ARG4_NAME d->arg[9]
+#define DELTA_ARG5_NAME d->arg[11]
+#define DELTA_ARG6_NAME d->arg[13]
+#define DELTA_ARG7_NAME d->arg[15]
+
+
+/**
+ * @brief Get argument value by argument ID.
+ */
+#define DELTA_ARG(i) d->arg[(i * 2) + 2]
+
+
+/**
+ * @brief Get argument name by argument ID.
+ */
 #define DELTA_ARG_NAME(i) d->arg[(i * 2) + 1]
 
 
@@ -138,14 +159,48 @@
 #define DELTA_TRUE    1
 #define DELTA_FALSE   0
 
+/**
+ * @brief Return a NULL value.
+ */
+#define DELTA_TYPE_NULL 0
 
-#define DELTA_TYPE_NULL     0
-#define DELTA_TYPE_BOOLEAN  1
-#define DELTA_TYPE_NUMBER   2
-#define DELTA_TYPE_STRING   3
-#define DELTA_TYPE_ARRAY    4
+
+/**
+ * @brief Return a boolean value.
+ * This macro expects a number, if the value is 0 then FALSE will be returned, any other number will
+ * be set to 1 and hence TRUE.
+ */
+#define DELTA_TYPE_BOOLEAN 1
+
+
+/**
+ * @brief Return a number value.
+ */
+#define DELTA_TYPE_NUMBER 2
+
+
+/**
+ * @brief Return a string value.
+ */
+#define DELTA_TYPE_STRING 3
+
+
+/**
+ * @brief Return an array value.
+ */
+#define DELTA_TYPE_ARRAY 4
+
+
+/**
+ * @brief Return a resource.
+ */
 #define DELTA_TYPE_RESOURCE 5
-#define DELTA_TYPE_OBJECT   6
+
+
+/**
+ * @brief Return an object.
+ */
+#define DELTA_TYPE_OBJECT 6
 
 
 #endif

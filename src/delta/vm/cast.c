@@ -89,10 +89,10 @@ inline double delta_cast_number_var(struct DeltaVariable *v)
  *
  * @param address RAM location of the variable.
  */
-inline struct DeltaVariable* delta_cast_string(int address, int *free)
+inline struct DeltaVariable* delta_cast_string(int address, int *release)
 {
 	if(ram[address]->type == DELTA_TYPE_STRING) {
-		*free = DELTA_NO;
+		*release = DELTA_NO;
 		return ram[address];
 	}
 	
@@ -104,7 +104,7 @@ inline struct DeltaVariable* delta_cast_string(int address, int *free)
 		sprintf(ram[address]->value.ptr, "1", ram[address]->value.number);
 		ram[address]->size = strlen(ram[address]->value.ptr);
 		
-		*free = DELTA_NO;
+		*release = DELTA_NO;
 		return ram[address];
 	}
 	
@@ -116,7 +116,7 @@ inline struct DeltaVariable* delta_cast_string(int address, int *free)
 		sprintf(ram[address]->value.ptr, "%g", ram[address]->value.number);
 		ram[address]->size = strlen(ram[address]->value.ptr);
 		
-		*free = DELTA_NO;
+		*release = DELTA_NO;
 		return ram[address];
 	}
 	
