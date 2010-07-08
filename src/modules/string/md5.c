@@ -452,8 +452,7 @@ char *inString;
  Prints out message digest, a space, the file name, and a carriage
  return.
  */
-static void MDFile (filename)
-char *filename;
+char* MDFile (char *filename)
 {
 	FILE *inFile = fopen (filename, "rb");
 	MD5_CTX mdContext;
@@ -461,17 +460,16 @@ char *filename;
 	unsigned char data[1024];
 	
 	if (inFile == NULL) {
-		printf ("%s can't be opened.\n", filename);
-		return;
+		// file can't be opened
+		return NULL;
 	}
 	
 	MD5Init (&mdContext);
 	while ((bytes = fread (data, 1, 1024, inFile)) != 0)
 		MD5Update (&mdContext, data, bytes);
 	MD5Final (&mdContext);
-	MDPrint (&mdContext);
-	printf (" %s\n", filename);
 	fclose (inFile);
+	return MDPrint (&mdContext);
 }
 
 /* Writes the message digest of the data from stdin onto stdout,

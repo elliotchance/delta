@@ -26,6 +26,18 @@ inline double delta_cast_number(int address)
 }
 
 
+inline int delta_cast_int(int address)
+{
+	return (int) delta_cast_number_var(ram[address]);
+}
+
+
+inline int delta_cast_int_var(struct DeltaVariable *v)
+{
+	return (int) delta_cast_number_var(v);
+}
+
+
 /**
  * @brief Cast a live variable to a number.
  *
@@ -168,4 +180,39 @@ inline struct DeltaVariable* delta_cast_string_var(struct DeltaVariable* v, int 
 	
 	// hopefully we will never get to here
 	return NULL;
+}
+
+
+inline int delta_cast_boolean(int address)
+{
+	return delta_cast_boolean_var(ram[address]);
+}
+
+
+inline int delta_cast_boolean_var(struct DeltaVariable *v)
+{
+	if(v->type == DELTA_TYPE_BOOLEAN)
+		return v->value.number;
+	
+	// other types can never be cast to a boolean so all other types return an approximation
+	if(v->type == DELTA_TYPE_NULL)
+		return DELTA_FALSE;
+	
+	if(v->type == DELTA_TYPE_NUMBER)
+		return (v->value.number ? DELTA_TRUE : DELTA_FALSE);
+	
+	if(v->type == DELTA_TYPE_STRING)
+		return (v->size ? DELTA_TRUE : DELTA_FALSE);
+	
+	if(v->type == DELTA_TYPE_ARRAY)
+		return (v->value.array.elements ? DELTA_TRUE : DELTA_FALSE);
+	
+	if(v->type == DELTA_TYPE_OBJECT)
+		return DELTA_FALSE;
+	
+	if(v->type == DELTA_TYPE_RESOURCE)
+		return (v->value.resource.ptr == NULL ? DELTA_FALSE : DELTA_TRUE);
+	
+	// hopefully we will never get to here
+	return DELTA_FALSE;
 }

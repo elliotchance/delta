@@ -26,8 +26,13 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 		printf("(null)");
 	else if(v->type == DELTA_TYPE_BOOLEAN)
 		printf("%s", (v->value.number ? "1" : ""));
-	else if(v->type == DELTA_TYPE_NUMBER)
-		printf("%g", v->value.number);
+	else if(v->type == DELTA_TYPE_NUMBER) {
+		// if its an integer print non scientific notation
+		if((unsigned long) v->value.number == v->value.number)
+			printf("%lu", (unsigned long) v->value.number);
+		else
+			printf("%g", v->value.number);
+	}
 	else if(v->type == DELTA_TYPE_STRING)
 		printf("%s", v->value.ptr);
 	else if(v->type == DELTA_TYPE_OBJECT)
@@ -108,13 +113,8 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 {
 	// load constants
 	int i;
-	for(i = 0; i < c->total_constants; ++i) {
+	for(i = 0; i < c->total_constants; ++i)
 		ram[c->constants[i].ram_location] = &c->constants[i];
-		
-		/*printf("ram[%d] = ", c->constants[i].ram_location);
-		delta_vm_print_variable(ram[c->constants[i].ram_location]);
-		printf("\n");*/
-	}
 	
 	return DELTA_SUCCESS;
 }
