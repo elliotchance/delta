@@ -3,6 +3,7 @@
  */
 
 #include "delta/delta.h"
+#include "delta/compiler/compiler.h"
 #include <sys/time.h>
 
 

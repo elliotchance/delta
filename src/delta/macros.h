@@ -240,4 +240,9 @@
 
 #define DELTA_ERROR_USER_NOTICE "1024"
 
+
+#define DELTA_TRIGGER_ERROR(msg, type) \
+	delta_vm_push_runtime_error(msg, atoi(type))
+
+
 #endif

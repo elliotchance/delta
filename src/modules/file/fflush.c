@@ -21,7 +21,7 @@ DELTA_FUNCTION(fflush)
 {
 	// check for correct resource type
 	if(!DELTA_CHECK_RESOURCE(ram[DELTA_ARG0], DELTA_RESOURCE_FILE)) {
-		// TODO: push warning here
+		DELTA_TRIGGER_ERROR("Resource to fflush() is not valid", DELTA_ERROR_WARNING);
 		DELTA_RETURN_FALSE;
 	}
 	
