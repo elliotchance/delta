@@ -5,6 +5,7 @@
 #include "compiler.h"
 #include "bytecode.h"
 #include "vm.h"
+#include "strings.h"
 #include "../macros.h"
 #include <string.h>
 #include <ctype.h>
@@ -135,18 +136,6 @@ int delta_is_declared(struct DeltaCompiler *c, char* varname)
 }
 
 
-int delta_is_number(char *word)
-{
-	int i, len = strlen(word);
-	for(i = 0; i < len; ++i) {
-		if(!isnumber(word[i]) && word[i] != '.' && word[i] != '-' && word[i] != '+' &&
-		   word[i] != 'e')
-			return 0;
-	}
-	return 1;
-}
-
-
 int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 {
 	// safety
@@ -252,34 +241,6 @@ void delta_die(const char* msg)
 {
 	perror(msg);
 	exit(1);
-}
-
-
-int delta_is_string(char* test)
-{
-	if(test == NULL)
-		return DELTA_NO;
-	if(test[0] == '"')
-		return DELTA_YES;
-	return DELTA_NO;
-}
-
-
-char* delta_copy_string(char* str)
-{
-	int len = strlen(str);
-	char *r = (char*) malloc(len + 1);
-	strcpy(r, str);
-	return r;
-}
-
-
-char* delta_copy_substring(char* str, int at, int length)
-{
-	int len = length - at;
-	char *r = (char*) malloc(len + 1);
-	strncpy(r, str + at, len);
-	return r;
 }
 
 
@@ -421,13 +382,12 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 	
 	// check for negation
 	if(line[0] == '-') {
-		// FIXME: leak
+		// FIXME: leak, should this even need to be here?
 		char *new_line = (char*) malloc(length + 2);
 		new_line[0] = '0';
 		strncpy(new_line + 1, line, length);
 		line = new_line;
 	}
-	printf("line = '%s'\n", line);
 	
 	// first parse the line and look for variables and constants
 	for(i = 0; i < length; ) {
@@ -630,33 +590,6 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 }
 
 
-char* delta_extract_argument_key(char *arg)
-{
-	// look for the operator
-	int i, len = strlen(arg), found = -1;
-	for(i = 0; i < len - 1; ++i) {
-		if(arg[i] == '=' && arg[i + 1] == '>') {
-			found = i;
-			break;
-		}
-	}
-	
-	// a key was found
-	if(found >= 0) {
-		// chop the key off
-		char *r = delta_copy_substring(arg, 0, found);
-		
-		// TODO: memory leak
-		arg = delta_copy_substring(arg, found + 2, len);
-		
-		return r;
-	}
-	
-	// no key was found
-	return NULL;
-}
-
-
 int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 {
 	// split the line on commas
@@ -697,7 +630,6 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 		else
 			key_addr = delta_compile_line_part(c, key, strlen(key));
 
-		
 		arg_ptr[arg_depth - 1][(i * 2) + 1] = key_addr;
 		arg_ptr[arg_depth - 1][(i * 2) + 2] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
 		--arg_depth;
@@ -705,15 +637,6 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 	arg_ptr[arg_depth][0] = var_temp++;
 	
 	return arg_ptr[arg_depth][0];
-}
-
-
-int delta_strpos(char *haystack, char *needle)
-{
-	char *p = strstr(haystack, needle);
-	if (p)
-		return p - haystack;
-	return -1;
 }
 
 
@@ -743,12 +666,12 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	else if(!strcmp(short_identifier, "if")) {
 		// if statement, get the conditional expression
 		int expr_at = delta_strpos(identifier, "(") + 1;
-		int expr_end = delta_strpos(identifier, ")");
+		int expr_end = delta_strrchr(identifier, ')');
 		char *expr = (char*) malloc(expr_end - expr_at + 1);
 		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
 		// evaluate expression
-		int expr_eval = delta_compile_line(c, expr, expr_end - expr_at);
+		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
 		// perform if statement
 		++label_id;
@@ -760,7 +683,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	else if(!strcmp(short_identifier, "while")) {
 		// if statement, get the conditional expression
 		int expr_at = delta_strpos(identifier, "(") + 1;
-		int expr_end = delta_strpos(identifier, ")");
+		int expr_end = delta_strrchr(identifier, ')');
 		char *expr = (char*) malloc(expr_end - expr_at + 1);
 		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
@@ -769,7 +692,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
 		
 		// evaluate expression
-		int expr_eval = delta_compile_line(c, expr, expr_end - expr_at);
+		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
 		// perform if statement
 		++label_id;
@@ -810,13 +733,15 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	// add forward patch
 	if(!strcmp(short_identifier, "if")) {
 		// add the jump for else
-		printf("BYTECODE_JMP ()\n");
-		DeltaFunction_push(c, new_DeltaInstruction0(NULL, BYTECODE_JMP));
+		printf("BYTECODE_JMP ( %d )\n", label_id + 1);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_JMP, label_id + 1));
 		
 		printf("BYTECODE_PAT ( %d )\n", label_id);
 		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		++label_id;
 	}
 	else if(!strcmp(short_identifier, "else")) {
+		// patch from if jump
 		printf("BYTECODE_PAT ( %d )\n", label_id);
 		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 	}
