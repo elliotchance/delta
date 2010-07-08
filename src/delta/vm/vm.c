@@ -88,25 +88,6 @@ int delta_vm_init(struct DeltaCompiler *c)
 	total_delta_defines = 0;
 	delta_defines = (struct DeltaDefine*) calloc(alloc_delta_defines, sizeof(struct DeltaDefine));
 	
-	delta_vm_push_define("M_PI",       "3.14159265358979323846");
-	delta_vm_push_define("M_E",        "2.7182818284590452354");
-	delta_vm_push_define("M_LOG2E",    "1.4426950408889634074");
-	delta_vm_push_define("M_LOG10E",   "0.43429448190325182765");
-	delta_vm_push_define("M_LN2",      "0.69314718055994530942");
-	delta_vm_push_define("M_LN10",     "2.30258509299404568402");
-	delta_vm_push_define("M_PI_2",     "1.57079632679489661923");
-	delta_vm_push_define("M_PI_4",     "0.78539816339744830962");
-	delta_vm_push_define("M_1_PI",     "0.31830988618379067154");
-	delta_vm_push_define("M_2_PI",     "0.63661977236758134308");
-	delta_vm_push_define("M_SQRTPI",   "1.77245385090551602729");
-	delta_vm_push_define("M_2_SQRTPI", "1.12837916709551257390");
-	delta_vm_push_define("M_SQRT2",    "1.41421356237309504880");
-	delta_vm_push_define("M_SQRT3",    "1.73205080756887729352");
-	delta_vm_push_define("M_SQRT1_2",  "0.70710678118654752440");
-	delta_vm_push_define("M_LNPI",     "1.14472988584940017414");
-	delta_vm_push_define("M_EULER",    "0.57721566490153286061");
-	delta_vm_push_define("INF",        "1e2000");
-	
 	// prepare built-in functions
 	alloc_delta_functions = 200;
 	total_delta_functions = 0;
@@ -137,3 +118,38 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 	
 	return DELTA_SUCCESS;
 }
+
+
+int delta_vm_push_runtime_error(char *msg, int error_type)
+{
+	// first make sure the error_type is valid
+	int r = DELTA_TRUE;
+	if(error_type < 1 || error_type > 1024)
+		r = DELTA_FALSE;
+	
+	// immeditaly print the message
+	if(error_type == atoi(DELTA_ERROR_ERROR))
+		printf("ERROR");
+	else if(error_type == atoi(DELTA_ERROR_WARNING))
+		printf("WARNING");
+	else if(error_type == atoi(DELTA_ERROR_PARSE))
+		printf("PARSE ERROR");
+	else if(error_type == atoi(DELTA_ERROR_NOTICE))
+		printf("NOTICE");
+	else if(error_type == atoi(DELTA_ERROR_USER_ERROR))
+		printf("USER ERROR");
+	else if(error_type == atoi(DELTA_ERROR_USER_WARNING))
+		printf("USER WARNING");
+	else if(error_type == atoi(DELTA_ERROR_USER_NOTICE))
+		printf("USER NOTICE");
+	else
+		printf("UNKNOWN ERROR");
+	
+	printf(": %s\n", msg);
+	
+	// the error message is always a copy so remember to freeit when we're finished
+	free(msg);
+	
+	return r;
+}
+

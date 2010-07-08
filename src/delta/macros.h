@@ -226,4 +226,18 @@
 	(__resource->type == DELTA_TYPE_RESOURCE && __resource->value.resource.id == __type)
 
 
+#define DELTA_ERROR_ERROR "1"
+
+#define DELTA_ERROR_WARNING "2"
+
+#define DELTA_ERROR_PARSE "4"
+
+#define DELTA_ERROR_NOTICE "8"
+
+#define DELTA_ERROR_USER_ERROR "256"
+
+#define DELTA_ERROR_USER_WARNING "512"
+
+#define DELTA_ERROR_USER_NOTICE "1024"
+
 #endif

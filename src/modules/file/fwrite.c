@@ -18,7 +18,7 @@ DELTA_FUNCTION(fwrite)
 		DELTA_RETURN_ZERO;
 	}
 	
-	// TODO: length isnt supported yet
+	// TODO: length isn't supported yet
 	int release1;
 	struct DeltaVariable *arg1 = delta_cast_string(DELTA_ARG1, &release1);
 	

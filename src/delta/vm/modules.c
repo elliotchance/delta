@@ -8,6 +8,7 @@
 #include "modules/array/module.h"
 #include "modules/ctype/module.h"
 #include "modules/date/module.h"
+#include "modules/errors/module.h"
 #include "modules/file/module.h"
 #include "modules/io/module.h"
 #include "modules/math/module.h"
@@ -20,6 +21,7 @@ void delta_load_modules()
 	delta_load_module_array();
 	delta_load_module_ctype();
 	delta_load_module_date();
+	delta_load_module_errors();
 	delta_load_module_file();
 	delta_load_module_io();
 	delta_load_module_math();
