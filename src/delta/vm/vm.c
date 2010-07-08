@@ -118,7 +118,6 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 		ram[c->constants[i].ram_location]->value.number = c->constants[i].value.number;
 		ram[c->constants[i].ram_location]->value.ptr = c->constants[i].value.ptr;
 	}
-	printf("*** finished loading constants");
 	
 	return DELTA_SUCCESS;
 }

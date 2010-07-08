@@ -97,3 +97,48 @@ int delta_strrchr(char *haystack, char needle)
 		return p - haystack;
 	return -1;
 }
+
+
+/**
+ * @brief Escaping a string will convert escape sequences into their respective characters.
+ * TODO: this does not yet support hexadecimal representation.
+ */
+void delta_escape_string(char *in, int length)
+{
+	/*
+	 \a	Bell (beep)
+	 \b	Backspace
+	 \f	Formfeed
+	 \n	Newline
+	 \r	Return
+	 \t	Tab
+	 \\	Backslash
+	 \'	Single quote
+	 \"	Double quote
+	 \xdd Hexadecimal representation
+	 */
+	
+	int i, write = 0;
+	for(i = 0; i < length; ++i, ++write) {
+		if(in[write] == '\\') {
+			if(in[write + 1] == 'a')
+				in[write] = '\a';
+			else if(in[write + 1] == 'b')
+				in[write] = '\b';
+			else if(in[write + 1] == 'f')
+				in[write] = '\f';
+			else if(in[write + 1] == 'n')
+				in[write] = '\n';
+			else if(in[write + 1] == 'r')
+				in[write] = '\r';
+			else if(in[write + 1] == 't')
+				in[write] = '\t';
+			else
+				in[write] = in[write + 1];
+			--write;
+		}
+	}
+	
+	// chop off the useless bits
+	in[write] = 0;
+}
