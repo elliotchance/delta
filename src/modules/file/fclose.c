@@ -3,7 +3,7 @@
  */
 
 #include "delta/delta.h"
-#include "file.h"
+#include "module.h"
 
 
 /**
@@ -13,8 +13,7 @@
 DELTA_FUNCTION(fclose)
 {
 	// check for correct resource type
-	if(ram[DELTA_ARG0]->type != DELTA_TYPE_RESOURCE ||
-	   ram[DELTA_ARG0]->value.resource.id != DELTA_RESOURCE_FILE) {
+	if(!DELTA_CHECK_RESOURCE(ram[DELTA_ARG0], DELTA_RESOURCE_FILE)) {
 		// TODO: push warning here
 		DELTA_RETURN_ZERO;
 	}

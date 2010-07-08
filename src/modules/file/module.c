@@ -17,4 +17,8 @@ void delta_load_module_file()
 	delta_vm_push_function(new_DeltaFunction("fopen",  FUNC(fopen), 2, 2));
 	delta_vm_push_function(new_DeltaFunction("fwrite", FUNC(fwrite), 2, 2));
 	delta_vm_push_function(new_DeltaFunction("fclose", FUNC(fclose), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("feof",   FUNC(feof), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("fflush", FUNC(fflush), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("fgetc",  FUNC(fgetc), 1, 1));
+	delta_vm_push_function(new_DeltaFunction("fgets",  FUNC(fgets), 1, 2));
 }

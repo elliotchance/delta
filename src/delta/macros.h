@@ -89,6 +89,22 @@
 }
 
 
+#define DELTA_RETURN_FALSE \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
+	ram[DELTA_DEST]->value.number = 0; \
+	return; \
+}
+
+
+#define DELTA_RETURN_TRUE \
+{ \
+	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
+	ram[DELTA_DEST]->value.number = 1; \
+	return; \
+}
+
+
 #define DELTA_RETURN_STRING(return_value) \
 { \
 	ram[DELTA_DEST]->type = DELTA_TYPE_STRING; \
@@ -201,6 +217,13 @@
  * @brief Return an object.
  */
 #define DELTA_TYPE_OBJECT 6
+
+
+/**
+ * @brief Check if a variable is a valid resource of a given type.
+ */
+#define DELTA_CHECK_RESOURCE(__resource, __type) \
+	(__resource->type == DELTA_TYPE_RESOURCE && __resource->value.resource.id == __type)
 
 
 #endif
