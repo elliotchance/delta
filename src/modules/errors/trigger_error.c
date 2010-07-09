@@ -4,6 +4,7 @@
 
 #include "delta/delta.h"
 #include "delta/compiler/compiler.h"
+#include "delta/compiler/strings.h"
 #include <sys/time.h>
 
 

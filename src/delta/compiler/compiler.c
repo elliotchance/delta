@@ -6,6 +6,10 @@
 #include "bytecode.h"
 #include "vm.h"
 #include "strings.h"
+#include "delta/structs/DeltaInstruction.h"
+#include "delta/structs/DeltaFunction.h"
+#include "token.h"
+#include "constant.h"
 #include "../macros.h"
 #include <string.h>
 #include <ctype.h>
@@ -17,188 +21,11 @@
 #define DELTA_INF 1e2000
 
 
-static int var_temp = 0;
-static int *arg_count = NULL;
-static int **arg_ptr = NULL;
-static int arg_depth = 0;
-static int label_id = 0;
-
-
-struct DeltaInstruction new_DeltaInstruction0(char *name, DeltaByteCode bc)
-{
-	struct DeltaInstruction d;
-	d.func = name;
-	d.bc = bc;
-	
-	return d;
-}
-
-
-struct DeltaInstruction new_DeltaInstruction1(char *name, DeltaByteCode bc, int destination)
-{
-	struct DeltaInstruction d;
-	d.func = name;
-	d.bc = bc;
-	d.args = 1;
-	d.arg = (int*) malloc(d.args * sizeof(int));
-	d.arg[0] = destination;
-	
-	return d;
-}
-
-
-struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int source1)
-{
-	struct DeltaInstruction d;
-	d.func = name;
-	d.bc = bc;
-	d.args = 2;
-	d.arg = (int*) malloc(d.args * sizeof(int));
-	d.arg[0] = destination;
-	d.arg[1] = source1;
-	
-	return d;
-}
-
-
-struct DeltaInstruction new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int source1, int source2)
-{
-	struct DeltaInstruction d;
-	d.func = name;
-	d.bc = bc;
-	d.args = 3;
-	d.arg = (int*) malloc(d.args * sizeof(int));
-	d.arg[0] = destination;
-	d.arg[1] = source1;
-	d.arg[2] = source2;
-	
-	return d;
-}
-
-
-struct DeltaInstruction new_DeltaInstructionN(char *name, DeltaByteCode bc)
-{
-	struct DeltaInstruction d;
-	d.func = name;
-	d.bc = bc;
-	
-	// we don't just assign the pointer we copy the data so that theres no danger of the vaues
-	// changing later and also it saves space.
-	d.args = arg_count[arg_depth];
-	d.arg = (int*) calloc(d.args, sizeof(int));
-	int i;
-	for(i = 0; i < d.args; ++i)
-		d.arg[i] = arg_ptr[arg_depth][i];
-	
-	return d;
-}
-
-
-char* delta_read_inv_token(char* line, int* offset)
-{
-	int orig = *offset, len = strlen(line);
-	
-	for(; *offset < len; ++*offset) {
-		if(isalnum(line[*offset]) || isspace(line[*offset]))
-			break;
-	}
-	
-	char* r = (char*) malloc(orig + 1);
-	strncpy(r, line + orig, *offset - orig);
-	return r;
-}
-
-
-void delta_skip_spaces(char* line, int* offset)
-{
-	int len = strlen(line);
-	for(; *offset < len; ++*offset) {
-		if(!isspace(line[*offset]))
-			return;
-	}
-}
-
-
-int delta_is_keyword(char* word)
-{
-	return !strcmp(word, "return");
-}
-
-
-int delta_is_declared(struct DeltaCompiler *c, char* varname)
-{
-	int i;
-	for(i = 0; i < c->total_vars; ++i) {
-		if(!strcmp(c->vars[i].name, varname))
-			return 1;
-	}
-	return 0;
-}
-
-
-int delta_get_variable_id(struct DeltaCompiler *c, char* name)
-{
-	// safety
-	if(name == NULL)
-		return -1;
-	
-	// strip off array element
-	char *element = NULL;
-	int pos = delta_strpos(name, "[");
-	if(pos >= 0) {
-		int end = delta_strpos(name, "]");
-		element = (char*) malloc(end - pos);
-		strncpy(element, name + pos + 1, end - pos - 1);
-		name[pos] = 0;
-	}
-	//printf("looking for '%s' [%s]\n", name, element);
-	
-	// a register address
-	if(name[0] == '#') {
-		int temp = -1;
-		sscanf(name, "#%d", &temp);
-		return temp;
-	}
-	
-	int i, location = -1;
-	for(i = 0; i < c->total_vars; ++i) {
-		if(!strcmp(name, c->vars[i].name)) {
-			location = c->vars[i].ram_location;
-			break;
-		}
-	}
-	
-	// if the variable is found and we need to only access one element we have to copy the array
-	// value out into a temp place
-	if(location >= 0 && element != NULL) {
-		int var_dest = var_temp++;
-		int var_dimention = delta_compile_line_part(c, element, strlen(element));
-		
-#if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_AG1 ( %d %d %d )\n", var_dest, location, var_dimention);
-#endif
-		DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location, var_dimention));
-		return var_dest;
-	}
-	
-	// variable not found
-	return location;
-}
-
-
-int delta_get_operator_order(char* op)
-{
-	if(!strcmp(op, "*") || !strcmp(op, "/"))
-		return 1;
-	if(!strcmp(op, "+") || !strcmp(op, "-"))
-		return 2;
-	if(!strcmp(op, "=") || !strcmp(op, "+=") || !strcmp(op, "-=") || !strcmp(op, "*=") ||
-	   !strcmp(op, "/="))
-		return 3;
-	
-	// unknown operators are always performed with the lowest priority
-	return 0;
-}
+int var_temp = 0;
+int *arg_count = NULL;
+int **arg_ptr = NULL;
+int arg_depth = 0;
+int label_id = 0;
 
 
 int delta_push_label(struct DeltaCompiler *c, char *name)
@@ -207,173 +34,10 @@ int delta_push_label(struct DeltaCompiler *c, char *name)
 }
 
 
-void DeltaFunction_push(struct DeltaCompiler* c, struct DeltaInstruction ins)
-{
-	c->ins[c->total_ins++] = ins;
-}
-
-
-struct DeltaCompiler* new_DeltaCompiler(int total_objects)
-{
-	struct DeltaCompiler *c = (struct DeltaCompiler*) malloc(sizeof(struct DeltaCompiler));
-	
-	c->alloc_ins = 100;
-	c->total_ins = 0;
-	c->ins = (struct DeltaInstruction*) malloc(c->alloc_ins * sizeof(struct DeltaInstruction));
-	
-	c->alloc_vars = 100;
-	c->total_vars = 0;
-	c->vars = (struct DeltaVariable*) malloc(c->alloc_vars * sizeof(struct DeltaVariable));
-	
-	c->alloc_labels = 100;
-	c->total_labels = 0;
-	c->labels = (struct DeltaLabel*) malloc(c->alloc_labels * sizeof(struct DeltaLabel));
-	
-	c->alloc_constants = 100;
-	c->total_constants = 0;
-	c->constants = (struct DeltaVariable*) malloc(c->alloc_constants * sizeof(struct DeltaVariable));
-	
-	return c;
-}
-
-
 void delta_die(const char* msg)
 {
 	perror(msg);
 	exit(1);
-}
-
-
-char* delta_read_token(struct DeltaCompiler *c, char* line, int* offset)
-{
-	int orig = *offset, len = strlen(line);
-	
-	// look for () with function
-	int found = -1;
-	for(; *offset < len; ++*offset) {
-		if(line[*offset] == '[') {
-			for(; *offset < len; ++*offset) {
-				if(line[*offset] == ']')
-					break;
-			}
-			++*offset;
-		}
-		else if(line[*offset] == '(') {
-			found = *offset - orig;
-			break;
-		}
-		if(!isalnum(line[*offset]) && line[*offset] != '_' &&
-		   line[*offset] != '+' && line[*offset] != '-' && line[*offset] != '.' &&
-		   line[*offset] != 'e')
-			break;
-	}
-	
-	if(found >= 0) {
-		char *function_name = (char*) malloc(found + 1);
-		strncpy(function_name, line + orig, found);
-		orig += found;
-		
-		// count the length of the subexpression
-		int bcount_1 = 0; // ()
-		for(; *offset < len; ++*offset) {
-			if(line[*offset] == '(')
-				++bcount_1;
-			else if(line[*offset] == ')') {
-				--bcount_1;
-				if(!bcount_1)
-					break;
-			}
-		}
-		++*offset;
-		
-		// evaluate the subexpression
-		char* r = (char*) malloc(*offset - orig - 1);
-		strncpy(r, line + orig + 1, *offset - orig - 2);
-		delta_compile_line(c, r, strlen(r));
-		
-		// if there was a function, apply it now
-		if(found > 0) {
-			int var_dest = ++var_temp;
-			
-			printf("BYTECODE_CAL %s(", function_name);
-			int _k;
-			arg_ptr[arg_depth][0] = var_dest;
-			for(_k = 0; _k < arg_count[arg_depth]; ++_k) {
-				printf(" %d", arg_ptr[arg_depth][_k]);
-			}
-			printf(" )\n");
-			DeltaFunction_push(c, new_DeltaInstructionN(function_name, BYTECODE_CAL));
-			
-			r = (char*) malloc(8);
-			sprintf(r, "#%d", var_dest);
-		} else {
-			r = (char*) malloc(8);
-			sprintf(r, "#%d", var_temp);
-		}
-		
-		return r;
-	}
-	
-	// look for a string constant
-	if(line[*offset] == '"') {
-		++*offset;
-		
-		// count the length of the string constant
-		for(; *offset < len; ++*offset) {
-			if(line[*offset] == '"')
-				break;
-		}
-		++*offset;
-		
-		char* r = (char*) malloc(*offset - orig + 1);
-		strncpy(r, line + orig, *offset - orig);
-		return r;
-	}
-	
-	for(; *offset < len; ++*offset) {
-		if(!isalnum(line[*offset]) && line[*offset] != '_')
-			break;
-	}
-	
-	char* r = (char*) malloc(orig + 1);
-	strncpy(r, line + orig, *offset - orig);
-	return r;
-}
-
-
-int delta_push_constant(struct DeltaCompiler *c, char *token)
-{
-	++var_temp;
-	c->constants[c->total_constants].type = DELTA_TYPE_STRING;
-	c->constants[c->total_constants].value.ptr = token;
-	c->constants[c->total_constants].ram_location = var_temp;
-	c->constants[c->total_constants].size = strlen(token);
-	delta_escape_string(c->constants[c->total_constants].value.ptr,
-						c->constants[c->total_constants].size);
-	++c->total_constants;
-	return var_temp;
-}
-
-
-int delta_push_number_constant(struct DeltaCompiler *c, double value)
-{
-	++var_temp;
-	c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
-	c->constants[c->total_constants].value.number = value;
-	++c->total_constants;
-	return var_temp;
-}
-
-
-char* delta_replace_constant(char *token)
-{
-	int i;
-	for(i = 0; i < total_delta_defines; ++i) {
-		if(!strcmp(token, delta_defines[i].name))
-			return delta_copy_string(delta_defines[i].value);
-	}
-	
-	return token;
 }
 
 
@@ -558,7 +222,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			
 			// var_id1 must resolve
 			if(var_id1 < 0) {
-				perror("LHS of += must be a variable\n");
+				fprintf(stderr, "LHS of %s must be a variable\n", tokens[highest_op_pos]);
 				exit(1);
 			}
 			
@@ -808,19 +472,3 @@ int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 	free(whole_file);
 	return DELTA_SUCCESS;
 }
-
-
-struct DeltaFunction* new_DeltaFunction(char *name,
-										void (*function_ptr)(struct DeltaInstruction *d),
-										int min_args, int max_args)
-{
-	struct DeltaFunction *f = (struct DeltaFunction*) malloc(sizeof(struct DeltaFunction));
-	
-	f->name = name;
-	f->function_ptr = function_ptr;
-	f->min_args = min_args;
-	f->max_args = max_args;
-	
-	return f;
-}
-
