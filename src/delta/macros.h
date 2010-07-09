@@ -220,6 +220,12 @@
 
 
 /**
+ * @brief For finding variable safe types.
+ */
+#define DELTA_TYPE_UNKNOWN 10
+
+
+/**
  * @brief Check if a variable is a valid resource of a given type.
  */
 #define DELTA_CHECK_RESOURCE(__resource, __type) \

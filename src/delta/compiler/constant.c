@@ -12,6 +12,10 @@
 
 int delta_push_constant(struct DeltaCompiler *c, char *token)
 {
+	if(delta_is_number(token))
+		return delta_push_number_constant(c, atof(token));
+	
+	printf("delta_push_constant '%s'\n", token);
 	++var_temp;
 	c->constants[c->total_constants].type = DELTA_TYPE_STRING;
 	c->constants[c->total_constants].value.ptr = token;
@@ -26,9 +30,11 @@ int delta_push_constant(struct DeltaCompiler *c, char *token)
 
 int delta_push_number_constant(struct DeltaCompiler *c, double value)
 {
+	printf("delta_push_number_constant '%g'\n", value);
 	++var_temp;
 	c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
 	c->constants[c->total_constants].value.number = value;
+	c->constants[c->total_constants].ram_location = var_temp;
 	++c->total_constants;
 	return var_temp;
 }

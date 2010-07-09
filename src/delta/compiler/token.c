@@ -5,7 +5,8 @@
 #include "token.h"
 #include "compiler.h"
 #include "bytecode.h"
-#include "DeltaInstruction.h"
+#include "delta/structs/DeltaInstruction.h"
+#include "delta/structs/DeltaFunction.h"
 #include "strings.h"
 #include <string.h>
 #include <ctype.h>
@@ -103,15 +104,37 @@ int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 }
 
 
+/**
+ * @url http://en.wikipedia.org/wiki/Order_of_operations
+ */
 int delta_get_operator_order(char* op)
 {
-	if(!strcmp(op, "*") || !strcmp(op, "/"))
-		return 1;
-	if(!strcmp(op, "+") || !strcmp(op, "-"))
+	if(!strcmp(op, "!"))
 		return 2;
-	if(!strcmp(op, "=") || !strcmp(op, "+=") || !strcmp(op, "-=") || !strcmp(op, "*=") ||
-	   !strcmp(op, "/="))
+	if(!strcmp(op, "*") || !strcmp(op, "/") || !strcmp(op, "%"))
 		return 3;
+	if(!strcmp(op, "+") || !strcmp(op, "-"))
+		return 4;
+	if(!strcmp(op, ">>") || !strcmp(op, "<<"))
+		return 5;
+	if(!strcmp(op, "<") || !strcmp(op, "<=") || !strcmp(op, ">") || !strcmp(op, ">="))
+		return 6;
+	if(!strcmp(op, "==") || !strcmp(op, "!="))
+		return 7;
+	if(!strcmp(op, "&"))
+		return 8;
+	if(!strcmp(op, "^"))
+		return 9;
+	if(!strcmp(op, "|"))
+		return 10;
+	if(!strcmp(op, "&&"))
+		return 11;
+	if(!strcmp(op, "||"))
+		return 12;
+	if(!strcmp(op, "=") || !strcmp(op, "+=") || !strcmp(op, "*=") || !strcmp(op, "/=") ||
+	   !strcmp(op, "%=") || !strcmp(op, "&=") || !strcmp(op, "|=") || !strcmp(op, "^=") ||
+	   !strcmp(op, "<<=") || !strcmp(op, ">>="))
+		return 14;
 	
 	// unknown operators are always performed with the lowest priority
 	return 0;

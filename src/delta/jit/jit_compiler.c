@@ -9,7 +9,7 @@
 #include <string.h>
 
 
-jit_insn codeBuffer[1024];
+static jit_insn codeBuffer[1024];
 
 
 stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
@@ -25,40 +25,44 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 	
 	// compile instructions
 	for(i = at; i < end; ++i) {
+		// skip NUL bytecodes
+		if(instructions[i].bc == BYTECODE_NUL)
+			continue;
+		
 		if(instructions[i].bc == BYTECODE_IFS) {
 			// copy in the boolean argument as a double
 			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);
 			jit_truncr_d_i(JIT_R0, JIT_R0);
-			printf("*** IFS %d\n", instructions[i].arg[0]);
+			//printf("*** IFS %d\n", instructions[i].arg[0]);
 			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 0);
 		}
 		else if(instructions[i].bc == BYTECODE_LOP) {
 			// copy in the boolean argument as a double
 			jit_ldi_d(JIT_R0, &ram[instructions[i].arg[1]]->value.number);
 			jit_truncr_d_i(JIT_R0, JIT_R0);
-			printf("*** LOP %d\n", instructions[i].arg[0]);
+			//printf("*** LOP %d\n", instructions[i].arg[0]);
 			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 0);
 		}
 		else if(instructions[i].bc == BYTECODE_LBL) {
-			printf("*** LBL %d\n", instructions[i].arg[0]);
+			//printf("*** LBL %d\n", instructions[i].arg[0]);
 			loop[instructions[i].arg[0]] = jit_get_label();
 		}
 		else if(instructions[i].bc == BYTECODE_GTO) {
-			printf("*** GTO %d\n", instructions[i].arg[0]);
+			//printf("*** GTO %d\n", instructions[i].arg[0]);
 			jit_jmpi(loop[instructions[i].arg[0]]);
 		}
 		else if(instructions[i].bc == BYTECODE_PAT) {
-			printf("*** PAT %d\n", instructions[i].arg[0]);
+			//printf("*** PAT %d\n", instructions[i].arg[0]);
 			jit_patch(loop[instructions[i].arg[0]]);
 		}
 		else if(instructions[i].bc == BYTECODE_JMP) {
-			printf("*** JMP %d\n", instructions[i].arg[0]);
+			//printf("*** JMP %d\n", instructions[i].arg[0]);
 			jit_movi_i(JIT_R0, 1);
 			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 1);
 		} else {
-			jit_movi_p(JIT_R0, &instructions[i]);
+			jit_movi_p(JIT_V0, &instructions[i]);
 			jit_prepare(1);
-			jit_pusharg_p(JIT_R0);
+			jit_pusharg_p(JIT_V0);
 			
 			// link the function by its name
 			if(instructions[i].func != NULL) {
@@ -81,7 +85,8 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 			}
 			else {
 				// mostly operator instructions
-				     if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
+					 if(0) { }
+				else if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
 				else if(instructions[i].bc == BYTECODE_AG1) jit_finish(ins_AG1);
 				else if(instructions[i].bc == BYTECODE_AS1) jit_finish(ins_AS1);
 				else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
@@ -94,7 +99,21 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 				else if(instructions[i].bc == BYTECODE_DIV) jit_finish(ins_DIV);
 				else if(instructions[i].bc == BYTECODE_GTO) jit_finish(ins_GTO);
 				else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
+				else if(instructions[i].bc == BYTECODE_MOD) jit_finish(ins_MOD);
 				else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);
+				else if(instructions[i].bc == BYTECODE_NAD) jit_finish(ins_NAD);
+				else if(instructions[i].bc == BYTECODE_NSB) jit_finish(ins_NSB);
+				else if(instructions[i].bc == BYTECODE_NMU) jit_finish(ins_NMU);
+				else if(instructions[i].bc == BYTECODE_NDV) jit_finish(ins_NDV);
+				else if(instructions[i].bc == BYTECODE_NMD) jit_finish(ins_NMD);
+				else if(instructions[i].bc == BYTECODE_NIN) jit_finish(ins_NIN);
+				else if(instructions[i].bc == BYTECODE_NDE) jit_finish(ins_NDE);
+				else if(instructions[i].bc == BYTECODE_NEQ) jit_finish(ins_NEQ);
+				else if(instructions[i].bc == BYTECODE_NGE) jit_finish(ins_NGE);
+				else if(instructions[i].bc == BYTECODE_NGT) jit_finish(ins_NGT);
+				else if(instructions[i].bc == BYTECODE_NLE) jit_finish(ins_NLE);
+				else if(instructions[i].bc == BYTECODE_NLT) jit_finish(ins_NLT);
+				else if(instructions[i].bc == BYTECODE_NNE) jit_finish(ins_NNE);
 				else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
 				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
 				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);

@@ -22,7 +22,42 @@
  */
 inline double delta_cast_number(int address)
 {
-	return delta_cast_number_var(ram[address]);
+	struct DeltaVariable *v = ram[address];
+	
+	if(v->type == DELTA_TYPE_NUMBER)
+		return v->value.number;
+	
+	if(v->type == DELTA_TYPE_BOOLEAN)
+		return (v->value.number ? 1 : 0);
+	
+	if(v->type == DELTA_TYPE_STRING) {
+		// a string can be cast to a number only if there is no loss in precision. we test this by
+		// converting the string to a number and then back into a string, if the double converted
+		// string is equal to the current value then there is no loss of precision casting.
+		char *temp = (char*) malloc(32);
+		double temp2 = atof(v->value.ptr);
+		sprintf(temp, "%g", temp2);
+		
+		// check for lost precision
+		if(!strcmp(temp, v->value.ptr)) {
+			v->type == DELTA_TYPE_NUMBER;
+			v->value.number = temp2;
+			free(temp);
+			return v->value.number;
+		}
+		
+		// just because it could not be cast doesn't mean there is no numerical value to return
+		free(temp);
+		return temp2;
+	}
+	
+	if(v->type == DELTA_TYPE_ARRAY) {
+		// arrays can never be converted into numbers so we only return the number of elements
+		return v->value.array.elements;
+	}
+	
+	// objects, resources and NULL must return 0
+	return 0.0;
 }
 
 

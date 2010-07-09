@@ -75,6 +75,9 @@ struct DeltaVariable
 	
 	//! To make strings binary safe we have a separate size for ptr.
 	int size;
+	
+	//! Safe variable type.
+	DeltaVariableType safe_type;
 };
 
 

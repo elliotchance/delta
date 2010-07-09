@@ -15,8 +15,107 @@
  */
 DELTA_INS(ADD)
 {
-	//DELTA_PRINT_INS_ARGS(ADD);
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) + delta_cast_number(d->arg[2]));
+}
+
+
+/**
+ * @brief Fast math numerical addition.
+ */
+DELTA_INS(NAD)
+{
+	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number + ram[d->arg[2]]->value.number;
+}
+
+
+/**
+ * @brief Fast math numerical subtraction.
+ */
+DELTA_INS(NSB)
+{
+	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number - ram[d->arg[2]]->value.number;
+}
+
+
+/**
+ * @brief Fast math multiplication addition.
+ */
+DELTA_INS(NMU)
+{
+	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number * ram[d->arg[2]]->value.number;
+}
+
+
+/**
+ * @brief Fast math numerical division.
+ */
+DELTA_INS(NDV)
+{
+	// TODO: divide by zero, also check DIV
+	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number / ram[d->arg[2]]->value.number;
+}
+
+
+/**
+ * @brief Fast math numerical modulus.
+ */
+DELTA_INS(NMD)
+{
+	ram[d->arg[0]]->value.number = fmod(ram[d->arg[1]]->value.number, ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath equal to.
+ */
+DELTA_INS(NEQ)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number == ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath greater than or equal to.
+ */
+DELTA_INS(NGE)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number >= ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath greater than.
+ */
+DELTA_INS(NGT)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number > ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath less than or equal to.
+ */
+DELTA_INS(NLE)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number <= ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath less than.
+ */
+DELTA_INS(NLT)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number < ram[d->arg[2]]->value.number);
+}
+
+
+/**
+ * @brief FastMath not equal to.
+ */
+DELTA_INS(NNE)
+{
+	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number != ram[d->arg[2]]->value.number);
 }
 
 
@@ -122,6 +221,24 @@ DELTA_INS(INC)
 
 
 /**
+ * @brief FastMath increment (add 1)
+ */
+DELTA_INS(NIN)
+{
+	++ram[DELTA_DEST]->value.number;
+}
+
+
+/**
+ * @brief FastMath decrement (add 1)
+ */
+DELTA_INS(NDE)
+{
+	--ram[DELTA_DEST]->value.number;
+}
+
+
+/**
  * @brief Define a label.
  * This bytecode is for marking a label for the jit compiler, this function itself should never be
  * called, however if it does nothing will happen.
@@ -172,6 +289,7 @@ DELTA_INS(SET)
 	ram[DELTA_DEST]->value.number = ram[d->arg[1]]->value.number;
 	ram[DELTA_DEST]->value.ptr = ram[d->arg[1]]->value.ptr;
 	ram[DELTA_DEST]->value.array = ram[d->arg[1]]->value.array;
+	ram[DELTA_DEST]->value.resource = ram[d->arg[1]]->value.resource;
 }
 
 
@@ -182,6 +300,15 @@ DELTA_INS(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
 	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) - delta_cast_number(d->arg[2]));
+}
+
+
+/**
+ * @brief Numerical modulus.
+ */
+DELTA_INS(MOD)
+{
+	DELTA_RETURN_NUMBER(fmod(delta_cast_number(d->arg[1]), delta_cast_number(d->arg[2])));
 }
 
 

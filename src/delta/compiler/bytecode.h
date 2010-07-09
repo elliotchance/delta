@@ -19,20 +19,35 @@
 #define BYTECODE_SUB 0x0021 /* -  */
 #define BYTECODE_MUL 0x0022 /* *  */
 #define BYTECODE_DIV 0x0023 /* /  */
+#define BYTECODE_MOD 0x0024 /* %  */
+#define BYTECODE_INC 0x0025 /* ++ */
+#define BYTECODE_DEC 0x0026 /* -- */
 
-#define BYTECODE_CEQ 0x0030 /* == */
-#define BYTECODE_CNE 0x0031 /* != */
-#define BYTECODE_CLT 0x0032 /* <  */
-#define BYTECODE_CGT 0x0033 /* >  */
-#define BYTECODE_CLE 0x0034 /* <= */
-#define BYTECODE_CGE 0x0035 /* >= */
+#define BYTECODE_CEQ 0x0030 // ==
+#define BYTECODE_CNE 0x0031 // !=
+#define BYTECODE_CLT 0x0032 // <
+#define BYTECODE_CGT 0x0033 // >
+#define BYTECODE_CLE 0x0034 // <=
+#define BYTECODE_CGE 0x0035 // >=
 
-#define BYTECODE_INC 0x0040 /* ++ */
-#define BYTECODE_DEC 0x0041 /* -- */
+#define BYTECODE_AS1 0x0040 // Set first dimension array
 
-#define BYTECODE_AS1 0x0050 // Set first dimension array
+#define BYTECODE_AG1 0x0050 // Get first dimension array
 
-#define BYTECODE_AG1 0x0060 // Get first dimension array
+#define BYTECODE_NAD 0x0060 // FastMath +
+#define BYTECODE_NSB 0x0061 // FastMath -
+#define BYTECODE_NMU 0x0062 // FastMath *
+#define BYTECODE_NDV 0x0063 // FastMath /
+#define BYTECODE_NMD 0x0064 // FastMath %
+#define BYTECODE_NIN 0x0065 // FastMath ++
+#define BYTECODE_NDE 0x0066 // FastMath --
+
+#define BYTECODE_NEQ 0x0070 // FastMath ==
+#define BYTECODE_NNE 0x0071 // FastMath !=
+#define BYTECODE_NLT 0x0072 // FastMath <
+#define BYTECODE_NGT 0x0073 // FastMath >
+#define BYTECODE_NLE 0x0074 // FastMath <=
+#define BYTECODE_NGE 0x0075 // FastMath >=
 
 
 //-----------------------------------------------

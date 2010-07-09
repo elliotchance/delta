@@ -15,6 +15,8 @@
 #include "save.h"
 #include "vm.h"
 #include "jit_compiler.h"
+#include "delta/jit/optimiser.h"
+#include "delta/structs/DeltaCompiler.h"
 
 
 int main()
@@ -26,6 +28,9 @@ int main()
 	// take input files
 	delta_compile_file(c, "test.delta");
 	
+	// optimise bytecode
+	delta_optimise_bytecode(c, 0, c->total_ins);
+	
 	// save bytecode
 	delta_save_file(c, "test.dc");
 	
@@ -36,7 +41,7 @@ int main()
 	delta_vm_prepare(c);
 	start = clock();
 	printf("\n\n==> BEGIN, hit enter to proceed\n");
-	getchar();
+	//getchar();
 	f(NULL);
 	printf("==> END\n\n");
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);

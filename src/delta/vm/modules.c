@@ -12,6 +12,7 @@
 #include "modules/file/module.h"
 #include "modules/io/module.h"
 #include "modules/math/module.h"
+#include "modules/misc/module.h"
 #include "modules/string/module.h"
 #include "modules/variables/module.h"
 
@@ -25,6 +26,7 @@ void delta_load_modules()
 	delta_load_module_file();
 	delta_load_module_io();
 	delta_load_module_math();
+	delta_load_module_misc();
 	delta_load_module_string();
 	delta_load_module_variables();
 }
