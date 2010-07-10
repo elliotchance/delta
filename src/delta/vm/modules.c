@@ -15,6 +15,7 @@
 #include "modules/misc/module.h"
 #include "modules/string/module.h"
 #include "modules/variables/module.h"
+#include "modules/zlib/module.h"
 
 
 void delta_load_modules()
@@ -29,4 +30,5 @@ void delta_load_modules()
 	delta_load_module_misc();
 	delta_load_module_string();
 	delta_load_module_variables();
+	delta_load_module_zlib();
 }
