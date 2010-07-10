@@ -52,72 +52,90 @@
 
 #define DELTA_RETURN_NULL \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_NULL; \
+	DELTA_DEST->type = DELTA_TYPE_NULL; \
 	return;\
 }
 
 
 #define DELTA_RETURN_NAN \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
-	ram[DELTA_DEST]->value.number = NAN; \
+	DELTA_DEST->type = DELTA_TYPE_NUMBER; \
+	DELTA_DEST->value.number = NAN; \
 	return;\
 }
 
 
 #define DELTA_RETURN_BOOLEAN(return_value) \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
-	ram[DELTA_DEST]->value.number = (return_value == 0 ? 0 : 1); \
+	DELTA_DEST->type = DELTA_TYPE_BOOLEAN; \
+	DELTA_DEST->value.number = (return_value == 0 ? 0 : 1); \
 	return; \
 }
 
 
 #define DELTA_RETURN_NUMBER(return_value) \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
-	ram[DELTA_DEST]->value.number = return_value; \
+	DELTA_DEST->type = DELTA_TYPE_NUMBER; \
+	DELTA_DEST->value.number = return_value; \
 	return; \
 }
 
 
 #define DELTA_RETURN_ZERO \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_NUMBER; \
-	ram[DELTA_DEST]->value.number = 0; \
+	DELTA_DEST->type = DELTA_TYPE_NUMBER; \
+	DELTA_DEST->value.number = 0; \
+	return; \
+}
+
+
+#define DELTA_RETURN_ONE \
+{ \
+	DELTA_DEST->type = DELTA_TYPE_NUMBER; \
+	DELTA_DEST->value.number = 1; \
 	return; \
 }
 
 
 #define DELTA_RETURN_FALSE \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
-	ram[DELTA_DEST]->value.number = 0; \
+	DELTA_DEST->type = DELTA_TYPE_BOOLEAN; \
+	DELTA_DEST->value.number = DELTA_FALSE; \
 	return; \
 }
 
 
 #define DELTA_RETURN_TRUE \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_BOOLEAN; \
-	ram[DELTA_DEST]->value.number = 1; \
+	DELTA_DEST->type = DELTA_TYPE_BOOLEAN; \
+	DELTA_DEST->value.number = DELTA_TRUE; \
 	return; \
 }
 
 
 #define DELTA_RETURN_STRING(return_value) \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_STRING; \
-	ram[DELTA_DEST]->value.ptr = return_value; \
+	DELTA_DEST->type = DELTA_TYPE_STRING; \
+	DELTA_DEST->value.ptr = return_value; \
+	DELTA_DEST->size = strlen(return_value); \
+	return; \
+}
+
+
+#define DELTA_RETURN_BINARY_STRING(return_value, return_size) \
+{ \
+	DELTA_DEST->type = DELTA_TYPE_STRING; \
+	DELTA_DEST->value.ptr = return_value; \
+	DELTA_DEST->size = return_size; \
 	return; \
 }
 
 
 #define DELTA_RETURN_RESOURCE(return_value, resource_id) \
 { \
-	ram[DELTA_DEST]->type = DELTA_TYPE_RESOURCE; \
-	ram[DELTA_DEST]->value.resource.ptr = (char*) return_value; \
-	ram[DELTA_DEST]->value.resource.id = resource_id; \
+	DELTA_DEST->type = DELTA_TYPE_RESOURCE; \
+	DELTA_DEST->value.resource.ptr = (char*) return_value; \
+	DELTA_DEST->value.resource.id = resource_id; \
 	return; \
 }
 
@@ -131,41 +149,41 @@
 /**
  * @brief The RAM address of the destination variable.
  */
-#define DELTA_DEST d->arg[0]
+#define DELTA_DEST d->varg[0]
 
 
 // Argument addresses
-#define DELTA_ARG0 d->arg[2]
-#define DELTA_ARG1 d->arg[4]
-#define DELTA_ARG2 d->arg[6]
-#define DELTA_ARG3 d->arg[8]
-#define DELTA_ARG4 d->arg[10]
-#define DELTA_ARG5 d->arg[12]
-#define DELTA_ARG6 d->arg[14]
-#define DELTA_ARG7 d->arg[16]
+#define DELTA_ARG0 d->varg[2]
+#define DELTA_ARG1 d->varg[4]
+#define DELTA_ARG2 d->varg[6]
+#define DELTA_ARG3 d->varg[8]
+#define DELTA_ARG4 d->varg[10]
+#define DELTA_ARG5 d->varg[12]
+#define DELTA_ARG6 d->varg[14]
+#define DELTA_ARG7 d->varg[16]
 
 
-// Argument name addresses
-#define DELTA_ARG0_NAME d->arg[1]
-#define DELTA_ARG1_NAME d->arg[3]
-#define DELTA_ARG2_NAME d->arg[5]
-#define DELTA_ARG3_NAME d->arg[7]
-#define DELTA_ARG4_NAME d->arg[9]
-#define DELTA_ARG5_NAME d->arg[11]
-#define DELTA_ARG6_NAME d->arg[13]
-#define DELTA_ARG7_NAME d->arg[15]
+// Argument name addresses, these are used like char*
+#define DELTA_ARG0_NAME d->varg[1]
+#define DELTA_ARG1_NAME d->varg[3]
+#define DELTA_ARG2_NAME d->varg[5]
+#define DELTA_ARG3_NAME d->varg[7]
+#define DELTA_ARG4_NAME d->varg[9]
+#define DELTA_ARG5_NAME d->varg[11]
+#define DELTA_ARG6_NAME d->varg[13]
+#define DELTA_ARG7_NAME d->varg[15]
 
 
 /**
  * @brief Get argument value by argument ID.
  */
-#define DELTA_ARG(i) d->arg[(i * 2) + 2]
+#define DELTA_ARG(i) d->varg[(i * 2) + 2]
 
 
 /**
  * @brief Get argument name by argument ID.
  */
-#define DELTA_ARG_NAME(i) d->arg[(i * 2) + 1]
+#define DELTA_ARG_NAME(i) d->varg[(i * 2) + 1]
 
 
 #define DELTA_SUCCESS 1
@@ -246,7 +264,11 @@
 
 #define DELTA_ERROR_USER_NOTICE "1024"
 
-
+/**
+ * @brief Trigger a runtime error.
+ * @param msg A char* message
+ * @param type Can be one of DELTA_ERROR_*
+ */
 #define DELTA_TRIGGER_ERROR(msg, type) \
 	delta_vm_push_runtime_error(msg, atoi(type))
 

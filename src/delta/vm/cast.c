@@ -20,66 +20,7 @@
  * @param address RAM location of the variable.
  * @return double The value that should be considered the number representation of the variable.
  */
-inline double delta_cast_number(int address)
-{
-	struct DeltaVariable *v = ram[address];
-	
-	if(v->type == DELTA_TYPE_NUMBER)
-		return v->value.number;
-	
-	if(v->type == DELTA_TYPE_BOOLEAN)
-		return (v->value.number ? 1 : 0);
-	
-	if(v->type == DELTA_TYPE_STRING) {
-		// a string can be cast to a number only if there is no loss in precision. we test this by
-		// converting the string to a number and then back into a string, if the double converted
-		// string is equal to the current value then there is no loss of precision casting.
-		char *temp = (char*) malloc(32);
-		double temp2 = atof(v->value.ptr);
-		sprintf(temp, "%g", temp2);
-		
-		// check for lost precision
-		if(!strcmp(temp, v->value.ptr)) {
-			v->type == DELTA_TYPE_NUMBER;
-			v->value.number = temp2;
-			free(temp);
-			return v->value.number;
-		}
-		
-		// just because it could not be cast doesn't mean there is no numerical value to return
-		free(temp);
-		return temp2;
-	}
-	
-	if(v->type == DELTA_TYPE_ARRAY) {
-		// arrays can never be converted into numbers so we only return the number of elements
-		return v->value.array.elements;
-	}
-	
-	// objects, resources and NULL must return 0
-	return 0.0;
-}
-
-
-inline int delta_cast_int(int address)
-{
-	return (int) delta_cast_number_var(ram[address]);
-}
-
-
-inline int delta_cast_int_var(struct DeltaVariable *v)
-{
-	return (int) delta_cast_number_var(v);
-}
-
-
-/**
- * @brief Cast a live variable to a number.
- *
- * This function works the same way as delta_cast_number() except it takes a variable instead of a
- * RAM location.
- */
-inline double delta_cast_number_var(struct DeltaVariable *v)
+inline double delta_cast_number(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_NUMBER)
 		return v->value.number;
@@ -118,9 +59,9 @@ inline double delta_cast_number_var(struct DeltaVariable *v)
 }
 
 
-inline struct DeltaVariable* delta_cast_string(int address, int *release)
+inline int delta_cast_int(struct DeltaVariable *v)
 {
-	return delta_cast_string_var(ram[address], release);
+	return (int) delta_cast_number(v);
 }
 
 
@@ -136,7 +77,7 @@ inline struct DeltaVariable* delta_cast_string(int address, int *release)
  * @param release This will be set to 0 or 1. If set to 1 then the returned DeltaVariable* must be
  *        have free() invoked when you are finished with it to prevent memory leaks.
  */
-inline struct DeltaVariable* delta_cast_string_var(struct DeltaVariable* v, int *release)
+inline struct DeltaVariable* delta_cast_string(struct DeltaVariable* v, int *release)
 {
 	if(v->type == DELTA_TYPE_STRING) {
 		*release = DELTA_NO;
@@ -218,13 +159,7 @@ inline struct DeltaVariable* delta_cast_string_var(struct DeltaVariable* v, int 
 }
 
 
-inline int delta_cast_boolean(int address)
-{
-	return delta_cast_boolean_var(ram[address]);
-}
-
-
-inline int delta_cast_boolean_var(struct DeltaVariable *v)
+inline int delta_cast_boolean(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_BOOLEAN)
 		return v->value.number;

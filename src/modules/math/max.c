@@ -21,14 +21,14 @@
  */
 DELTA_FUNCTION(max)
 {
-	if(ram[DELTA_ARG0]->type == DELTA_TYPE_ARRAY) {
-		struct DeltaArray *array = &ram[DELTA_ARG0]->value.array;
+	if(DELTA_ARG0->type == DELTA_TYPE_ARRAY) {
+		struct DeltaArray *array = &DELTA_ARG0->value.array;
 		struct DeltaArrayValue *e = array->head;
-		double highest = delta_cast_number_var(e->value);
+		double highest = delta_cast_number(e->value);
 		e = e->next;
 		int i;
 		for(i = 1; i < array->elements; ++i, e = e->next) {
-			double arg = delta_cast_number_var(e->value);
+			double arg = delta_cast_number(e->value);
 			if(arg > highest)
 				highest = arg;
 		}

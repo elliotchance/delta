@@ -20,7 +20,6 @@ DELTA_INS(CLT); // <
 DELTA_INS(CNE); // !=
 DELTA_INS(DEC); // --
 DELTA_INS(DIV); // /
-DELTA_INS(GTO); // goto label
 DELTA_INS(INC); // ++
 DELTA_INS(LBL); // begin label
 DELTA_INS(MOD); // %

@@ -14,11 +14,11 @@
 DELTA_FUNCTION(array_push)
 {
 	// first make sure source1 is an array
-	if(ram[DELTA_ARG0]->type != DELTA_TYPE_ARRAY) {
-		ram[DELTA_ARG0]->type = DELTA_TYPE_ARRAY;
-		ram[DELTA_ARG0]->value.array.elements = 0;
-		ram[DELTA_ARG0]->value.array.head = NULL;
-		ram[DELTA_ARG0]->value.array.tail = NULL;
+	if(DELTA_ARG0->type != DELTA_TYPE_ARRAY) {
+		DELTA_ARG0->type = DELTA_TYPE_ARRAY;
+		DELTA_ARG0->value.array.elements = 0;
+		DELTA_ARG0->value.array.head = NULL;
+		DELTA_ARG0->value.array.tail = NULL;
 	}
 	
 	// create the new element to push
@@ -29,9 +29,9 @@ DELTA_FUNCTION(array_push)
 	//strcpy(dav->value, "world");
 	
 	// push element
-	ram[DELTA_ARG0]->value.array.head = dav;
-	ram[DELTA_ARG0]->value.array.tail = dav;
+	DELTA_ARG0->value.array.head = dav;
+	DELTA_ARG0->value.array.tail = dav;
 	
 	// increment the elements
-	++ram[DELTA_ARG0]->value.array.elements;
+	++DELTA_ARG0->value.array.elements;
 }

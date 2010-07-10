@@ -432,21 +432,22 @@ static void MDTimeTrial ()
      TEST_BYTES/(endTime-startTime));
 }
 
+
 /* Computes the message digest for string inString.
  Prints out message digest, a space, the string (in quotes) and a
  carriage return.
  */
-static char* MDString (inString)
-char *inString;
+static char* MDString (unsigned char *inString)
 {
 	MD5_CTX mdContext;
-	unsigned int len = strlen (inString);
+	unsigned int len = strlen((char*) inString);
 	
 	MD5Init (&mdContext);
 	MD5Update (&mdContext, inString, len);
 	MD5Final (&mdContext);
 	return MDPrint (&mdContext);
 }
+
 
 /* Computes the message digest for a specified file.
  Prints out message digest, a space, the file name, and a carriage
@@ -503,7 +504,7 @@ DELTA_FUNCTION(md5)
 {
 	int release;
 	struct DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
-	char *md5_result = MDString(v->value.ptr);
+	char *md5_result = MDString((unsigned char*) v->value.ptr);
 	
 	if(release)
 		free(v);

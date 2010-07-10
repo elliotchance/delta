@@ -20,12 +20,12 @@
 DELTA_FUNCTION(fflush)
 {
 	// check for correct resource type
-	if(!DELTA_CHECK_RESOURCE(ram[DELTA_ARG0], DELTA_RESOURCE_FILE)) {
+	if(!DELTA_CHECK_RESOURCE(DELTA_ARG0, DELTA_RESOURCE_FILE)) {
 		DELTA_TRIGGER_ERROR("Resource to fflush() is not valid", DELTA_ERROR_WARNING);
 		DELTA_RETURN_FALSE;
 	}
 	
 	// check for eof
-	int r = fflush((FILE*) ram[DELTA_ARG0]->value.resource.ptr);
+	int r = fflush((FILE*) DELTA_ARG0->value.resource.ptr);
 	DELTA_RETURN_BOOLEAN(r);
 }

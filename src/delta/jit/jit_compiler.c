@@ -16,7 +16,7 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 {
 	// pointer to generated code
 	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);
-	int i, loop_id = 0;
+	int i, loop_id = 0, j;
 	jit_insn **loop = (jit_insn**) calloc(16, sizeof(jit_insn*));
 	struct DeltaInstruction* instructions = c->ins;
 	
@@ -60,13 +60,20 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 			jit_movi_i(JIT_R0, 1);
 			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 1);
 		} else {
+			// link argument addresses
+			instructions[i].varg = (struct DeltaVariable**)
+				malloc(instructions[i].args * sizeof(struct DeltaVariable*));
+			for(j = 0; j < instructions[i].args; ++j)
+				instructions[i].varg[j] = ram[instructions[i].arg[j]];
+			
+			// link function call
 			jit_movi_p(JIT_V0, &instructions[i]);
 			jit_prepare(1);
 			jit_pusharg_p(JIT_V0);
 			
 			// link the function by its name
 			if(instructions[i].func != NULL) {
-				int j, linked = -1;
+				int linked = -1;
 				for(j = 0; j < total_delta_functions; ++j) {
 					if(!strcmp(delta_functions[j]->name, instructions[i].func)) {
 						// TODO: check argument count is with acceptable range
@@ -97,7 +104,6 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 				else if(instructions[i].bc == BYTECODE_CNE) jit_finish(ins_CNE);
 				else if(instructions[i].bc == BYTECODE_DEC) jit_finish(ins_DEC);
 				else if(instructions[i].bc == BYTECODE_DIV) jit_finish(ins_DIV);
-				else if(instructions[i].bc == BYTECODE_GTO) jit_finish(ins_GTO);
 				else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
 				else if(instructions[i].bc == BYTECODE_MOD) jit_finish(ins_MOD);
 				else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);

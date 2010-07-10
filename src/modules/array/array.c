@@ -11,10 +11,10 @@
  */
 DELTA_FUNCTION(array)
 {
-	ram[DELTA_DEST]->type = DELTA_TYPE_ARRAY;
-	ram[DELTA_DEST]->value.array.elements = DELTA_ARGS;
-	ram[DELTA_DEST]->value.array.head = NULL;
-	ram[DELTA_DEST]->value.array.tail = NULL;
+	DELTA_DEST->type = DELTA_TYPE_ARRAY;
+	DELTA_DEST->value.array.elements = DELTA_ARGS;
+	DELTA_DEST->value.array.head = NULL;
+	DELTA_DEST->value.array.tail = NULL;
 	
 	// push the elements
 	int i;
@@ -26,16 +26,16 @@ DELTA_FUNCTION(array)
 		struct DeltaVariable *v = delta_cast_string(DELTA_ARG_NAME(i), &release);
 		dav->key = (char*) malloc(v->size + 1);
 		strncpy(dav->key, v->value.ptr, v->size);
-		dav->value = ram[DELTA_ARG(i)];
+		dav->value = DELTA_ARG(i);
 		
 		// push the element onto the tail
-		if(ram[DELTA_DEST]->value.array.head == NULL) {
-			ram[DELTA_DEST]->value.array.head = dav;
-			ram[DELTA_DEST]->value.array.tail = dav;
+		if(DELTA_DEST->value.array.head == NULL) {
+			DELTA_DEST->value.array.head = dav;
+			DELTA_DEST->value.array.tail = dav;
 		}
 		
-		ram[DELTA_DEST]->value.array.tail->next = dav;
-		ram[DELTA_DEST]->value.array.tail = dav;
+		DELTA_DEST->value.array.tail->next = dav;
+		DELTA_DEST->value.array.tail = dav;
 		
 		// clean up
 		if(release)

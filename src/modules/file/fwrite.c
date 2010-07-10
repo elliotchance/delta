@@ -13,7 +13,7 @@
 DELTA_FUNCTION(fwrite)
 {
 	// check for correct resource type
-	if(!DELTA_CHECK_RESOURCE(ram[DELTA_ARG0], DELTA_RESOURCE_FILE)) {
+	if(!DELTA_CHECK_RESOURCE(DELTA_ARG0, DELTA_RESOURCE_FILE)) {
 		DELTA_TRIGGER_ERROR("Resource to fwrite() is not valid", DELTA_ERROR_WARNING);
 		DELTA_RETURN_ZERO;
 	}
@@ -23,7 +23,7 @@ DELTA_FUNCTION(fwrite)
 	struct DeltaVariable *arg1 = delta_cast_string(DELTA_ARG1, &release1);
 	
 	// create the resource
-	int r = fwrite(arg1->value.ptr, arg1->size, 1, (FILE*) ram[DELTA_ARG0]->value.resource.ptr);
+	int r = fwrite(arg1->value.ptr, arg1->size, 1, (FILE*) DELTA_ARG0->value.resource.ptr);
 	
 	// clean up
 	if(release1)

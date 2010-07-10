@@ -15,7 +15,7 @@
  */
 DELTA_INS(ADD)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) + delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) + delta_cast_number(d->varg[2]));
 }
 
 
@@ -24,7 +24,7 @@ DELTA_INS(ADD)
  */
 DELTA_INS(NAD)
 {
-	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number + ram[d->arg[2]]->value.number;
+	DELTA_DEST->value.number = d->varg[1]->value.number + d->varg[2]->value.number;
 }
 
 
@@ -33,7 +33,7 @@ DELTA_INS(NAD)
  */
 DELTA_INS(NSB)
 {
-	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number - ram[d->arg[2]]->value.number;
+	DELTA_DEST->value.number = d->varg[1]->value.number - d->varg[2]->value.number;
 }
 
 
@@ -42,7 +42,7 @@ DELTA_INS(NSB)
  */
 DELTA_INS(NMU)
 {
-	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number * ram[d->arg[2]]->value.number;
+	DELTA_DEST->value.number = d->varg[1]->value.number * d->varg[2]->value.number;
 }
 
 
@@ -52,7 +52,7 @@ DELTA_INS(NMU)
 DELTA_INS(NDV)
 {
 	// TODO: divide by zero, also check DIV
-	ram[d->arg[0]]->value.number = ram[d->arg[1]]->value.number / ram[d->arg[2]]->value.number;
+	DELTA_DEST->value.number = d->varg[1]->value.number / d->varg[2]->value.number;
 }
 
 
@@ -61,7 +61,7 @@ DELTA_INS(NDV)
  */
 DELTA_INS(NMD)
 {
-	ram[d->arg[0]]->value.number = fmod(ram[d->arg[1]]->value.number, ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = fmod(d->varg[1]->value.number, d->varg[2]->value.number);
 }
 
 
@@ -70,7 +70,7 @@ DELTA_INS(NMD)
  */
 DELTA_INS(NEQ)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number == ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number == d->varg[2]->value.number);
 }
 
 
@@ -79,7 +79,7 @@ DELTA_INS(NEQ)
  */
 DELTA_INS(NGE)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number >= ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number >= d->varg[2]->value.number);
 }
 
 
@@ -88,7 +88,7 @@ DELTA_INS(NGE)
  */
 DELTA_INS(NGT)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number > ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number > d->varg[2]->value.number);
 }
 
 
@@ -97,7 +97,7 @@ DELTA_INS(NGT)
  */
 DELTA_INS(NLE)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number <= ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number <= d->varg[2]->value.number);
 }
 
 
@@ -106,7 +106,7 @@ DELTA_INS(NLE)
  */
 DELTA_INS(NLT)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number < ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number < d->varg[2]->value.number);
 }
 
 
@@ -115,7 +115,7 @@ DELTA_INS(NLT)
  */
 DELTA_INS(NNE)
 {
-	ram[d->arg[0]]->value.number = (ram[d->arg[1]]->value.number != ram[d->arg[2]]->value.number);
+	DELTA_DEST->value.number = (d->varg[1]->value.number != d->varg[2]->value.number);
 }
 
 
@@ -124,7 +124,7 @@ DELTA_INS(NNE)
  */
 DELTA_INS(CEQ)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) == delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) == delta_cast_number(d->varg[2]));
 }
 
 
@@ -133,7 +133,7 @@ DELTA_INS(CEQ)
  */
 DELTA_INS(CGE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) >= delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) >= delta_cast_number(d->varg[2]));
 }
 
 
@@ -142,7 +142,7 @@ DELTA_INS(CGE)
  */
 DELTA_INS(CGT)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) > delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) > delta_cast_number(d->varg[2]));
 }
 
 
@@ -151,7 +151,7 @@ DELTA_INS(CGT)
  */
 DELTA_INS(CLE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) <= delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) <= delta_cast_number(d->varg[2]));
 }
 
 
@@ -160,7 +160,7 @@ DELTA_INS(CLE)
  */
 DELTA_INS(CLT)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) < delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) < delta_cast_number(d->varg[2]));
 }
 
 
@@ -169,7 +169,7 @@ DELTA_INS(CLT)
  */
 DELTA_INS(CNE)
 {
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) != delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) != delta_cast_number(d->varg[2]));
 }
 
 
@@ -188,16 +188,7 @@ DELTA_INS(DEC)
 DELTA_INS(DIV)
 {
 	// this is only numerical division, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) / delta_cast_number(d->arg[2]));
-}
-
-
-/**
- * @brief Goto label.
- */
-DELTA_INS(GTO)
-{
-	stack_pos = DELTA_DEST;
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) / delta_cast_number(d->varg[2]));
 }
 
 
@@ -225,7 +216,7 @@ DELTA_INS(INC)
  */
 DELTA_INS(NIN)
 {
-	++ram[DELTA_DEST]->value.number;
+	++DELTA_DEST->value.number;
 }
 
 
@@ -234,7 +225,7 @@ DELTA_INS(NIN)
  */
 DELTA_INS(NDE)
 {
-	--ram[DELTA_DEST]->value.number;
+	--DELTA_DEST->value.number;
 }
 
 
@@ -255,7 +246,7 @@ DELTA_INS(LBL)
 DELTA_INS(MUL)
 {
 	// this is only numerical multiplicaton, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) * delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) * delta_cast_number(d->varg[2]));
 }
 
 
@@ -284,12 +275,12 @@ DELTA_INS(RTN)
 DELTA_INS(SET)
 {
 	// TODO: assigning any type except object requires a complete recursive copy of the variable.
-	ram[DELTA_DEST]->type = ram[d->arg[1]]->type;
-	ram[DELTA_DEST]->size = ram[d->arg[1]]->size;
-	ram[DELTA_DEST]->value.number = ram[d->arg[1]]->value.number;
-	ram[DELTA_DEST]->value.ptr = ram[d->arg[1]]->value.ptr;
-	ram[DELTA_DEST]->value.array = ram[d->arg[1]]->value.array;
-	ram[DELTA_DEST]->value.resource = ram[d->arg[1]]->value.resource;
+	DELTA_DEST->type = d->varg[1]->type;
+	DELTA_DEST->size = d->varg[1]->size;
+	DELTA_DEST->value.number = d->varg[1]->value.number;
+	DELTA_DEST->value.ptr = d->varg[1]->value.ptr;
+	DELTA_DEST->value.array = d->varg[1]->value.array;
+	DELTA_DEST->value.resource = d->varg[1]->value.resource;
 }
 
 
@@ -299,7 +290,7 @@ DELTA_INS(SET)
 DELTA_INS(SUB)
 {
 	// this is only numerical subtraction, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(d->arg[1]) - delta_cast_number(d->arg[2]));
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) - delta_cast_number(d->varg[2]));
 }
 
 
@@ -308,7 +299,7 @@ DELTA_INS(SUB)
  */
 DELTA_INS(MOD)
 {
-	DELTA_RETURN_NUMBER(fmod(delta_cast_number(d->arg[1]), delta_cast_number(d->arg[2])));
+	DELTA_RETURN_NUMBER(fmod(delta_cast_number(d->varg[1]), delta_cast_number(d->varg[2])));
 }
 
 
@@ -320,15 +311,15 @@ DELTA_INS(AS1)
 	// FIXME: we must be an array
 	
 	int release_key;
-	struct DeltaVariable *v = delta_cast_string(d->arg[1], &release_key);
+	struct DeltaVariable *v = delta_cast_string(d->varg[1], &release_key);
 	
 	// try and find the key
 	int i, found = 0;
-	struct DeltaArrayValue *element = ram[DELTA_DEST]->value.array.head;
-	for(i = 0; i < ram[DELTA_DEST]->value.array.elements; ++i, element = element->next) {
+	struct DeltaArrayValue *element = DELTA_DEST->value.array.head;
+	for(i = 0; i < DELTA_DEST->value.array.elements; ++i, element = element->next) {
 		if(!strcmp(v->value.ptr, element->key)) {
 			element->value->type = DELTA_TYPE_NUMBER;
-			element->value->value.number = ram[d->arg[2]]->value.number;
+			element->value->value.number = d->varg[2]->value.number;
 			found = 1;
 			break;
 		}
@@ -338,9 +329,9 @@ DELTA_INS(AS1)
 	if(!found) {
 		struct DeltaArrayValue *next = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
 		next->key = v->value.ptr;
-		next->value = ram[d->arg[2]];
-		ram[DELTA_DEST]->value.array.tail->next = next;
-		++ram[DELTA_DEST]->value.array.elements;
+		next->value = d->varg[2];
+		DELTA_DEST->value.array.tail->next = next;
+		++DELTA_DEST->value.array.elements;
 	}
 	
 	// clean up
@@ -357,15 +348,15 @@ DELTA_INS(AG1)
 	// FIXME: we must be an array
 	
 	int release_key;
-	struct DeltaVariable *v = delta_cast_string(d->arg[2], &release_key);
+	struct DeltaVariable *v = delta_cast_string(d->varg[2], &release_key);
 	
 	// try and find the key
 	int i, found = 0;
-	struct DeltaArrayValue *element = ram[d->arg[1]]->value.array.head;
-	for(i = 0; i < ram[d->arg[1]]->value.array.elements; ++i, element = element->next) {
+	struct DeltaArrayValue *element = d->varg[1]->value.array.head;
+	for(i = 0; i < d->varg[1]->value.array.elements; ++i, element = element->next) {
 		if(!strcmp(v->value.ptr, element->key)) {
-			ram[DELTA_DEST]->type = element->value->type;
-			ram[DELTA_DEST]->value.number = element->value->value.number;
+			DELTA_DEST->type = element->value->type;
+			DELTA_DEST->value.number = element->value->value.number;
 			found = 1;
 			break;
 		}
@@ -373,7 +364,7 @@ DELTA_INS(AG1)
 	
 	// if the key doesn't exist then return NULL
 	if(!found)
-		ram[DELTA_DEST]->type = DELTA_TYPE_NULL;
+		DELTA_DEST->type = DELTA_TYPE_NULL;
 	
 	// clean up
 	if(release_key)

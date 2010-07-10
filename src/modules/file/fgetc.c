@@ -21,12 +21,12 @@
 DELTA_FUNCTION(fgetc)
 {
 	// check for correct resource type
-	if(!DELTA_CHECK_RESOURCE(ram[DELTA_ARG0], DELTA_RESOURCE_FILE)) {
+	if(!DELTA_CHECK_RESOURCE(DELTA_ARG0, DELTA_RESOURCE_FILE)) {
 		DELTA_TRIGGER_ERROR("Resource to fgetc() is not valid", DELTA_ERROR_WARNING);
 		DELTA_RETURN_FALSE;
 	}
 	
 	// check for eof
-	int r = fgetc((FILE*) ram[DELTA_ARG0]->value.resource.ptr);
+	int r = fgetc((FILE*) DELTA_ARG0->value.resource.ptr);
 	DELTA_RETURN_STRING((char*) &r);
 }

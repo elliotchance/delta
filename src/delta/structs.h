@@ -88,17 +88,17 @@ struct DeltaLabel
 };
 
 
-struct DeltaInstruction;
-typedef void (*stack_function)(struct DeltaInstruction*);
-
-
 struct DeltaInstruction
 {
 	char* func;
 	DeltaByteCode bc;
 	int args;
 	int *arg;
+	struct DeltaVariable **varg;
 };
+
+
+typedef void (*stack_function)(struct DeltaInstruction*);
 
 
 struct DeltaFunction

@@ -28,7 +28,7 @@ DELTA_FUNCTION(substr)
 		free(arg0);
 	
 	// return
-	ram[DELTA_DEST]->type = DELTA_TYPE_STRING;
-	ram[DELTA_DEST]->value.ptr = (char*) malloc(arg2 + 1);
-	strncpy(ram[DELTA_DEST]->value.ptr, arg0->value.ptr + arg1, arg2);
+	DELTA_DEST->type = DELTA_TYPE_STRING;
+	DELTA_DEST->value.ptr = (char*) malloc(arg2 + 1);
+	strncpy(DELTA_DEST->value.ptr, arg0->value.ptr + arg1, arg2);
 }
