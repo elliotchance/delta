@@ -26,8 +26,6 @@ DELTA_FUNCTION(fwrite)
 	int r = fwrite(arg1->value.ptr, arg1->size, 1, (FILE*) DELTA_ARG0->value.resource.ptr);
 	
 	// clean up
-	if(release1)
-		free(arg1);
-	
+	DELTA_RELEASE(release1, arg1);
 	DELTA_RETURN_NUMBER(r);
 }

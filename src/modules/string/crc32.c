@@ -145,7 +145,6 @@ DELTA_FUNCTION(crc32)
 	r = Crc32_ComputeBuf(r, v->value.ptr, v->size);
 	
 	// clean up
-	if(release)
-		free(v);
+	DELTA_RELEASE(release, v);
 	DELTA_RETURN_NUMBER(r);
 }

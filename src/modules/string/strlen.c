@@ -14,7 +14,6 @@ DELTA_FUNCTION(strlen)
 	struct DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
 	int r = v->size;
 	
-	if(release)
-		free(v);
+	DELTA_RELEASE(release, v);
 	DELTA_RETURN_NUMBER(r);
 }

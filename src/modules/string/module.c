@@ -14,6 +14,7 @@ struct DeltaFunction* new_DeltaFunction(char *name,
 
 void delta_load_module_string()
 {
+	delta_vm_push_function(new_DeltaFunction("addslashes",  FUNC(addslashes), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("crc32",       FUNC(crc32), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("md5",         FUNC(md5), 1, 1));
 	delta_vm_push_function(new_DeltaFunction("md5_file",    FUNC(md5_file), 1, 1));

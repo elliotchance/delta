@@ -31,6 +31,7 @@ void delta_vm_print_variable(struct DeltaVariable *v);
 int  delta_vm_push_function(struct DeltaFunction* f);
 int  delta_vm_push_define(char *name, char *value);
 int  delta_vm_push_runtime_error(char *msg, int error_type);
+void delta_release_variable(struct DeltaVariable *v);
 
 
 #endif

@@ -20,10 +20,8 @@ DELTA_FUNCTION(fopen)
 	FILE* f = fopen(arg0->value.ptr, arg1->value.ptr);
 	
 	// clean up
-	if(release0)
-		free(arg0);
-	if(release1)
-		free(arg1);
+	DELTA_RELEASE(release0, arg0);
+	DELTA_RELEASE(release1, arg1);
 	
 	if(f == NULL)
 		DELTA_RETURN_NULL;

@@ -32,8 +32,6 @@ DELTA_FUNCTION(decoct)
 	char* r = base_convert(arg0->value.ptr, 10, 8);
 	
 	// clean up
-	if(release_arg0)
-		free(arg0);
-	
+	DELTA_RELEASE(release_arg0, arg0);
 	DELTA_RETURN_STRING(r);
 }

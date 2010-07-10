@@ -8,6 +8,7 @@
 
 
 #include "structs.h"
+#include <string.h>
 
 
 #define DELTA_ADD_BYTECODE(__BYTECODE) \
@@ -271,6 +272,13 @@
  */
 #define DELTA_TRIGGER_ERROR(msg, type) \
 	delta_vm_push_runtime_error(msg, atoi(type))
+
+
+#define DELTA_RELEASE(obj_release, obj_ptr) \
+{ \
+	if(obj_release) \
+		delta_release_variable(obj_ptr); \
+}
 
 
 #endif

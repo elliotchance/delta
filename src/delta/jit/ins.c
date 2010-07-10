@@ -335,8 +335,7 @@ DELTA_INS(AS1)
 	}
 	
 	// clean up
-	if(release_key)
-		free(v);
+	DELTA_RELEASE(release_key, v);
 }
 
 
@@ -367,6 +366,5 @@ DELTA_INS(AG1)
 		DELTA_DEST->type = DELTA_TYPE_NULL;
 	
 	// clean up
-	if(release_key)
-		free(v);
+	DELTA_RELEASE(release_key, v);
 }

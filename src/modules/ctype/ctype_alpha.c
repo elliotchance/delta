@@ -33,8 +33,6 @@ DELTA_FUNCTION(ctype_alpha)
 	}
 	
 	// clean up
-	if(release0)
-		free(arg0);
-	
+	DELTA_RELEASE(release0, arg0);
 	DELTA_RETURN_BOOLEAN(r);
 }

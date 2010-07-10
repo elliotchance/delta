@@ -94,9 +94,7 @@ DELTA_FUNCTION(levenshtein)
 	
 	int r = levenshtein_distance(arg0->value.ptr, arg1->value.ptr);
 	
-	if(release0)
-		free(arg0);
-	if(release1)
-		free(arg1);
+	DELTA_RELEASE(release0, arg0);
+	DELTA_RELEASE(release1, arg1);
 	DELTA_RETURN_NUMBER(r);
 }

@@ -76,8 +76,6 @@ DELTA_FUNCTION(soundex)
 	soundex(arg0->value.ptr, buf);
 	
 	// be nice and release
-	if(release_arg0)
-		free(arg0);
-	
+	DELTA_RELEASE(release_arg0, arg0);
 	DELTA_RETURN_STRING(buf);
 }

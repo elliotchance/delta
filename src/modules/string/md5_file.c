@@ -18,7 +18,6 @@ DELTA_FUNCTION(md5_file)
 	struct DeltaVariable *v = delta_cast_string(DELTA_ARG0, &release);
 	char *md5_result = MDFile(v->value.ptr);
 	
-	if(release)
-		free(v);
+	DELTA_RELEASE(release, v);
 	DELTA_RETURN_STRING(md5_result);
 }

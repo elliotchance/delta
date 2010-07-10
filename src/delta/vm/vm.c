@@ -156,3 +156,17 @@ int delta_vm_push_runtime_error(char *msg, int error_type)
 	return r;
 }
 
+
+void delta_release_variable(struct DeltaVariable *v)
+{
+	if(v == NULL)
+		return;
+	
+	free(v->name);
+	free(v->value.ptr);
+	free(v->value.resource.ptr);
+	// TODO: free array elements
+	
+	// free self
+	free(v);
+}

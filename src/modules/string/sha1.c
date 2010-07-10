@@ -467,7 +467,6 @@ DELTA_FUNCTION(sha1)
 	for (i = 0; i < 20; i++)
 		sprintf(resblock + (i * 2), "%02x", digest[i]);
 	
-	if(release)
-		free(v);
+	DELTA_RELEASE(release, v);
 	DELTA_RETURN_STRING(resblock);
 }

@@ -24,8 +24,7 @@ DELTA_FUNCTION(substr)
 		arg2 = (int) delta_cast_number(DELTA_ARG2);
 	
 	// be nice and release
-	if(release_arg0)
-		free(arg0);
+	DELTA_RELEASE(release_arg0, arg0);
 	
 	// return
 	DELTA_DEST->type = DELTA_TYPE_STRING;

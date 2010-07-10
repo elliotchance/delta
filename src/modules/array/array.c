@@ -38,7 +38,6 @@ DELTA_FUNCTION(array)
 		DELTA_DEST->value.array.tail = dav;
 		
 		// clean up
-		if(release)
-			free(v);
+		DELTA_RELEASE(release, v);
 	}
 }
