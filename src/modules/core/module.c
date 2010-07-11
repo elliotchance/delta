@@ -43,11 +43,6 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(fopen, 2, 2);
 	DELTA_PUSH_FUNCTION(fwrite, 2, 2);
 	
-	// io
-	DELTA_PUSH_FUNCTION(echo, 1, DELTA_MAX_ARGS);
-	DELTA_PUSH_FUNCTION(print, 1, DELTA_MAX_ARGS);
-	DELTA_PUSH_FUNCTION(println, 1, DELTA_MAX_ARGS);
-	
 	// math
 	DELTA_PUSH_FUNCTION(abs, 1, 1);
 	DELTA_PUSH_FUNCTION(acos, 1, 1);
@@ -113,7 +108,9 @@ struct DeltaModuleFunction* module_functions(int *count)
 	
 	// variables
 	DELTA_PUSH_FUNCTION(is_array, 1, 1);
+	DELTA_PUSH_FUNCTION(echo, 1, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(print, 1, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(println, 1, DELTA_MAX_ARGS);
 	
 	DELTA_END_MODULE_FUNCTIONS;
-	return f;
 }

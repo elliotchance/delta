@@ -14,5 +14,4 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(gzeof, 1, 1);
 	
 	DELTA_END_MODULE_FUNCTIONS;
-	return f;
 }

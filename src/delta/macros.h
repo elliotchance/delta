@@ -296,7 +296,8 @@
 
 
 #define DELTA_END_MODULE_FUNCTIONS \
-	*count = stack_i
+	*count = stack_i; \
+	return f
 
 
 #endif
