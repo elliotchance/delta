@@ -1,0 +1,10 @@
+bin/*
+build/*
+cloc.pl
+*.xcodeproj
+doc_template/*
+doc.php
+examples/*
+lib/*
+sloc.sh
+src/*
