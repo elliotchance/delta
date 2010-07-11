@@ -1,0 +1,56 @@
+@charset "UTF-8";
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+	padding: 0;
+	margin: 0;
+}
+a, a:visited {
+	color: #039;
+	text-decoration: none;
+}
+a:hover, a:active {
+	color: #039;
+	text-decoration: underline;
+}
+h2 {
+	color: #036;
+	font-size: 16px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #AAA;
+}
+.param {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+	color: #066;
+	font-weight: bold;
+	font-style: italic;
+}
+.examplehead {
+	font-weight: bold;
+	border-bottom-width: 1px;
+	border-bottom-style: dotted;
+	border-bottom-color: #666;
+}
+.examplebox {
+	border: 1px solid #CCC;
+}
+.examplebody {
+	font-family: Courier, monospace;
+	font-size: 12px;
+}
+.syntax {
+	font-family: Courier, monospace;
+	color: #000;
+	font-size: 14px;
+}
+.section {
+	padding: 5px;
+}
+
+.functionname {
+	font-size: 18px;
+	font-weight: bold;
+	color: #036;
+}

@@ -3,21 +3,102 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Untitled Document</title>
+<title>Delta Documentation</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+<!-- TemplateParam name="SeeAlsoSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ExamplesSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ParametersSection" type="boolean" value="true" -->
 </head>
 
 <body>
-<!-- TemplateBeginEditable name="FunctionName" -->
-<p>function name</p>
-<!-- TemplateEndEditable -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
   <tr>
-    <td>&nbsp;</td>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" -->
+      <iframe src="nav.math.html" width="100%" style="border: none"></iframe>
+    <!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- TemplateBeginEditable name="FunctionName" -->abs <!-- TemplateEndEditable --></span><br />
+<div style="padding-top: 5px">
+<!-- TemplateBeginEditable name="ShortDescription" -->Arc tangent of two variables. <!-- TemplateEndEditable --></div>
+<br />
+
+<h2>Syntax</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Syntax" -->
+<span class="syntax">
+float <strong>atan2</strong> ( float <span class="param">y</span> , float <span class="param">x</span> )
+</span>
+<!-- TemplateEndEditable -->
+</div>
+
+<h2>Description</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Description" -->
+This function calculates the arc tangent of the two variables <span class="param">x</span> and <span class="param">y</span>. It is similar to calculating the arc tangent of <span class="param">y</span> / <span class="param">x</span>, except that the signs of both arguments are used to determine the quadrant of the result.
+<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ParametersSection" -->
+<h2>Parameters</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Parameters" -->
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="25" nowrap="nowrap" class="param">y</td>
+    <td>Dividend parameter</td>
+  </tr>
+  <tr>
+    <td width="25" nowrap="nowrap" class="param">x</td>
+    <td>Divisor parameter</td>
   </tr>
 </table>
-<p>&nbsp;</p>
+<!-- TemplateEndEditable -->
+</div>
+<!-- TemplateEndIf -->
+
+<h2>Return Values</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Return" -->
+<p>The arc tangent of y/x in radians.</p>
+<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ExamplesSection" -->
+<h2>Examples</h2>
+<div class="section">
+<!-- TemplateBeginRepeat name="Examples" -->
+<!-- TemplateBeginEditable name="Example" -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="3" class="examplebox">
+    <tr>
+      <td class="examplehead">Example #1 abs() exampleExample</td>
+    </tr>
+    <tr>
+      <td class="examplebody">$abs = abs(-4.2); // $abs = 4.2; (double/float)<br />
+$abs2 = abs(5);   // $abs2 = 5; (integer)<br />
+$abs3 = abs(-5);  // $abs3 = 5; (integer)</td>
+    </tr>
+  </table>
+<!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat --></div>
+<!-- TemplateEndIf -->
+
+<!-- TemplateBeginIf cond="_document['SeeAlsoSection']" -->
+<h2>See Also</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="SeeAlso" -->
+  <ul>
+    <li>atan() - Arc tangent</li>
+  </ul>
+<!-- TemplateEndEditable -->
+</div>
+<!-- TemplateEndIf --></td>
+  </tr>
+</table>
+
 </body>
 </html>
