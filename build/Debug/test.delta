@@ -1,2 +1,0 @@
-apm_set_precision(16);
-println(apm_gcd(12, 18));
