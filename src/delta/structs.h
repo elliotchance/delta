@@ -126,4 +126,12 @@ struct DeltaCompiler
 };
 
 
+struct DeltaModuleFunction
+{
+	char* name;
+	int min_args;
+	int max_args;
+};
+
+
 #endif

@@ -3,34 +3,73 @@
  */
 
 #include "modules.h"
+#include "delta/vm/vm.h"
+#include "delta/structs/DeltaFunction.h"
+#include <dlfcn.h>
 
-// module includes
-#include "modules/array/module.h"
-#include "modules/ctype/module.h"
-#include "modules/date/module.h"
-#include "modules/errors/module.h"
-#include "modules/file/module.h"
-#include "modules/io/module.h"
-#include "modules/math/module.h"
-#include "modules/mapm/module.h"
-#include "modules/misc/module.h"
-#include "modules/string/module.h"
-#include "modules/variables/module.h"
-#include "modules/zlib/module.h"
+
+delta_module_function delta_get_module_function(void *module, char *name)
+{
+	const char *error;
+	
+	// translate to real C name
+	char real_name[64];
+	sprintf(real_name, "delta_function_%s", name);
+	
+	// get the module function
+	dlerror();
+	delta_module_function ret = dlsym(module, real_name);
+	if((error = dlerror())) {
+		fprintf(stderr, "Couldn't find %s: %s\n", real_name, error);
+		return NULL;
+	}
+	
+	return ret;
+}
+
+
+int delta_load_module(char *path)
+{
+	const char *error;
+	delta_module_ptr module_functions;
+	
+	// load dynamically loaded library
+	void *module = dlopen(path, RTLD_LAZY);
+	if(!module) {
+		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
+		return DELTA_FAILURE;
+	}
+	
+	// get the module functions
+	dlerror();
+	module_functions = dlsym(module, "module_functions");
+	if((error = dlerror())) {
+		fprintf(stderr, "Couldn't find module_functions: %s\n", error);
+		return DELTA_FAILURE;
+	}
+	
+	int count;
+	struct DeltaModuleFunction *functions = (*module_functions)(&count);
+	
+	// load the functions into the virtual machine
+	int i;
+	for(i = 0; i < count; ++i) {
+		delta_module_function f = delta_get_module_function(module, functions[i].name);
+		printf("Loading %s into Delta VM\n", functions[i].name, functions[i].min_args, functions[i].max_args);
+		if(f != NULL)
+			delta_vm_push_function(new_DeltaFunction(functions[i].name, f, functions[i].min_args, functions[i].max_args));
+	}
+	
+	
+	// do not close
+	// dlclose(module);
+	return DELTA_SUCCESS;
+}
 
 
 void delta_load_modules()
 {
-	delta_load_module_array();
-	delta_load_module_ctype();
-	delta_load_module_date();
-	delta_load_module_errors();
-	delta_load_module_file();
-	delta_load_module_io();
-	delta_load_module_math();
-	delta_load_module_mapm();
-	delta_load_module_misc();
-	delta_load_module_string();
-	delta_load_module_variables();
-	delta_load_module_zlib();
+	delta_load_module("libdelta_core.dylib");
+	delta_load_module("libdelta_mapm.dylib");
+	delta_load_module("libdelta_zlib.dylib");
 }

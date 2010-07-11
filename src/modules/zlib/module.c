@@ -5,14 +5,14 @@
 #include "module.h"
 
 
-// prototypes here so we dont have to include more files
-int delta_vm_push_function(struct DeltaFunction* f);
-struct DeltaFunction* new_DeltaFunction(char *name,
-										void (*function_ptr)(struct DeltaInstruction *d),
-										int min_args, int max_args);
-
-
-void delta_load_module_zlib()
+struct DeltaModuleFunction* module_functions(int *count)
 {
-	delta_vm_push_function(new_DeltaFunction("gzopen", FUNC(gzopen), 2, 3));
+	DELTA_PREPARE_MODULE_FUNCTIONS(10);
+	
+	DELTA_PUSH_FUNCTION(gzopen, 2, 2);
+	DELTA_PUSH_FUNCTION(gzclose, 1, 1);
+	DELTA_PUSH_FUNCTION(gzeof, 1, 1);
+	
+	DELTA_END_MODULE_FUNCTIONS;
+	return f;
 }

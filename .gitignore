@@ -1,6 +1,9 @@
+bin/*
 build/*
 *.xcodeproj
 cloc.pl
 sloc.sh
 doc*
 test/*
+
+!*/blank.file

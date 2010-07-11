@@ -281,4 +281,22 @@
 }
 
 
+#define DELTA_PREPARE_MODULE_FUNCTIONS(_total) \
+	int stack_i = 0; \
+	*count = _total; \
+	struct DeltaModuleFunction *f = (struct DeltaModuleFunction*) \
+		calloc(_total, sizeof(struct DeltaModuleFunction));
+
+
+#define DELTA_PUSH_FUNCTION(_name, _min, _max) \
+	f[stack_i].name = #_name; \
+	f[stack_i].min_args = _min; \
+	f[stack_i].max_args = _max; \
+	++stack_i;
+
+
+#define DELTA_END_MODULE_FUNCTIONS \
+	*count = stack_i
+
+
 #endif
