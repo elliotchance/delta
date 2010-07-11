@@ -1,9 +1,7 @@
-bin/*
 build/*
 cloc.pl
 *.xcodeproj
 doc.php
 examples/*
-lib/*
 sloc.sh
 src/*
