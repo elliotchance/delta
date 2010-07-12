@@ -27,6 +27,14 @@ h2 {
 	font-weight: bold;
 	font-style: italic;
 }
+.paramd {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+	color: #066;
+	font-weight: bold;
+	font-style: italic;
+	padding-right: 10px;
+}
 .examplehead {
 	font-weight: bold;
 	border-bottom-width: 1px;

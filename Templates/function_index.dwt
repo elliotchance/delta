@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+<!-- TemplateParam name="InstallationSection" type="boolean" value="false" -->
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" -->
+      <iframe src="nav.math.html" width="100%" style="border: none"></iframe>
+    <!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999">
+	<!-- TemplateBeginEditable name="Name" --><h1>Mathematical Functions</h1>
+	<!-- TemplateEndEditable --><!-- TemplateBeginIf cond="_document['InstallationSection']" -->
+<h2>Installation</h2>
+<div class="section"> <!-- TemplateBeginEditable name="Installation" -->
+Comes bundled with Delta.
+<!-- TemplateEndEditable --></div>
+<!-- TemplateEndIf -->
+
+<h2>Description</h2>
+<div class="section">
+  <!-- TemplateBeginEditable name="Description" -->
+    Mathematical and numerical processing functions.
+  <!-- TemplateEndEditable -->
+</div>
+
+</td>
+  </tr>
+</table>
+
+</body>
+</html>

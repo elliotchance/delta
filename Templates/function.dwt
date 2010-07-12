@@ -24,7 +24,7 @@
     <!-- TemplateEndEditable --></td>
     <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- TemplateBeginEditable name="FunctionName" -->abs <!-- TemplateEndEditable --></span><br />
 <div style="padding-top: 5px">
-<!-- TemplateBeginEditable name="ShortDescription" -->Arc tangent of two variables. <!-- TemplateEndEditable --></div>
+<!-- TemplateBeginEditable name="ShortDescription" -->&lt;&lt;ShortDescription&gt;&gt;<!-- TemplateEndEditable --></div>
 <br />
 
 <h2>Syntax</h2>
@@ -38,33 +38,29 @@ float <strong>atan2</strong> ( float <span class="param">y</span> , float <span 
 
 <h2>Description</h2>
 <div class="section">
-<!-- TemplateBeginEditable name="Description" -->
-This function calculates the arc tangent of the two variables <span class="param">x</span> and <span class="param">y</span>. It is similar to calculating the arc tangent of <span class="param">y</span> / <span class="param">x</span>, except that the signs of both arguments are used to determine the quadrant of the result.
-<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="Description" -->&lt;&lt;Description&gt;&gt;<!-- TemplateEndEditable -->
 </div>
 
 <!-- TemplateBeginIf cond="ParametersSection" -->
 <h2>Parameters</h2>
 <div class="section">
-<!-- TemplateBeginEditable name="Parameters" -->
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
+<!-- TemplateBeginRepeat name="Parameters" -->
+<!-- TemplateBeginEditable name="Parameter" -->
   <tr>
-    <td width="25" nowrap="nowrap" class="param">y</td>
+    <td width="25" nowrap="nowrap" class="paramd">y</td>
     <td>Dividend parameter</td>
   </tr>
-  <tr>
-    <td width="25" nowrap="nowrap" class="param">x</td>
-    <td>Divisor parameter</td>
-  </tr>
-</table>
 <!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat -->
+</table>
 </div>
 <!-- TemplateEndIf -->
 
 <h2>Return Values</h2>
 <div class="section">
 <!-- TemplateBeginEditable name="Return" -->
-<p>The arc tangent of y/x in radians.</p>
+&lt;&lt;Return&gt;&gt;
 <!-- TemplateEndEditable -->
 </div>
 
@@ -92,7 +88,7 @@ $abs3 = abs(-5);  // $abs3 = 5; (integer)</td>
 <div class="section">
 <!-- TemplateBeginEditable name="SeeAlso" -->
   <ul>
-    <li>atan() - Arc tangent</li>
+    <li><a href="function.atan2.html">atan()</a> - Arc tangent</li>
   </ul>
 <!-- TemplateEndEditable -->
 </div>
