@@ -1,1 +1,4 @@
+bin/*
+build/*
 doc.php
+lib/*
