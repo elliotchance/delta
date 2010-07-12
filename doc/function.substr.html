@@ -22,23 +22,22 @@
     <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
       <iframe src="nav.string.html" width="100%" style="border: none"></iframe>
     <!-- InstanceEndEditable --></td>
-    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->crc32 <!-- InstanceEndEditable --></span><br />
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->substr<!-- InstanceEndEditable --></span><br />
 <div style="padding-top: 5px">
-<!-- InstanceBeginEditable name="ShortDescription" -->Calculates the crc32 polynomial of a string<!-- InstanceEndEditable --></div>
+<!-- InstanceBeginEditable name="ShortDescription" -->Return part of a string.<!-- InstanceEndEditable --></div>
 <br />
 
 <h2>Syntax</h2>
 <div class="section">
 <!-- InstanceBeginEditable name="Syntax" -->
 <span class="syntax">
-int <strong>crc32</strong> ( string <span class="param">str</span><span class="param"></span> )
-</span>
+string <strong>substr</strong> ( string </span><span class="param">string</span><span class="syntax"> , int </span><span class="param">start</span><span class="syntax"> [, int </span><span class="param">length</span><span class="syntax"> ] ) </span>
 <!-- InstanceEndEditable -->
 </div>
 
 <h2>Description</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Description" -->Generates the cyclic redundancy checksum polynomial of 32-bit lengths of the str. This is usually used to validate the integrity of data being transmitted.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Description" -->Returns the portion of string specified by the <span class="param">start</span> and <span class="param">length</span> parameters.<!-- InstanceEndEditable -->
 </div>
 
 
@@ -48,8 +47,22 @@ int <strong>crc32</strong> ( string <span class="param">str</span><span class="p
 <!-- InstanceBeginRepeat name="Parameters" --><!-- InstanceBeginRepeatEntry -->
 <!-- InstanceBeginEditable name="Parameter" -->
   <tr>
-    <td width="25" nowrap="nowrap" class="paramd">str</td>
-    <td>The data.</td>
+    <td width="25" nowrap="nowrap" class="paramd">string</td>
+    <td>The input string.</td>
+  </tr>
+<!-- InstanceEndEditable -->
+<!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+<!-- InstanceBeginEditable name="Parameter" -->
+  <tr>
+    <td width="25" nowrap="nowrap" class="paramd">start</td>
+    <td>Must be greater than or equal to 0.</td>
+  </tr>
+<!-- InstanceEndEditable -->
+<!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+<!-- InstanceBeginEditable name="Parameter" -->
+  <tr>
+    <td width="25" nowrap="nowrap" class="paramd">length</td>
+    <td>Must be greater than or equal to 0.</td>
   </tr>
 <!-- InstanceEndEditable -->
 <!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
@@ -59,7 +72,7 @@ int <strong>crc32</strong> ( string <span class="param">str</span><span class="p
 
 <h2>Return Values</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Return" -->Returns the crc32 checksum of str as an integer.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Return" -->Returns the extracted part of string.<!-- InstanceEndEditable -->
 </div>
 
 
