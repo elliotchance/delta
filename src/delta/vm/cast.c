@@ -2,10 +2,10 @@
  *  Delta programming language
  */
 
-#include "cast.h"
-#include "structs.h"
-#include "vm.h"
-#include "../macros.h"
+#include "delta/vm/cast.h"
+#include "delta/structs.h"
+#include "delta/vm/vm.h"
+#include "delta/macros.h"
 #include <string.h>
 
 

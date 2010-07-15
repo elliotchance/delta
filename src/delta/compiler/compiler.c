@@ -4,13 +4,13 @@
 
 #include "compiler.h"
 #include "bytecode.h"
-#include "vm.h"
-#include "strings.h"
+#include "delta/vm/vm.h"
+#include "delta/compiler/strings.h"
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
 #include "token.h"
 #include "constant.h"
-#include "../macros.h"
+#include "delta/macros.h"
 #include <string.h>
 #include <ctype.h>
 

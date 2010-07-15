@@ -1,0 +1,4 @@
+begin delta_mapm
+  name=libdelta_mapm.dylib
+  type=module
+end

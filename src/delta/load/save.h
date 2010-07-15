@@ -6,7 +6,7 @@
 #define _DELTA_SAVE_H
 
 
-#include "structs.h"
+#include "delta/structs.h"
 
 int delta_save_file(struct DeltaCompiler *c, const char* out_file);
 

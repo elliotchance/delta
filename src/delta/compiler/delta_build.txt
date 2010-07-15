@@ -1,0 +1,2 @@
+delta *.c
+delta_core strings.c

@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "structs.h"
+#include "delta/structs.h"
 
 
 double                delta_cast_number(struct DeltaVariable *v);

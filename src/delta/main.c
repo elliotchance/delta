@@ -7,14 +7,14 @@
 #include <ctype.h>
 #include <sys/time.h>
 #include <math.h>
-#include "lightning.h"
+#include "delta/jit/lightning.h"
 
-#include "structs.h"
-#include "bytecode.h"
-#include "compiler.h"
-#include "save.h"
-#include "vm.h"
-#include "jit_compiler.h"
+#include "delta/structs.h"
+#include "delta/compiler/bytecode.h"
+#include "delta/compiler/compiler.h"
+#include "delta/load/save.h"
+#include "delta/vm/vm.h"
+#include "delta/jit/jit_compiler.h"
 #include "delta/jit/optimiser.h"
 #include "delta/structs/DeltaCompiler.h"
 

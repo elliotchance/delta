@@ -12,7 +12,8 @@ int base_convert_chr2int(char ch)
 {
 	static char *chs = "0123456789abcdefABCDEF";
 	int chvals[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 10, 11, 12, 13, 14, 15 };
-	for(int i = 0; i < 22; ++i) {
+	int i;
+	for(i = 0; i < 22; ++i) {
 		if(chs[i] == ch)
 			return chvals[i];
 	}
@@ -25,8 +26,8 @@ char* base_convert(char* in, int base1, int base2)
 	int in_len = strlen(in);
 	
 	// convert the incoming base to base 10
-	int r = 0;
-	for(int i = in_len - 1, j = 0; i >= 0; --i, ++j)
+	int r = 0, i, j;
+	for(i = in_len - 1, j = 0; i >= 0; --i, ++j)
 		r += base_convert_chr2int(in[i]) * (int) pow((double) base1, (double) j);
 	
 	// convert base 10 to outgoing base

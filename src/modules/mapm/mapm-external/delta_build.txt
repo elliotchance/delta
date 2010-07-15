@@ -1,0 +1,4 @@
+delta_mapm *.c
+delta_mapm !calc.c
+delta_mapm !primenum.c
+delta_mapm !validate.c

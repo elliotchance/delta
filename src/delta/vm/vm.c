@@ -2,9 +2,9 @@
  *  Delta programming language
  */
 
-#include "vm.h"
-#include "bytecode.h"
-#include "ins.h"
+#include "delta/vm/vm.h"
+#include "delta/compiler/bytecode.h"
+#include "delta/jit/ins.h"
 #include "modules.h"
 
 

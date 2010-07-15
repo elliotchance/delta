@@ -6,7 +6,7 @@
 #define _DELTA_BYTECODE_COMPILER_H
 
 
-#include "structs.h"
+#include "delta/structs.h"
 
 
 extern int var_temp;

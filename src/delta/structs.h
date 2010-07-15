@@ -6,7 +6,7 @@
 #define _DELTA_STRUCTS_H
 
 
-#include "lightning.h"
+#include "delta/jit/lightning.h"
 
 
 typedef unsigned short DeltaByteCode;

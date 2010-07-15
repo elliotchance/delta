@@ -3,8 +3,8 @@
  */
 
 #include "ins.h"
-#include "vm.h"
-#include "../macros.h"
+#include "delta/vm/vm.h"
+#include "delta/macros.h"
 #include "delta/vm/cast.h"
 #include <math.h>
 #include <string.h>

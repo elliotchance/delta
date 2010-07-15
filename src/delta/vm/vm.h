@@ -6,8 +6,8 @@
 #define _DELTA_VM_H
 
 
-#include "lightning.h"
-#include "structs.h"
+#include "delta/jit/lightning.h"
+#include "delta/structs.h"
 
 
 #define DELTA_MAX_ARGS 1024

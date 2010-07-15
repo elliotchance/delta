@@ -1,0 +1,4 @@
+begin delta
+  name=delta
+  type=executable
+end

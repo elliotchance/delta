@@ -2,10 +2,10 @@
  *  Delta programming language
  */
 
-#include "jit_compiler.h"
-#include "vm.h"
-#include "bytecode.h"
-#include "ins.h"
+#include "delta/jit/jit_compiler.h"
+#include "delta/vm/vm.h"
+#include "delta/compiler/bytecode.h"
+#include "delta/jit/ins.h"
 #include <string.h>
 
 

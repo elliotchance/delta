@@ -1,0 +1,4 @@
+begin delta_zlib
+  name=delta_zlib.dylib
+  type=module
+end

@@ -1,0 +1,2 @@
+delta_zlib *.c
+delta_zlib !example.c

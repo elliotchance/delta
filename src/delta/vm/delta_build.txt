@@ -1,0 +1,4 @@
+delta *.c
+delta_core vm.c
+delta_core cast.c
+delta_core modules.c

@@ -3,7 +3,7 @@
  */
 
 #include "delta/delta.h"
-#include "module.h"
+#include "../module.h"
 
 
 /**

@@ -1,0 +1,4 @@
+begin delta_core
+  name=libdelta_core.dylib
+  type=module
+end

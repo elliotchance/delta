@@ -3,7 +3,7 @@
  */
 
 #include "DeltaInstruction.h"
-#include "compiler.h"
+#include "delta/compiler/compiler.h"
 
 
 struct DeltaInstruction new_DeltaInstruction0(char *name, DeltaByteCode bc)
