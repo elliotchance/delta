@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="nav.ref.html" width="100%" style="border: none"></iframe>
+      <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Optimization</h1>
+      <!-- InstanceEndEditable -->
+      <!-- InstanceBeginRepeat name="Sections" --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="overview" id="overview"></a>Overview</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Delta employs a few techniques to increase the execution time.<br />
+        </p>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="reducer" id="reducer"></a>Bytecode reducer</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>The simplest form of optimisation, it runs through the bytecode and finds any two bytecodes that perform a single instruction and hence can be reduced into a single bytecode.</p>
+        <p>For example the following line of code:</p>
+        <pre>a = b + 3</pre>
+        <p>Will produce two bytecodes (i’ll write them in pseudo-code so its easier to read):</p>
+        <pre>ADD temp b 3
+SET a temp</pre>
+        <p>After the optimiser runs it will recognise the address relationships and reduce it to a single bytecode:</p>
+        <pre>ADD a b 3</pre>
+        <p>Increment/decrement detector<br />
+          The following delta code:</p>
+        <pre>i += 1
+           i = i + 1</pre>
+        <p>As recognised as auto incrementing and translated to more efficient byecodes. On top of that if the variable in question is identified as only existing in NUMBER space FastMath will further apply optimised bytecodes.<br />
+        </p>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="fastmath" id="fastmath"></a>FastMath</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>The most performance degrading attribute about scripting languages are that they are type-less and so any variable may need to be cast at any time to a number when using basic math like addition, subtraction, multiplication, division and modulus.</p>
+        <p>FastMath is a technique that tracks variables and temporary registers and finds variables that only exist in the <span class="kw">NUMBER</span> type. As we know these variables only exist as <span class="kw">NUMBER</span>s and all the actions (bytecodes) performed on them are guaranteed to also return <span class="kw">NUMBER</span> types we can translate these basic math bytecodes into a new set of bytecodes that assume arguments are always numerical. Removing the type checking and casting gives a substantial improvement of up to 50%.</p>
+        <p>No performance advantage comes at zero price, FastMath makes for a fairly complex variable checker that will only perform further optimisations on variables and temporary registers it can guarantee as <span class="kw">NUMBER</span> space. In other words, if in doubt it does not modify the original bytecodes.</p>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>
