@@ -1,6 +1,4 @@
-bin/*
 build/*
-lib/*
 *.xcodeproj
 cloc.pl
 sloc.sh
