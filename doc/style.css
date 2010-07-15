@@ -13,12 +13,18 @@ a:hover, a:active {
 	color: #039;
 	text-decoration: underline;
 }
+h1 {
+	margin-top: 0px;
+	padding-top: 0px;
+}
 h2 {
 	color: #036;
 	font-size: 16px;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #AAA;
+	margin-top: 10px;
+	padding-top: 10px;
 }
 .param {
 	font-family: "Courier New", Courier, monospace;
@@ -61,4 +67,14 @@ h2 {
 	font-size: 18px;
 	font-weight: bold;
 	color: #036;
+}
+table {
+	border-collapse:collapse;
+}
+th {
+	background-color: #DDDDFF;
+}
+.kw {
+	font-family: Courier, monospace;
+	font-size: 13px;
 }

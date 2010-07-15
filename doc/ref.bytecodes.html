@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="nav.ref.html" width="100%" style="border: none"></iframe>
+      <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Bytecodes</h1>
+      <!-- InstanceEndEditable -->
+      <div class="section"> <!-- InstanceBeginEditable name="Body" -->
+        <h2>Main        </h2>
+        <table width="100%" border="1" cellpadding="3" cellspacing="0">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_SET">BYTECODE_SET</a></td>
+            <td>Copy a variable to a new location</td>
+            <td width="150">dest source</td>
+          </tr>
+        </table>
+        <h2>Basic math</h2>
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_ADD">BYTECODE_ADD</a></td>
+            <td>Numerical addition</td>
+            <td width="150">dest source</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_SUB">BYTECODE_SUB</a></td>
+            <td>Numerical subtraction</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_MUL">BYTECODE_MUL</a></td>
+            <td>Numerical multiplication</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_DIV">BYTECODE_DIV</a></td>
+            <td>Numerical division</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_MOD">BYTECODE_MOD</a></td>
+            <td>Numerical modulus</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_INC">BYTECODE_INC</a></td>
+            <td>Numerical increment</td>
+            <td>dest source</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_DEC">BYTECODE_DEC</a></td>
+            <td>Numerical decrement</td>
+            <td>dest source</td>
+          </tr>
+        </table>
+        <h2>Comparison</h2>
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_CEQ">BYTECODE_CEQ</a></td>
+            <td>Equal to</td>
+            <td width="150">dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_CNE">BYTECODE_CNE</a></td>
+            <td>Not equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_CLT">BYTECODE_CLT</a></td>
+            <td>Less than</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_CGT">BYTECODE_CLE</a></td>
+            <td>Less than or equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_CGT">BYTECODE_CGT</a></td>
+            <td>Greater than</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_CGE">BYTECODE_CGE</a></td>
+            <td>Greater than or equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+        </table>
+        <h2>Arrays</h2>
+        <table width="100%" border="1" cellpadding="3" cellspacing="0">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_AS1">BYTECODE_AS1</a></td>
+            <td>Set first dimension array</td>
+            <td width="150">dest source1 element1</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_AS1">BYTECODE_AG1</a></td>
+            <td>Get first dimension array</td>
+            <td>dest source1 element1</td>
+          </tr>
+        </table>
+        <h2>FastMath</h2>
+        <table width="100%" border="1" cellpadding="3" cellspacing="0">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_NAD">BYTECODE_NAD</a></td>
+            <td>FastMath addition</td>
+            <td width="150">dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NSB">BYTECODE_NSB</a></td>
+            <td>FastMath subtraction</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NMU">BYTECODE_NMU</a></td>
+            <td>FastMath multiplication</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NDV">BYTECODE_NDV</a></td>
+            <td>FastMath division</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NMD">BYTECODE_NMD</a></td>
+            <td>FastMath modulus</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NIN">BYTECODE_NIN</a></td>
+            <td>FastMath increment</td>
+            <td>dest source1</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NDE">BYTECODE_NDE</a></td>
+            <td>FastMath decrement</td>
+            <td>dest source1</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NEQ">BYTECODE_NEQ</a></td>
+            <td>FastMath equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NNE">BYTECODE_NNE</a></td>
+            <td>FastMath not equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NLE">BYTECODE_NLT</a></td>
+            <td>FastMath less than</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NLE">BYTECODE_NLE</a></td>
+            <td>FastMath less than or equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NGT">BYTECODE_NGT</a></td>
+            <td>FastMath greater than</td>
+            <td>dest source1 source2</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_NGE">BYTECODE_NGE</a></td>
+            <td>FastMath greater than or equal to</td>
+            <td>dest source1 source2</td>
+          </tr>
+        </table>
+        <h2>Branching</h2>
+        <table width="100%" border="1" cellpadding="3" cellspacing="0">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_LBL">BYTECODE_LBL</a></td>
+            <td>Create a label</td>
+            <td width="150">label_id</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_GTO">BYTECODE_GTO</a></td>
+            <td>Goto label</td>
+            <td> label_id</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_IFS">BYTECODE_IFS</a></td>
+            <td>if branch, on FALSE it will jump forward to <a href="#BYTECODE_PAT">BYTECODE_PAT</a></td>
+            <td>label_id</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_RTN">BYTECODE_PAT</a></td>
+            <td>Patch forward jump</td>
+            <td>label_id</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_RTN">BYTECODE_JMP</a></td>
+            <td>Jump forward</td>
+            <td>label_id</td>
+          </tr>
+        </table>
+        <h2>Functions</h2>
+        <table width="100%" border="1" cellpadding="3" cellspacing="0">
+          <tr>
+            <th>Bytecode</th>
+            <th>Description</th>
+            <th>Arguments</th>
+          </tr>
+          <tr>
+            <td width="150" class="kw"><a href="#BYTECODE_RTN">BYTECODE_CAL</a></td>
+            <td>Call function</td>
+            <td width="150">dest arg1name arg1 arg2name arg2 …</td>
+          </tr>
+          <tr>
+            <td class="kw"><a href="#BYTECODE_RTN">BYTECODE_RTN</a></td>
+            <td>Return</td>
+            <td>value</td>
+          </tr>
+        </table>
+        <p>&nbsp;</p>
+    <!-- InstanceEndEditable --> </div></td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

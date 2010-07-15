@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" -->
+      <iframe src="nav.math.html" width="100%" style="border: none"></iframe>
+      <!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- TemplateBeginEditable name="Name" -->
+      <h1>&lt;&lt;Title&gt;&gt;</h1>
+      <!-- TemplateEndEditable -->
+      <div class="section"> <!-- TemplateBeginEditable name="Body" -->
+        <h2>Subheading</h2>
+        <p>Body</p>
+        <!-- TemplateEndEditable --> </div></td>
+  </tr>
+</table>
+</body>
+</html>

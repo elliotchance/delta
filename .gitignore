@@ -1,4 +1,4 @@
-bin/*
 build/*
 doc.php
-lib/*
+sandbox/*
+*.xcodeproj

@@ -21,10 +21,8 @@
   </tr>
 <!-- TemplateEndRepeat -->
 </table>
-<!-- TemplateBeginEditable name="FunctionList" -->
-<ul>
-  <li><a href="function.abs.html" target="_parent">abs</a></li>
-</ul>
+<!-- TemplateBeginEditable name="Body" -->
+<p>Something.</p>
 <!-- TemplateEndEditable -->
 </body>
 </html>
