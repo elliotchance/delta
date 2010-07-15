@@ -27,15 +27,15 @@ h2 {
 	padding-top: 10px;
 }
 .param {
-	font-family: "Courier New", Courier, monospace;
-	font-size: 14px;
+	font-family: Courier, monospace;
+	font-size: 13px;
 	color: #066;
 	font-weight: bold;
 	font-style: italic;
 }
 .paramd {
-	font-family: "Courier New", Courier, monospace;
-	font-size: 14px;
+	font-family: Courier, monospace;
+	font-size: 13px;
 	color: #066;
 	font-weight: bold;
 	font-style: italic;
@@ -75,6 +75,43 @@ th {
 	background-color: #DDDDFF;
 }
 .kw {
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+pre {
+	font-family: Courier, monospace;
+	font-size: 13px;
+	background-color: #EEEEEE;
+	padding: 5px;
+	border: 1px dashed #666;
+}
+.codecomment {
+	color: #090;
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+.codestring {
+	color: #F00;
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+.codekw {
+	color: #939;
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+.codenum {
+	color: #00F;
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+.codemacro {
+	color: #963;
+	font-family: Courier, monospace;
+	font-size: 13px;
+}
+.codenone {
+	color: #000;
 	font-family: Courier, monospace;
 	font-size: 13px;
 }

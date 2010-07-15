@@ -21,10 +21,13 @@
     <td valign="top" style="border-bottom: solid 1px #999"><!-- TemplateBeginEditable name="Name" -->
       <h1>&lt;&lt;Title&gt;&gt;</h1>
       <!-- TemplateEndEditable -->
-      <div class="section"> <!-- TemplateBeginEditable name="Body" -->
-        <h2>Subheading</h2>
-        <p>Body</p>
-        <!-- TemplateEndEditable --> </div></td>
+      <!-- TemplateBeginRepeat name="Sections" -->
+      <div class="section">
+        <!-- TemplateBeginEditable name="SectionTitle" --><h2><a name="section" id="section"></a>Section</h2><!-- TemplateEndEditable -->
+        <!-- TemplateBeginEditable name="SectionBody" -->
+        Body.
+    <!-- TemplateEndEditable --></div><!-- TemplateEndRepeat -->
+    </td>
   </tr>
 </table>
 </body>

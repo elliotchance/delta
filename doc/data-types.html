@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="nav.ref.html" width="100%" style="border: none"></iframe>
+      <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Data types</h1>
+      <!-- InstanceEndEditable -->
+      <!-- InstanceBeginRepeat name="Sections" --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="overview" id="overview"></a>Overview</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Delta like all scripting language is typeless, allowing any data type to be assigned to any variable and also change at any time. This has its advantages and disadvantages, but all scripting languages will convert types when necessary.</p>
+        <p>Internally Delta will keep the following types:</p>
+        <ul>
+          <li class="kw">NULL</li>
+          <li class="kw">BOOLEAN</li>
+          <li class="kw">NUMBER</li>
+          <li class="kw">STRING</li>
+          <li class="kw">ARRAY</li>
+          <li class="kw">OBJECT</li>
+          <li class="kw">RESOURCE</li>
+        </ul>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="convert" id="convert"></a>Conversion Chart</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Horizontal – original type.<br />
+          Vertical – type to convert to.</p>
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>&nbsp;</th>
+            <th class="kw">NULL</th>
+            <th class="kw">BOOLEAN</th>
+            <th class="kw">NUMBER</th>
+            <th class="kw">STRING</th>
+            <th class="kw">ARRAY</th>
+            <th class="kw">OBJECT</th>
+            <th class="kw">RESOURCE</th>
+          </tr>
+          <tr>
+            <th class="kw">BOOLEAN</th>
+            <td class="kw">FALSE</td>
+            <td bgcolor="#99FF99">-</td>
+            <td>0 is <span class="kw">FALSE</span>, otherwise <span class="kw">TRUE</span></td>
+            <td>&quot;0&quot; or &quot;&quot; is <span class="kw">FALSE</span>, otherwise <span class="kw">TRUE</span></td>
+            <td><span class="kw">FALSE</span> for 0 elements, otherwise <span class="kw">TRUE</span></td>
+            <td class="kw">TRUE</td>
+            <td><span class="kw">FALSE</span> if <span class="kw">NULL</span> resource, otherwise <span class="kw">TRUE</span></td>
+          </tr>
+          <tr>
+            <th class="kw">NUMBER</th>
+            <td>0</td>
+            <td class="kw">FALSE</td>
+            <td bgcolor="#99FF99">-</td>
+            <td>Attempt to convert, 0 on fail</td>
+            <td>Number of elements</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <th class="kw">STRING</th>
+            <td>&quot;&quot;</td>
+            <td>&quot;&quot; for <span class="kw">FALSE</span>, &quot;1&quot; for <span class="kw">TRUE</span></td>
+            <td>Converted to STRING</td>
+            <td bgcolor="#99FF99">-</td>
+            <td>&quot;Array&quot;</td>
+            <td>&quot;Object&quot;</td>
+            <td>&quot;Resource&quot;</td>
+          </tr>
+          <tr>
+            <th class="kw">ARRAY</th>
+            <td>Empty array</td>
+            <td>Array with one element with value</td>
+            <td>Array with one element with value</td>
+            <td>Array with one element with value</td>
+            <td bgcolor="#99FF99">-</td>
+            <td>Array with one element with value</td>
+            <td>Array with one element with value</td>
+          </tr>
+          <tr>
+            <th class="kw">OBJECT</th>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#99FF99">-</td>
+            <td bgcolor="#FF9999">N/A</td>
+          </tr>
+          <tr>
+            <th class="kw">RESOURCE</th>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#FF9999">N/A</td>
+            <td bgcolor="#99FF99">-</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

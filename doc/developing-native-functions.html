@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="nav.ref.html" width="100%" style="border: none"></iframe>
+      <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Developing Native Functions</h1>
+      <!-- InstanceEndEditable -->
+      <!-- InstanceBeginRepeat name="Sections" --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="toc" id="toc"></a>Table of Contents</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <ul>
+          <li><a href="#basics">Basics</a></li>
+          <li><a href="#function">Writing the C Function</a></li>
+          <li><a href="#returning">Returning a Value</a></li>
+          <li><a href="#args">Getting Arguments</a></li>
+          <li><a href="#args2">Getting Argument Count and Types</a></li>
+          <li><a href="#resources">Using Resources</a></li>
+        </ul>
+    <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="basics" id="basics"></a>Basics</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->See <a href="writing-delta-modules.html">Writing Delta Modules</a>.<!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="function" id="function"></a>Writing the C Function</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>All Delta native functions use the same syntax so you can start any function from this template (remember to include “delta.h”):</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codecomment">// your code goes here</span>
+}
+    </pre>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="returning" id="returning"></a>Returning a Value</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>For example:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codemacro">DELTA_RETURN_NUMBER</span>(<span class="codenum">12.34</span>);
+}</pre>
+        <p>Use the following routines to return different values:</p>
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Syntax</th>
+            <th>Returns</th>
+            <th>Example</th>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_NULL</td>
+            <td valign="top" class="kw">NULL</td>
+            <td valign="top"><span class="codemacro">DELTA_RETURN_NULL</span><span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_BOOLEAN<span class="codenone">(</span><span class="param">value</span><span class="codenone">)</span></td>
+            <td valign="top" class="kw">BOOLEAN</td>
+            <td valign="top"><span class="codemacro">DELTA_RETURN_BOOLEAN<span class="codenone">(</span></span><span class="codemacro">DELTA_TRUE</span><span class="codemacro"><span class="codenone">);</span></span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_TRUE</td>
+            <td valign="top" class="kw">BOOLEAN</td>
+            <td valign="top" class="codemacro">DELTA_RETURN_TRUE<span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_FALSE</td>
+            <td valign="top" class="kw">BOOLEAN</td>
+            <td valign="top" class="codemacro">DELTA_RETURN_FALSE<span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_NAN</td>
+            <td valign="top" class="kw">NUMBER</td>
+            <td valign="top" class="codemacro">DELTA_RETURN_NAN<span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_ZERO</td>
+            <td valign="top" class="kw">NUMBER</td>
+            <td valign="top" class="codemacro">DELTA_RETURN_ZERO<span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_ONE</td>
+            <td valign="top" class="kw">NUMBER</td>
+            <td valign="top" class="codemacro">DELTA_RETURN_ONE<span class="codenone">;</span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_NUMBER<span class="codenone">(</span><span class="param">value</span><span class="codenone">)</span></td>
+            <td valign="top" class="kw">NUMBER</td>
+            <td valign="top"><span class="codemacro">DELTA_RETURN_BOOLEAN<span class="codenone">(</span></span><span class="codenum">157.34</span><span class="codemacro"><span class="codenone">);</span></span></td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_STRING<span class="codenone">(</span><span class="param">value</span><span class="codenone">)</span></td>
+            <td valign="top" class="kw">STRING</td>
+            <td valign="top" class="codenone"><span class="codemacro">DELTA_RETURN_STRING</span>(<span class="codestring">&quot;Hello World!&quot;</span>);</td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_BINARY_STRING<span class="codenone">(</span><span class="param">value</span><span class="codenone">, </span><span class="param">length</span><span class="codenone">)</span></td>
+            <td valign="top" class="kw">STRING</td>
+            <td valign="top" class="codenone"><span class="codemacro">DELTA_RETURN_BINARY_STRING</span>(<span class="codestring">&quot;foobar&quot;</span>, <span class="codenum">6</span>);</td>
+          </tr>
+          <tr>
+            <td valign="top" nowrap="nowrap" class="codemacro">DELTA_RETURN_RESOURCE<span class="codenone">(</span><span class="param">pointer</span><span class="codenone">, </span><span class="param">type</span><span class="codenone">)</span></td>
+            <td valign="top" class="kw">RESOURCE</td>
+            <td valign="top" class="codenone"><span class="codemacro">DELTA_RETURN_RESOURCE</span>(<br />
+              &nbsp;&nbsp;fopen(<span class="codestring">&quot;out.txt&quot;</span>, <span class="codestring">&quot;r&quot;</span>), <span class="codenum">0x1234</span><br />
+              );</td>
+          </tr>
+        </table>
+        <p><br />
+          For <span class="codemacro">DELTA_RETURN_RESOURCE</span> the type must be an <span class="codekw">int</span> but can be any value you want pick something that won't clash with any other resource ID.</p>
+        <p>You should always use the above macros, however you can access the return register directly with DELTA_DEST?, like:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codecomment">// return a dead resource</span>
+  <span class="codemacro">DELTA_DEST</span>-&gt;type = <span class="codemacro">DELTA_TYPE_RESOURCE</span>;
+  <span class="codemacro">DELTA_DEST</span>-&gt;value.resource.ptr = NULL;
+}</pre>
+    <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="args" id="args"></a>Getting Arguments</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>You can use the macros <span class="kw">DELTA_ARG0</span> – <span class="kw">DELTA_ARG9</span> or <span class="kw">DELTA_ARG(id)</span>, but you must remember to cast to the type you want:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codecomment">// these do the same thing</span>
+  <span class="codekw">double</span> d1 = delta_cast_number(<span class="codemacro">DELTA_ARG0</span>);
+  <span class="codekw">double</span> d2 = delta_cast_number(<span class="codemacro">DELTA_ARG</span>(<span class="codenum">0</span>));
+}</pre>
+    <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="args2" id="args2"></a>Getting Argument Count and Types</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>For functions than use a variable number of arguments you can use <span class="kw">DELTA_ARGS</span> to return the number of arguments, for example:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  printf(<span class="codestring">&quot;You sent %d arguments to this function.\n&quot;</span>, <span class="codemacro">DELTA_ARGS</span>);
+  <span class="codemacro">DELTA_RETURN_NULL</span>;
+}</pre>
+        <p>Before casting you may want to check the types of each argument, this can be done easily like:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codekw">int</span> i;
+  <span class="codekw">for</span>(i = <span class="codenum">0</span>; i &lt; <span class="codemacro">DELTA_ARGS</span>; ++i) {
+    <span class="codekw">if</span>(<span class="codemacro">DELTA_ARG</span>(i)-&gt;type == <span class="codemacro">DELTA_TYPE_NUMBER</span>)
+      printf(<span class="codestring">&quot;Argument %d is a NUMBER\n&quot;</span>, i);
+    <span class="codekw">else</span>
+      printf(<span class="codestring">&quot;Argument %d is NOT a NUMBER\n&quot;</span>, i);
+  }
+  <span class="codemacro">DELTA_RETURN_NULL</span>;
+}</pre>
+        <p>You can compare against all the internal <a href="data-types.html">Delta data types</a>:</p>
+        <table border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Name</th>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_NULL</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_BOOLEAN</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_NUMBER</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_STRING</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_ARRAY</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_OBJECT</span></td>
+          </tr>
+          <tr>
+            <td><span class="kw">DELTA_TYPE_RESOURCE</span></td>
+          </tr>
+        </table>
+        <h3>delta_cast_number(arg)</h3>
+        <p>Will attempt to convert the current type of arg to a NUMBER permanently, but only do this if there is no loss in precision. You should always use the value returned from delta_cast_number and not refer back or assume the arg is now a number.</p>
+        <h3>delta_cast_int(arg)</h3>
+        <p>Is just an alias for delta_cast_number but returns the result as a truncated int.</p>
+        <h3>delta_cast_boolean(arg)</h3>
+        <p>Following the same principles as delta_cast_number but will return <span class="codemacro">DELTA_TRUE</span> or <span class="codemacro">DELTA_FALSE</span> for 1 and 0 respectively.</p>
+        <h3>delta_cast_string(arg, *release)</h3>
+        <p>If the original arg is already a STRING then it will simply return a pointer to the original variable. However if arg is not a STRING then a new variable will be created with the equivalent string value and returned. To prevent memory leaks you must provide a release value and manually release the variable if required at the end of your function, for example:</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(my_func)
+{
+  <span class="codekw">int</span> release;
+  <span class="codekw">struct</span> DeltaVariable *string_val = delta_cast_string(<span class="codemacro">DELTA_ARG0</span>, &amp;release);
+  printf(<span class="codestring">&quot;string = %s\n&quot;</span>, string_val-&gt;value.ptr);
+  <span class="codemacro">DELTA_RELEASE</span>(release, string_val);
+  <span class="codemacro">DELTA_RETURN_NULL</span>;
+}</pre>
+    <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="resources" id="resources"></a>Using Resources</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>A <span class="kw">RESOURCE</span> is a pointer to a type an internal object that cannot be represented in Delta, a simple example is a C file handle. Here is an example of how to use your own custom resources safely.</p>
+        <pre><span class="codemacro">#define MY_TYPE 123456</span>
+
+<span class="codecomment">// res = create_resource();</span>
+<span class="codemacro">DELTA_FUNCTION</span>(create_resource)
+{
+  MyCustomObject *mco = (MyCustomObject*) malloc(sizeof(MyCustomObject));
+  <span class="codemacro">DELTA_RETURN_RESOURCE</span>(mco, <span class="codemacro">MY_TYPE</span>);
+}
+
+<span class="codecomment">// use_resource(res);</span>
+<span class="codemacro">DELTA_FUNCTION</span>(use_resource)
+{
+  if(!<span class="codemacro">DELTA_CHECK_RESOURCE</span>(<span class="codemacro">DELTA_ARG0</span>, <span class="codemacro">MY_TYPE</span>)) {
+    <span class="codemacro">DELTA_TRIGGER_ERROR</span>(<span class="codestring">&quot;Invalid resource&quot;</span>, <span class="codemacro">DELTA_ERROR_WARNING</span>);
+    <span class="codemacro">DELTA_RETURN_NULL</span>;
+  }
+
+  MyCustomObject *mco = (MyCustomObject*) <span class="codemacro">DELTA_ARG0</span>-&gt;resource.ptr;
+  <span class="codekw">int</span> result = some_c_function(mco);
+  <span class="codemacro">DELTA_RETURN_BOOLEAN</span>(result);
+}
+    </pre>
+    <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>
