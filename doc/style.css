@@ -115,3 +115,8 @@ pre {
 	font-family: Courier, monospace;
 	font-size: 13px;
 }
+#navframe {
+	border: none;
+	height: 100%;
+	width: 100%;
+}

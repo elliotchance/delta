@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="nav.ref.html" id="navframe"></iframe>
+      <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Writing Delta Modules</h1>
+      <!-- InstanceEndEditable -->
+      <!-- InstanceBeginRepeat name="Sections" --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="intro" id="intro"></a>Introduction</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Delta modules are loaded at runtime but loading a dynamically linked library file. The <a href="delta-vm.html">Delta VM</a> gets all the information it needs from standard named C functions. </p>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="required" id="required"></a>Required Functions</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Your library must have the function <span class="codekw">struct</span><span class="codenone"> DeltaModuleFunction* module_functions(</span><span class="codekw">int</span><span class="codenone"> *count)</span>. It will return a stack of functions for the <a href="delta-vm.html">Delta VM</a> to load from your library. You need not worry about count, it is taken care of by the macros.</p>
+        <pre><span class="codemacro">#include &quot;delta.h&quot;</span>
+
+<span class="codekw">struct</span> DeltaModuleFunction* module_functions(<span class="codekw">int</span> *count)
+{
+  <span class="codemacro">DELTA_PREPARE_MODULE_FUNCTIONS</span>(<span class="codenum">10</span>);
+  <span class="codemacro">DELTA_PUSH_FUNCTION</span>(func1, <span class="codenum">2</span>, <span class="codenum">2</span>);
+  <span class="codemacro">DELTA_PUSH_FUNCTION</span>(func2, <span class="codenum">1</span>, <span class="codenum">1</span>);
+  <span class="codemacro">DELTA_PUSH_FUNCTION</span>(func3, <span class="codenum">1</span>, <span class="codenum">1</span>);
+  ...
+  <span class="codemacro">DELTA_END_MODULE_FUNCTIONS</span>;
+}        </pre>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="prepare" id="prepare"></a>DELTA_PREPARE_MODULE_FUNCTIONS()</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->Must be called before <span class="codemacro">DELTA_PUSH_FUNCTION</span>. The argument (10) must be greater than or equal to the total number of <span class="codemacro">DELTA_PUSH_FUNCTION</span>, it is safe to make it larger because <span class="codemacro">DELTA_END_MODULE_FUNCTIONS</span> will correct the right number of functions for you. <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="push" id="push"></a>DELTA_PUSH_FUNCTION()</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>The first argument is the name of the function to match your <span class="codemacro">DELTA_FUNCTION</span><span class="codenone">(func1) {}</span>. The last two arguments are the minimum and maximum arguments this functions accepts (inclusive). You can use <a href="delta-max-args.html"><span class="codemacro">DELTA_MAX_ARGS</span></a> for an unlimited number of maximum arguments. </p>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="end" id="end"></a>DELTA_END_MODULE_FUNCTIONS</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->Also required, but no documentation needed.<!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="functions" id="functions"></a>Writing Delta Functions</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->Read the full article at <a href="developing-native-functions.html">Developing Native Functions</a>.<!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>
