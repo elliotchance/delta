@@ -275,6 +275,8 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 
 int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 {
+	printf("line = '%s'\n", line);
+	
 	// split the line on commas
 	int total_parts = 0, i, last = -1;
 	int bcount1 = 0; // ()
@@ -371,7 +373,9 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
 		// loop label
+#if DELTA_SHOW_BYTECODE
 		printf("BYTECODE_LBL ( %d )\n", label_id);
+#endif
 		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
 		
 		// evaluate expression
@@ -391,7 +395,25 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	
 	// dissect lines
 	for(i = at; i < end; ++i) {
-		if(block[i] == '{') {
+		// single line comment
+		if(block[i] == '/' && block[i + 1] == '/') {
+			for(; i < end; ++i) {
+				if(block[i] == '\n')
+					break;
+			}
+		}
+		
+		// multi line comment
+		else if(block[i] == '/' && block[i + 1] == '*') {
+			++i;
+			for(; i < end; ++i) {
+				if(block[i] == '*' && block[i + 1] == '/')
+					break;
+			}
+			++i;
+		}
+		
+		else if(block[i] == '{') {
 			char *new_identifier = (char*) malloc(line_pos + 1);
 			strncpy(new_identifier, block + i - line_pos, line_pos);
 			

@@ -55,7 +55,6 @@ int delta_load_module(char *path)
 	int i;
 	for(i = 0; i < count; ++i) {
 		delta_module_function f = delta_get_module_function(module, functions[i].name);
-		printf("Loading %s into Delta VM\n", functions[i].name, functions[i].min_args, functions[i].max_args);
 		if(f != NULL)
 			delta_vm_push_function(new_DeltaFunction(functions[i].name, f, functions[i].min_args, functions[i].max_args));
 	}
