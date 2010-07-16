@@ -13,15 +13,17 @@
 // operators
 //-----------------------------------------------
 
-#define BYTECODE_SET 0x0010 /* =  */
+#define BYTECODE_SET 0x0010 // =
+// TODO: docme
+#define BYTECODE_SAP 0x0011 // .
 
-#define BYTECODE_ADD 0x0020 /* +  */
-#define BYTECODE_SUB 0x0021 /* -  */
-#define BYTECODE_MUL 0x0022 /* *  */
-#define BYTECODE_DIV 0x0023 /* /  */
-#define BYTECODE_MOD 0x0024 /* %  */
-#define BYTECODE_INC 0x0025 /* ++ */
-#define BYTECODE_DEC 0x0026 /* -- */
+#define BYTECODE_ADD 0x0020 // +
+#define BYTECODE_SUB 0x0021 // -
+#define BYTECODE_MUL 0x0022 // *
+#define BYTECODE_DIV 0x0023 // /
+#define BYTECODE_MOD 0x0024 // %
+#define BYTECODE_INC 0x0025 // ++
+#define BYTECODE_DEC 0x0026 // --
 
 #define BYTECODE_CEQ 0x0030 // ==
 #define BYTECODE_CNE 0x0031 // !=

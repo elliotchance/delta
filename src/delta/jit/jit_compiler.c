@@ -123,6 +123,7 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 				else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
 				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
 				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
+				else if(instructions[i].bc == BYTECODE_SAP) jit_finish(ins_SAP);
 				else                                        jit_finish(ins_NUL);
 			}
 		}

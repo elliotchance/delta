@@ -20,6 +20,29 @@ DELTA_INS(ADD)
 
 
 /**
+ * @brief String append.
+ */
+DELTA_INS(SAP)
+{
+	// get args
+	int release0, release1;
+	struct DeltaVariable *arg0 = delta_cast_string(d->varg[1], &release0);
+	struct DeltaVariable *arg1 = delta_cast_string(d->varg[2], &release1);
+	
+	// create the new string
+	char *r = (char*) malloc(arg0->size + arg1->size + 1);
+	strncpy(r, arg0->value.ptr, arg0->size);
+	strncpy(r + arg0->size, arg1->value.ptr, arg1->size);
+	r[arg0->size + arg1->size] = 0;
+	
+	// finish
+	DELTA_RELEASE(release0, arg0);
+	DELTA_RELEASE(release1, arg1);
+	DELTA_RETURN_BINARY_STRING(r, arg0->size + arg1->size);
+}
+
+
+/**
  * @brief Fast math numerical addition.
  */
 DELTA_INS(NAD)

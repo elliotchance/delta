@@ -60,7 +60,7 @@ void delta_vm_print_ram(struct DeltaCompiler *c)
 	int i;
 	for(i = 0; i < total_ram; ++i) {
 		if(ram[i]->type != DELTA_TYPE_NULL) {
-			printf("ram[%d](%d) = ", i, ram[i]->type);
+			printf("ram[%d](%d, %d) = ", i, ram[i]->type, ram[i]->size);
 			delta_vm_print_variable(ram[i]);
 			printf("\n");
 		}
@@ -117,6 +117,8 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 		ram[c->constants[i].ram_location]->type = c->constants[i].type;
 		ram[c->constants[i].ram_location]->value.number = c->constants[i].value.number;
 		ram[c->constants[i].ram_location]->value.ptr = c->constants[i].value.ptr;
+		ram[c->constants[i].ram_location]->size = c->constants[i].size;
+		// TODO: finish the rest of the attributes
 	}
 	
 	return DELTA_SUCCESS;
