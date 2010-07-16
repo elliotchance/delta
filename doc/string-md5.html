@@ -20,25 +20,25 @@
   </tr>
   <tr>
     <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
-      <iframe src="nav.string.html" id="navframe"></iframe>
+      <iframe src="string-nav.html" id="navframe"></iframe>
     <!-- InstanceEndEditable --></td>
-    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->soundex<!-- InstanceEndEditable --></span><br />
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->md5 <!-- InstanceEndEditable --></span><br />
 <div style="padding-top: 5px">
-<!-- InstanceBeginEditable name="ShortDescription" -->Calculate the soundex key of a string.<!-- InstanceEndEditable --></div>
+<!-- InstanceBeginEditable name="ShortDescription" -->Calculate the md5 hash of a string.<!-- InstanceEndEditable --></div>
 <br />
 
 <h2>Syntax</h2>
 <div class="section">
 <!-- InstanceBeginEditable name="Syntax" -->
 <span class="syntax">
-string<strong> soundex </strong>( string <span class="param">str</span><span class="param"></span> )
+string <strong>md5</strong> ( string <span class="param">str</span><span class="param"></span> )
 </span>
 <!-- InstanceEndEditable -->
 </div>
 
 <h2>Description</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Description" -->Calculates the soundex key of <span class="param">str</span>.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Description" -->Calculates the MD5 hash of <span class="param">str</span> using the <a href="http://www.faqs.org/rfcs/rfc1321">RSA Data Security, Inc. MD5 Message-Digest Algorithm</a>, and returns that hash.<!-- InstanceEndEditable -->
 </div>
 
 
@@ -59,7 +59,7 @@ string<strong> soundex </strong>( string <span class="param">str</span><span cla
 
 <h2>Return Values</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Return" -->Returns the soundex key as a string.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Return" -->Returns the hash as a 32-character hexadecimal number.<!-- InstanceEndEditable -->
 </div>
 
 

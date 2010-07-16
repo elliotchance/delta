@@ -20,25 +20,25 @@
   </tr>
   <tr>
     <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
-      <iframe src="nav.string.html" id="navframe"></iframe>
+      <iframe src="string-nav.html" id="navframe"></iframe>
     <!-- InstanceEndEditable --></td>
-    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->levenshtein <!-- InstanceEndEditable --></span><br />
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- InstanceBeginEditable name="FunctionName" -->md5_file <!-- InstanceEndEditable --></span><br />
 <div style="padding-top: 5px">
-<!-- InstanceBeginEditable name="ShortDescription" -->Calculate Levenshtein distance between two strings.<!-- InstanceEndEditable --></div>
+<!-- InstanceBeginEditable name="ShortDescription" -->Calculates the md5 hash of a given file.<!-- InstanceEndEditable --></div>
 <br />
 
 <h2>Syntax</h2>
 <div class="section">
 <!-- InstanceBeginEditable name="Syntax" -->
 <span class="syntax">
-int <strong>levenshtein</strong> ( string <span class="param">str1</span> , string <span class="param">str2</span> )
+string <strong>md5_file</strong> ( string <span class="param">filename</span><span class="param"></span> )
 </span>
 <!-- InstanceEndEditable -->
 </div>
 
 <h2>Description</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Description" -->The Levenshtein distance is defined as the minimal number of characters you have to replace, insert or delete to transform <span class="param">str1</span> into <span class="param">str2</span>. The complexity of the algorithm is O(m*n), where n and m are the length of <span class="param">str1</span> and <span class="param">str2</span>.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Description" -->Calculates the MD5 hash of the file specified by the <span class="param">filename</span> parameter using the <a href="http://www.faqs.org/rfcs/rfc1321">RSA Data Security, Inc. MD5 Message-Digest Algorithm</a>, and returns that hash.<!-- InstanceEndEditable -->
 </div>
 
 
@@ -48,15 +48,8 @@ int <strong>levenshtein</strong> ( string <span class="param">str1</span> , stri
 <!-- InstanceBeginRepeat name="Parameters" --><!-- InstanceBeginRepeatEntry -->
 <!-- InstanceBeginEditable name="Parameter" -->
   <tr>
-    <td width="25" nowrap="nowrap" class="paramd">str1</td>
-    <td>One of the strings being evaluated for Levenshtein distance.</td>
-  </tr>
-<!-- InstanceEndEditable -->
-<!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
-<!-- InstanceBeginEditable name="Parameter" -->
-  <tr>
-    <td width="25" nowrap="nowrap" class="paramd">str2</td>
-    <td>One of the strings being evaluated for Levenshtein distance.</td>
+    <td width="25" nowrap="nowrap" class="paramd">filename</td>
+    <td>The filename.</td>
   </tr>
 <!-- InstanceEndEditable -->
 <!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
@@ -66,7 +59,7 @@ int <strong>levenshtein</strong> ( string <span class="param">str1</span> , stri
 
 <h2>Return Values</h2>
 <div class="section">
-<!-- InstanceBeginEditable name="Return" -->This function returns the Levenshtein-Distance between the two argument strings.<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="Return" -->Returns the hash as a 32-character hexadecimal number.<!-- InstanceEndEditable -->
 </div>
 
 
