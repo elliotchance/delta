@@ -184,7 +184,10 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], ">=") ||
 		   !strcmp(tokens[highest_op_pos], "==") ||
 		   !strcmp(tokens[highest_op_pos], "!=") ||
-		   !strcmp(tokens[highest_op_pos], ".")) {
+		   !strcmp(tokens[highest_op_pos], "<>") ||
+		   !strcmp(tokens[highest_op_pos], ".") ||
+		   !strcmp(tokens[highest_op_pos], "&&") ||
+		   !strcmp(tokens[highest_op_pos], "||")) {
 			// resolve the address for the left and right
 			int var_dest = ++var_temp;
 			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
@@ -226,13 +229,23 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			else if(!strcmp(tokens[highest_op_pos], ".")) {
 				DELTA_ADD_OPERATOR_BYTECODE(SAP);
 			}
+			else if(!strcmp(tokens[highest_op_pos], "<>")) {
+				DELTA_ADD_OPERATOR_BYTECODE(CNE);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "&&")) {
+				DELTA_ADD_OPERATOR_BYTECODE(AND);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "||")) {
+				DELTA_ADD_OPERATOR_BYTECODE(ORR);
+			}
 		}
 		
 		if(!strcmp(tokens[highest_op_pos], "+=") ||
 		   !strcmp(tokens[highest_op_pos], "-=") ||
 		   !strcmp(tokens[highest_op_pos], "*=") ||
 		   !strcmp(tokens[highest_op_pos], "/=") ||
-		   !strcmp(tokens[highest_op_pos], "%=")) {
+		   !strcmp(tokens[highest_op_pos], "%=") ||
+		   !strcmp(tokens[highest_op_pos], ".=")) {
 			// resolve the address for the left and right
 			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
 			int var_id2 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);

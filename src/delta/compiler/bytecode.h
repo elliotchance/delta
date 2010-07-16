@@ -24,6 +24,12 @@
 #define BYTECODE_MOD 0x0024 // %
 #define BYTECODE_INC 0x0025 // ++
 #define BYTECODE_DEC 0x0026 // --
+// TODO: docme
+#define BYTECODE_AND 0x0027 // &&
+// TODO: docme
+#define BYTECODE_ORR 0x0028 // ||
+// TODO: docme
+#define BYTECODE_NOT 0x0029 // !
 
 #define BYTECODE_CEQ 0x0030 // ==
 #define BYTECODE_CNE 0x0031 // !=

@@ -11,6 +11,7 @@
 
 DELTA_INS(ADD); // +
 DELTA_INS(AG1); // Get first dimention array
+DELTA_INS(AND); // Boolean AND
 DELTA_INS(AS1); // Assign first dimention array
 DELTA_INS(CEQ); // ==
 DELTA_INS(CGE); // >=
@@ -28,10 +29,12 @@ DELTA_INS(NAD); // fastmath +
 DELTA_INS(NDE); // fastmath --
 DELTA_INS(NDV); // fastmath /
 DELTA_INS(NIN); // fastmath ++
+DELTA_INS(NOT); // Boolean NOT
 DELTA_INS(NUL); // no action
 DELTA_INS(NMD); // fastmath %
 DELTA_INS(NMU); // fastmath *
 DELTA_INS(NSB); // fastmath -
+DELTA_INS(ORR); // Boolean OR
 DELTA_INS(RTN); // return
 DELTA_INS(SAP); // .
 DELTA_INS(SET); // =

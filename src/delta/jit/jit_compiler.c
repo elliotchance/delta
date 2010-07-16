@@ -124,6 +124,9 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
 				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
 				else if(instructions[i].bc == BYTECODE_SAP) jit_finish(ins_SAP);
+				else if(instructions[i].bc == BYTECODE_AND) jit_finish(ins_AND);
+				else if(instructions[i].bc == BYTECODE_ORR) jit_finish(ins_ORR);
+				else if(instructions[i].bc == BYTECODE_NOT) jit_finish(ins_NOT);
 				else                                        jit_finish(ins_NUL);
 			}
 		}

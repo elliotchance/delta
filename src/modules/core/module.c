@@ -105,6 +105,7 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(soundex, 1, 1);
 	DELTA_PUSH_FUNCTION(strlen, 1, 1);
 	DELTA_PUSH_FUNCTION(substr, 2, 3);
+	DELTA_PUSH_FUNCTION(strpos, 2, 2);
 	
 	// variables
 	DELTA_PUSH_FUNCTION(is_array, 1, 1);

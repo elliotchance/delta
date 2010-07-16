@@ -11,6 +11,33 @@
 
 
 /**
+ * @brief Boolean AND.
+ */
+DELTA_INS(AND)
+{
+	DELTA_RETURN_BOOLEAN(delta_cast_boolean(d->varg[1]) && delta_cast_boolean(d->varg[2]));
+}
+
+
+/**
+ * @brief Boolean OR.
+ */
+DELTA_INS(ORR)
+{
+	DELTA_RETURN_BOOLEAN(delta_cast_boolean(d->varg[1]) || delta_cast_boolean(d->varg[2]));
+}
+
+
+/**
+ * @brief Boolean NOT.
+ */
+DELTA_INS(NOT)
+{
+	DELTA_RETURN_BOOLEAN(!delta_cast_boolean(d->varg[1]));
+}
+
+
+/**
  * @brief Numerical addition.
  */
 DELTA_INS(ADD)
