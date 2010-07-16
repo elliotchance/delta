@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/general.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- InstanceBeginEditable name="Nav" -->
+      <iframe src="ref-nav.html" id="navframe"></iframe>
+    <!-- InstanceEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><!-- InstanceBeginEditable name="Name" -->
+      <h1>Macros</h1>
+      <!-- InstanceEndEditable -->
+      <!-- InstanceBeginRepeat name="Sections" --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="overview" id="overview"></a>Overview</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        This is a list of the macros that a developer may need to know.<!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="deltafunctions" id="deltafunctions"></a>Delta Functions</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Macro</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ARG<span class="codenone">(</span><span class="param">i</span><span class="codenone">)</span></td>
+            <td valign="top">Get the value of a function argument.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ARG0<span class="codenone"> - </span>DELTA_ARG9</td>
+            <td valign="top">The same as <span class="codemacro">DELTA_ARG</span><span class="codenone">(0)</span> - <span class="codemacro">DELTA_ARG</span><span class="codenone">(9)</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ARG0_NAME<span class="codenone"> - </span>DELTA_ARG9_NAME</td>
+            <td valign="top">The same as <span class="codemacro">DELTA_ARG_NAME</span><span class="codenone">(0)</span> - <span class="codemacro">DELTA_ARG_NAME</span><span class="codenone">(9)</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ARGS</td>
+            <td valign="top">Returns the number of arguments sent to this function as an <span class="codekw">int</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ARG_NAME<span class="codenone">(</span><span class="param">i</span><span class="codenone">)</span></td>
+            <td valign="top">Get the name of the argument key. This is returned as a null-terminated string regardless of the type.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_CHECK_RESOURCE<span class="codenone">(</span><span class="param">resource</span><span class="codenone">, </span><span class="param">type</span><span class="codenone">)</span></td>
+            <td valign="top">Check the variable <span class="param">resource</span> is a <span class="codenone">RESOURCE</span> and that its type is also equal to <span class="param">type</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_DEST</td>
+            <td valign="top">The destination variable, this is the variable that holds the return value. You should use the <span class="codemacro">DELTA_RETURN_*</span> macros instead of accessing this directly.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_ENUMERATE_ARRAY</td>
+            <td valign="top">Enumerate the keys and values of an array.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_FALSE</td>
+            <td valign="top" class="codenone">0</td>
+            <td valign="top">The constant for the delta value of <span class="codekw">false</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_FUNCTION</td>
+            <td valign="top">Define a delta function body.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RELEASE<span class="codenone">(</span><span class="param">obj_release</span><span class="codenone">, </span><span class="param">obj_ptr</span><span class="codenone">)</span></td>
+            <td valign="top">Release the variable <span class="param">obj_ptr</span> if <span class="param">obj_release</span> is not equal to zero. This is a easier way of freeing memory returned by <span class="codenone">delta_cast_string()</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_BINARY_STRING<span class="codenone">(</span><span class="param">return_value</span><span class="codenone">, </span><span class="param">return_size</span><span class="codenone">)</span></td>
+            <td valign="top">Delta has binary safe strings (meaning strings can contain binary characters and the NUL character.) Not always but sometimes you may want to use <span class="codemacro">DELTA_RETURN_BINARY_STRING</span> to make sure the returned string is stored correctly.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_BOOLEAN<span class="codenone">(</span><span class="param">return_value</span><span class="codenone">)</span></td>
+            <td valign="top">Return the <span class="kw">BOOLEAN</span> value of <span class="param">return_value</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_FALSE</td>
+            <td valign="top">Return the <span class="codenone">BOOLEAN</span> value of <span class="codekw">false</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_NAN</td>
+            <td valign="top">Return the <span class="codenone">NUMBER</span> constant for Not A Number.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_NULL</td>
+            <td valign="top">Return <span class="kw">NULL</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_NUMBER<span class="codenone">(</span><span class="param">return_value</span><span class="codenone">)</span></td>
+            <td valign="top">Return the <span class="kw">NUMBER</span> value of <span class="param">return_value</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_ONE</td>
+            <td valign="top">Return the <span class="kw">NUMBER</span> value of <span class="kw">1</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_RESOURCE<span class="codenone">(</span><span class="param">return_value</span><span class="codenone">, </span><span class="param">resource_id</span><span class="codenone">)</span></td>
+            <td valign="top">Return the binary resource <span class="param">return_value</span> with the resource type of <span class="param">resource_id</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_STRING<span class="codenone">(</span><span class="param">return_value</span><span class="codenone">)</span></td>
+            <td valign="top">Return a null-terminated string.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_TRUE</td>
+            <td valign="top">Return the <span class="codenone">BOOLEAN</span> value of <span class="codekw">true</span>.</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_RETURN_ZERO</td>
+            <td valign="top">Return the <span class="kw">NUMBER</span> value of <span class="kw">0</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TRUE</td>
+            <td valign="top" class="codenone">1</td>
+            <td valign="top">The constant for the delta value of <span class="codekw">true</span>.</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="constants" id="constants"></a>Constants</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Macro</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_SUCCESS</td>
+            <td valign="top" class="codenone">1</td>
+            <td valign="top">Successful (pass) result.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_FAILURE</td>
+            <td valign="top" class="codenone">0</td>
+            <td valign="top">Unsuccessful (fail) result.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_YES</td>
+            <td valign="top" class="codenone">1</td>
+            <td valign="top">Yes.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_NO</td>
+            <td valign="top" class="codenone">0</td>
+            <td valign="top">No.</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="datatypes" id="datatypes"></a>Data Types</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Macro</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_ARRAY</td>
+            <td valign="top" class="codenone">4</td>
+            <td valign="top">Data type is <span class="kw">ARRAY</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_BOOLEAN</td>
+            <td valign="top" class="codenone">1</td>
+            <td valign="top">Data type is <span class="kw">BOOLEAN</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_NULL</td>
+            <td valign="top" class="codenone">0</td>
+            <td valign="top">Data type is <span class="kw">NULL</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_NUMBER</td>
+            <td valign="top" class="codenone">2</td>
+            <td valign="top">Data type is <span class="kw">NUMBER</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_OBJECT</td>
+            <td valign="top" class="codenone">6</td>
+            <td valign="top">Data type is <span class="kw">OBJECT</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_RESOURCE</td>
+            <td valign="top" class="codenone">5</td>
+            <td valign="top">Data type is <span class="kw">RESOURCE</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_STRING</td>
+            <td valign="top" class="codenone">3</td>
+            <td valign="top">Data type is <span class="kw">STRING</span>.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_TYPE_UNKNOWN</td>
+            <td valign="top" class="codenone">10</td>
+            <td valign="top">This isn't actually a real data type but a theoretical place holder in rare situations.</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="errors" id="errors"></a>Errors and Warnings</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Macro</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_ERROR</td>
+            <td valign="top" class="codenone">&quot;1&quot;</td>
+            <td valign="top">An ERROR will stop the script from executing.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_WARNING </td>
+            <td valign="top" class="codenone">&quot;2&quot;</td>
+            <td valign="top">A WARNING signals an error or failure that is not fatal.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_PARSE</td>
+            <td valign="top" class="codenone">&quot;4&quot;</td>
+            <td valign="top">&nbsp;</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_NOTICE</td>
+            <td valign="top" class="codenone">&quot;8&quot;</td>
+            <td valign="top">&nbsp;</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_USER_ERROR</td>
+            <td valign="top" class="codenone">&quot;256&quot;</td>
+            <td valign="top">&nbsp;</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_USER_WARNING </td>
+            <td valign="top" class="codenone">&quot;512&quot;</td>
+            <td valign="top">&nbsp;</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_ERROR_USER_NOTICE </td>
+            <td valign="top" class="codenone">&quot;1024&quot;</td>
+            <td valign="top">&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="codemacro">DELTA_TRIGGER_ERROR<span class="codenone">(</span><span class="param">msg</span><span class="codenone">, </span><span class="param">type</span><span class="codenone">)</span></td>
+            <td valign="top">Trigger a runtime error to be dealt with by the VM. type is one of <span class="codemacro">DELTA_ERROR_*</span>.</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="modules" id="modules"></a>Delta Modules</h2><!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <table width="100%" border="1" cellspacing="0" cellpadding="3">
+          <tr>
+            <th>Macro</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_PREPARE_MODULE_FUNCTIONS<span class="codenone">(</span><span class="param">total</span><span class="codenone">)</span></td>
+            <td valign="top">Begin exporting functions.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_PUSH_FUNCTION<span class="codenone">(</span><span class="param">name</span><span class="codenone">, </span><span class="param">min</span><span class="codenone">, </span><span class="param">max</span><span class="codenone">)</span></td>
+            <td valign="top">Export a function to the Delta VM.</td>
+          </tr>
+          <tr>
+            <td valign="top" class="codemacro">DELTA_END_MODULE_FUNCTIONS</td>
+            <td valign="top">End and clean up exporting functions.</td>
+          </tr>
+        </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
+    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

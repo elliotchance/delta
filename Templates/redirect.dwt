@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<script language="javascript">
+<!-- TemplateBeginEditable name="head" -->
+var name = "Some Other Page";
+var url = "";
+<!-- TemplateEndEditable -->
+if(url == "")
+	url = name.replace(/\s/g, '-').toLowerCase() + ".html";
+
+function redirect() {
+	document.location = url;
+}
+</script>
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body onload="redirect()">
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td valign="top" style="border-bottom: solid 1px #999"><h1>Redirect</h1>
+      <div class="section">
+      You will be redirected in a moment, if not you can goto 
+      <script language="javascript">
+	  document.write('<a href="' + url + '">' + name + '</a>.');
+	  </script><br />
+	  <!-- TemplateBeginEditable name="Body" -->
+	  <!-- TemplateEndEditable -->
+      </div></td>
+  </tr>
+</table>
+</body>
+</html>
