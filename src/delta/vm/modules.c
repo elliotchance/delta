@@ -70,5 +70,6 @@ void delta_load_modules()
 {
 	delta_load_module("libdelta_core.dylib");
 	delta_load_module("libdelta_mapm.dylib");
+	delta_load_module("libdelta_sqlite3.dylib");
 	delta_load_module("libdelta_zlib.dylib");
 }
