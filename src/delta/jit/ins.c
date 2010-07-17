@@ -101,8 +101,14 @@ DELTA_INS(NMU)
  */
 DELTA_INS(NDV)
 {
-	// TODO: divide by zero, also check DIV
-	DELTA_DEST->value.number = d->varg[1]->value.number / d->varg[2]->value.number;
+	double den = d->varg[2]->value.number;
+	if(den == 0.0) {
+		DELTA_TRIGGER_ERROR("Divide by zero", DELTA_ERROR_WARNING);
+		DELTA_DEST->value.number = 0.0;
+		return;
+	}
+	
+	DELTA_DEST->value.number = d->varg[1]->value.number / den;
 }
 
 
@@ -237,8 +243,13 @@ DELTA_INS(DEC)
  */
 DELTA_INS(DIV)
 {
-	// this is only numerical division, so other types need to be cast to a number
-	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) / delta_cast_number(d->varg[2]));
+	double den = delta_cast_number(d->varg[2]);
+	if(den == 0.0) {
+		DELTA_TRIGGER_ERROR("Divide by zero", DELTA_ERROR_WARNING);
+		DELTA_RETURN_NUMBER(0.0);
+	}
+	
+	DELTA_RETURN_NUMBER(delta_cast_number(d->varg[1]) / den);
 }
 
 
@@ -464,7 +475,6 @@ DELTA_INS(ZST)
  */
 DELTA_INS(ZAR)
 {
-	// TODO: incomplete
 	DELTA_DEST->type = DELTA_TYPE_NULL;
 }
 
@@ -474,7 +484,6 @@ DELTA_INS(ZAR)
  */
 DELTA_INS(ZRS)
 {
-	// TODO: incomplete
 	DELTA_DEST->type = DELTA_TYPE_NULL;
 }
 
@@ -484,6 +493,5 @@ DELTA_INS(ZRS)
  */
 DELTA_INS(ZOB)
 {
-	// TODO: incomplete
 	DELTA_DEST->type = DELTA_TYPE_NULL;
 }
