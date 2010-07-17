@@ -134,7 +134,7 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 				numerical = 1;
 			
 			// these are control flow and won't affect the data type
-			if(ins[i].bc >= 0x0110)
+			if(ins[i].bc >= BYTECODE_LBL)
 				numerical = 1;
 			
 			// simple math

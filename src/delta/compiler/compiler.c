@@ -21,7 +21,7 @@
 #define DELTA_INF 1e2000
 
 
-int var_temp = 0;
+int var_temp = 0, result_register = 0;
 int *arg_count = NULL;
 int **arg_ptr = NULL;
 int arg_depth = 0;
@@ -170,6 +170,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 #endif
 				DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
 			}
+			result_register = var_dest;
 		}
 		
 		// 3 argument operators
@@ -238,6 +239,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			else if(!strcmp(tokens[highest_op_pos], "||")) {
 				DELTA_ADD_OPERATOR_BYTECODE(ORR);
 			}
+			result_register = var_dest;
 		}
 		
 		if(!strcmp(tokens[highest_op_pos], "+=") ||
@@ -245,7 +247,9 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "*=") ||
 		   !strcmp(tokens[highest_op_pos], "/=") ||
 		   !strcmp(tokens[highest_op_pos], "%=") ||
-		   !strcmp(tokens[highest_op_pos], ".=")) {
+		   !strcmp(tokens[highest_op_pos], ".=") ||
+		   !strcmp(tokens[highest_op_pos], "&&=") ||
+		   !strcmp(tokens[highest_op_pos], "||=")) {
 			// resolve the address for the left and right
 			int var_id1 = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
 			int var_id2 = delta_get_variable_id(c, tokens[highest_op_pos + 1]);
@@ -272,6 +276,13 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			else if(!strcmp(tokens[highest_op_pos], "%=")) {
 				DELTA_ADD_OPERATOR_BYTECODE(MOD);
 			}
+			else if(!strcmp(tokens[highest_op_pos], "&&=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(AND);
+			}
+			else if(!strcmp(tokens[highest_op_pos], "||=")) {
+				DELTA_ADD_OPERATOR_BYTECODE(ORR);
+			}
+			result_register = var_dest;
 		}
 		
 		// reduce temp
@@ -286,14 +297,12 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		total_tokens -= 2;
 	}
 	
-	return var_temp;
+	return result_register;
 }
 
 
 int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 {
-	printf("line = '%s'\n", line);
-	
 	// split the line on commas
 	int total_parts = 0, i, last = -1;
 	int bcount1 = 0; // ()
@@ -375,12 +384,19 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		// evaluate expression
 		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
+		// convert the expression to a save BOOLEAN
+		++var_temp;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_ZBO (%d, %d)\n", var_temp, expr_eval);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		
 		// perform if statement
 		++label_id;
 #if DELTA_SHOW_BYTECODE
 		printf("BYTECODE_IFS (%d, %d)\n", label_id, expr_eval);
 #endif
-		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, expr_eval));
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, var_temp));
 	}
 	else if(!strcmp(short_identifier, "while")) {
 		// if statement, get the conditional expression
@@ -398,12 +414,19 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		// evaluate expression
 		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
+		// convert the expression to a save BOOLEAN
+		++var_temp;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_ZBO (%d, %d)\n", var_temp, expr_eval);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		
 		// perform if statement
 		++label_id;
 #if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_LOP (%d, %d)\n", label_id, expr_eval);
+		printf("BYTECODE_LOP (%d, %d)\n", label_id, var_temp);
 #endif
-		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, expr_eval));
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
 	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);

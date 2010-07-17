@@ -9,12 +9,13 @@
 #include "delta/jit/lightning.h"
 
 
-typedef unsigned short DeltaByteCode;
+typedef unsigned char DeltaByteCode;
 typedef char DeltaVariableType;
 
 
 struct DeltaArrayValue;
 struct DeltaVariable;
+
 
 struct DeltaArrayValue
 {

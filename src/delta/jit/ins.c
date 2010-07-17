@@ -418,3 +418,72 @@ DELTA_INS(AG1)
 	// clean up
 	DELTA_RELEASE(release_key, v);
 }
+
+
+/**
+ * @brief Cast to NULL.
+ */
+DELTA_INS(ZNL)
+{
+	DELTA_DEST->type = DELTA_TYPE_NULL;
+}
+
+
+/**
+ * @brief Cast to BOOLEAN.
+ */
+DELTA_INS(ZBO)
+{
+	DELTA_DEST->type = DELTA_TYPE_BOOLEAN;
+	DELTA_DEST->value.number = delta_cast_boolean(d->varg[1]);
+}
+
+
+/**
+ * @brief Cast to NUMBER.
+ */
+DELTA_INS(ZNU)
+{
+	DELTA_DEST->type = DELTA_TYPE_NUMBER;
+	DELTA_DEST->value.number = delta_cast_number(d->varg[1]);
+}
+
+
+/**
+ * @brief Cast to STRING.
+ */
+DELTA_INS(ZST)
+{
+	DELTA_DEST->type = DELTA_TYPE_STRING;
+	DELTA_DEST->value.ptr = delta_cast_new_string(d->varg[1], &DELTA_DEST->size);
+}
+
+
+/**
+ * @brief Cast to ARRAY.
+ */
+DELTA_INS(ZAR)
+{
+	// TODO: incomplete
+	DELTA_DEST->type = DELTA_TYPE_NULL;
+}
+
+
+/**
+ * @brief Cast to RESOURCE.
+ */
+DELTA_INS(ZRS)
+{
+	// TODO: incomplete
+	DELTA_DEST->type = DELTA_TYPE_NULL;
+}
+
+
+/**
+ * @brief Cast to OBJECT.
+ */
+DELTA_INS(ZOB)
+{
+	// TODO: incomplete
+	DELTA_DEST->type = DELTA_TYPE_NULL;
+}

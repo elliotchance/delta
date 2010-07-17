@@ -29,7 +29,7 @@ int main()
 	delta_compile_file(c, "test.delta");
 	
 	// optimise bytecode
-	delta_optimise_bytecode(c, 0, c->total_ins);
+	//delta_optimise_bytecode(c, 0, c->total_ins);
 	
 	// save bytecode
 	delta_save_file(c, "test.dc");
