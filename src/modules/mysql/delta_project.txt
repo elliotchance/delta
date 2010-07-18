@@ -1,0 +1,4 @@
+begin delta_mysql
+  name=libdelta_mysql.dylib
+  type=module
+end
