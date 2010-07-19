@@ -32,6 +32,5 @@ DELTA_FUNCTION(mysql_fetch_assoc)
 	for(i = 0; i < columns; ++i)
 		delta_array_push_k_string(&r, fields[i].name, row[i]);
 	
-	DELTA_DEST->type = DELTA_TYPE_ARRAY;
-	DELTA_DEST->value.array = r;
+	DELTA_RETURN_ARRAY(r);
 }

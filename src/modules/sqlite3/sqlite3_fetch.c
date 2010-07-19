@@ -29,6 +29,5 @@ DELTA_FUNCTION(sqlite3_fetch)
 		delta_array_push_k_string(&r, (char*) sqlite3_column_name(stmt, i),
 								  (char*) sqlite3_column_text(stmt, i));
 	
-	DELTA_DEST->type = DELTA_TYPE_ARRAY;
-	DELTA_DEST->value.array = r;
+	DELTA_RETURN_ARRAY(r);
 }

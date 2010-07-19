@@ -141,6 +141,14 @@
 }
 
 
+#define DELTA_RETURN_ARRAY(__array) \
+{ \
+	DELTA_DEST->type = DELTA_TYPE_ARRAY; \
+	DELTA_DEST->value.array = __array; \
+	return; \
+}
+
+
 /**
  * @brief Returns the number of arguments sent to the function.
  */
