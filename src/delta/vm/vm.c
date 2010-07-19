@@ -118,7 +118,7 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 		ram[c->constants[i].ram_location]->value.number = c->constants[i].value.number;
 		ram[c->constants[i].ram_location]->value.ptr = c->constants[i].value.ptr;
 		ram[c->constants[i].ram_location]->size = c->constants[i].size;
-		// TODO: finish the rest of the attributes
+		// TODO: issue #15: finish the rest of the attributes
 	}
 	
 	return DELTA_SUCCESS;
@@ -167,7 +167,7 @@ void delta_release_variable(struct DeltaVariable *v)
 	free(v->name);
 	free(v->value.ptr);
 	free(v->value.resource.ptr);
-	// TODO: free array elements
+	// TODO: issue #16: free array elements
 	
 	// free self
 	free(v);

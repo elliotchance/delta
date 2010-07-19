@@ -48,12 +48,41 @@ char* delta_copy_substring(char* str, int at, int length)
 }
 
 
+/* Copyright (C) 1994 DJ Delorie, see COPYING.DJ for details */
+int stricmp(const char *s1, const char *s2)
+{
+	while(toupper(*s1) == toupper(*s2)) {
+		if(*s1 == 0)
+			return 0;
+		s1++;
+		s2++;
+	}
+	
+	return toupper(*(unsigned const char*) s1) - toupper(*(unsigned const char*) (s2));
+}
+
+
 char* delta_extract_argument_key(char *arg)
 {
 	// look for the operator
 	int i, len = strlen(arg), found = -1;
+	int b1 = 0; // ()
+	int b2 = 0; // []
+	int b3 = 0; // {}
 	for(i = 0; i < len - 1; ++i) {
-		if(arg[i] == '=' && arg[i + 1] == '>') {
+		if(arg[i] == '(')
+			++b1;
+		else if(arg[i] == ')')
+			--b1;
+		else if(arg[i] == '[')
+			++b2;
+		else if(arg[i] == ']')
+			--b2;
+		else if(arg[i] == '{')
+			++b3;
+		else if(arg[i] == '}')
+			--b3;
+		else if(arg[i] == '=' && arg[i + 1] == '>' && !b1 && !b2 && !b3) {
 			found = i;
 			break;
 		}
@@ -101,7 +130,6 @@ int delta_strrchr(char *haystack, char needle)
 
 /**
  * @brief Escaping a string will convert escape sequences into their respective characters.
- * TODO: this does not yet support hexadecimal representation.
  */
 void delta_escape_string(char *in, int length)
 {

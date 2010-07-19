@@ -68,8 +68,10 @@ int delta_load_module(char *path)
 
 void delta_load_modules()
 {
+	// TODO: issue #14: delta.ini loading
 	delta_load_module("libdelta_core.dylib");
 	delta_load_module("libdelta_mapm.dylib");
+	delta_load_module("libdelta_mysql.dylib");
 	delta_load_module("libdelta_sqlite3.dylib");
 	delta_load_module("libdelta_zlib.dylib");
 }

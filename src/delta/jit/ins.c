@@ -335,7 +335,6 @@ DELTA_INS(RTN)
  */
 DELTA_INS(SET)
 {
-	// TODO: assigning any type except object requires a complete recursive copy of the variable.
 	DELTA_DEST->type = d->varg[1]->type;
 	DELTA_DEST->size = d->varg[1]->size;
 	DELTA_DEST->value.number = d->varg[1]->value.number;

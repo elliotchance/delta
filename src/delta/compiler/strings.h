@@ -15,6 +15,7 @@ char* delta_extract_argument_key(char *arg);
 int   delta_strpos(char *haystack, char *needle);
 int   delta_strrchr(char *haystack, char needle);
 void  delta_escape_string(char *in, int length);
+int   stricmp(const char *s1, const char *s2);
 
 
 #endif

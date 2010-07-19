@@ -165,14 +165,14 @@
 
 
 // Argument name addresses, these are used like char*
-#define DELTA_ARG0_NAME d->varg[1]
-#define DELTA_ARG1_NAME d->varg[3]
-#define DELTA_ARG2_NAME d->varg[5]
-#define DELTA_ARG3_NAME d->varg[7]
-#define DELTA_ARG4_NAME d->varg[9]
-#define DELTA_ARG5_NAME d->varg[11]
-#define DELTA_ARG6_NAME d->varg[13]
-#define DELTA_ARG7_NAME d->varg[15]
+#define DELTA_ARG0_NAME (d->varg[1]->value.ptr)
+#define DELTA_ARG1_NAME (d->varg[3]->value.ptr)
+#define DELTA_ARG2_NAME (d->varg[5]->value.ptr)
+#define DELTA_ARG3_NAME (d->varg[7]->value.ptr)
+#define DELTA_ARG4_NAME (d->varg[9]->value.ptr)
+#define DELTA_ARG5_NAME (d->varg[11]->value.ptr)
+#define DELTA_ARG6_NAME (d->varg[13]->value.ptr)
+#define DELTA_ARG7_NAME (d->varg[15]->value.ptr)
 
 
 /**
@@ -184,7 +184,7 @@
 /**
  * @brief Get argument name by argument ID.
  */
-#define DELTA_ARG_NAME(i) d->varg[(i * 2) + 1]
+#define DELTA_ARG_NAME(i) (d->varg[(i * 2) + 1]->value.ptr)
 
 
 #define DELTA_SUCCESS 1

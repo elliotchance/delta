@@ -76,7 +76,7 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 				int linked = -1;
 				for(j = 0; j < total_delta_functions; ++j) {
 					if(!strcmp(delta_functions[j]->name, instructions[i].func)) {
-						// TODO: check argument count is with acceptable range
+						// TODO: issue #13: check argument count is with acceptable range
 						linked = j;
 						break;
 					}

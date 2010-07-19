@@ -43,6 +43,8 @@ void delta_die(const char* msg)
 
 int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 {
+	//printf("line = '%s'\n", line);
+	
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
 	int i, j, k, total_tokens = 0;
 	
@@ -76,7 +78,8 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			++c->total_constants;
 		}
 		else if(delta_is_string(token)) {
-			sprintf(token, "#%d", delta_push_constant(c, delta_copy_substring(token, 1, strlen(token) - 1)));
+			sprintf(token, "#%d", delta_push_constant(c, delta_copy_substring(token, 1,
+																			  strlen(token) - 1)));
 		}
 		else if(!delta_is_keyword(token) && !delta_is_declared(c, token)) {
 			c->vars[c->total_vars].type = DELTA_TYPE_NUMBER;
@@ -146,7 +149,8 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			if(delta_strpos(tokens[highest_op_pos - 1], "[") > 0) {
 				var_dest = delta_get_variable_id(c, "a");
 				if(var_dest < 0) {
-					fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
+					fprintf(stderr, "Cannot resolve or write to '%s'\n",\
+							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
 				
@@ -157,11 +161,13 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 #if DELTA_SHOW_BYTECODE
 				printf("BYTECODE_AS1 ( %d %d %d )\n", var_dest, var_dimention, var_id1);
 #endif
-				DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest, var_dimention, var_id1));
+				DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
+															var_dimention, var_id1));
 			} else {
 				var_dest = delta_get_variable_id(c, tokens[highest_op_pos - 1]);
 				if(var_dest < 0) {
-					fprintf(stderr, "Cannot resolve or write to '%s'\n", tokens[highest_op_pos - 1]);
+					fprintf(stderr, "Cannot resolve or write to '%s'\n",
+							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
 				
@@ -332,17 +338,29 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 		
 		// create the argument key
 		char *key = delta_extract_argument_key(parts[i]);
-		int key_addr;
+		int key_addr, blank_key = 0;
 		if(key == NULL) {
+			blank_key = 1;
 			key = (char*) malloc(8);
 			sprintf(key, "%d", i);
 			key_addr = delta_push_constant(c, key);
 		}
 		else
 			key_addr = delta_compile_line_part(c, key, strlen(key));
-
+		
 		arg_ptr[arg_depth - 1][(i * 2) + 1] = key_addr;
-		arg_ptr[arg_depth - 1][(i * 2) + 2] = delta_compile_line_part(c, parts[i], strlen(parts[i]));
+		
+		if(blank_key) {
+			// evaluate whole code.
+			arg_ptr[arg_depth - 1][(i * 2) + 2] =
+				delta_compile_line_part(c, parts[i], strlen(parts[i]));
+		} else {
+			// only evaluate the code after the '=>' operator.
+			arg_ptr[arg_depth - 1][(i * 2) + 2] =
+				delta_compile_line_part(c, parts[i] + strlen(key) + 2,
+										strlen(parts[i]) - strlen(key) - 2);
+		}
+		
 		--arg_depth;
 	}
 	arg_ptr[arg_depth][0] = var_temp++;
