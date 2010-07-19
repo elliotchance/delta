@@ -12,6 +12,7 @@
 #include "delta/vm/cast.h"
 #include "delta/vm/vm.h"
 #include "delta/vm/array.h"
+#include "delta/vm/new.h"
 #include "delta/compiler/strings.h"
 
 

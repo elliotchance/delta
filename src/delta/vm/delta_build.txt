@@ -2,3 +2,5 @@ delta *.c
 delta_core vm.c
 delta_core cast.c
 delta_core modules.c
+delta_core array.c
+delta_core new.c

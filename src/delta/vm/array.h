@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "macros.h"
+#include "delta/macros.h"
 
 
 void delta_array_push(struct DeltaArray *array, struct DeltaArrayValue *element);

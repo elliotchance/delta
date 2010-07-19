@@ -3,7 +3,6 @@
  */
 
 #include "new.h"
-#include "macros.h"
 
 
 struct DeltaArray delta_new_array()

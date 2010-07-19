@@ -1,8 +1,8 @@
 <?php
 
 $root = "src";
-$bin = "sandbox/bin";
-$lib = "sandbox/lib";
+$bin = "sandbox.mac/bin";
+$lib = "sandbox.mac/lib";
 $files = array();
 $projects = array();
 $total_cloc = 0;
