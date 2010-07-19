@@ -13,7 +13,7 @@
  */
 DELTA_FUNCTION(array_push)
 {
-	// first make sure source1 is an array
+	// TODO: delta_cast_array(): first make sure source1 is an array
 	if(DELTA_ARG0->type != DELTA_TYPE_ARRAY) {
 		DELTA_ARG0->type = DELTA_TYPE_ARRAY;
 		DELTA_ARG0->value.array.elements = 0;
@@ -21,17 +21,8 @@ DELTA_FUNCTION(array_push)
 		DELTA_ARG0->value.array.tail = NULL;
 	}
 	
-	// create the new element to push
-	struct DeltaArrayValue *dav = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
-	dav->key = (char*) malloc(6);
-	strcpy(dav->key, "hello");
-	//dav->value = (char*) malloc(6);
-	//strcpy(dav->value, "world");
+	char *key = delta_cast_new_string(DELTA_ARG1, NULL);
+	delta_array_push_kv(&DELTA_ARG0->value.array, key, DELTA_ARG2);
 	
-	// push element
-	DELTA_ARG0->value.array.head = dav;
-	DELTA_ARG0->value.array.tail = dav;
-	
-	// increment the elements
-	++DELTA_ARG0->value.array.elements;
+	DELTA_RETURN_ARRAY(DELTA_ARG0->value.array);
 }

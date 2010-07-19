@@ -11,6 +11,7 @@
 #include "delta/macros.h"
 #include "delta/vm/cast.h"
 #include "delta/vm/vm.h"
+#include "delta/vm/array.h"
 #include "delta/compiler/strings.h"
 
 
