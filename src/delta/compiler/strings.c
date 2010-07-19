@@ -161,6 +161,12 @@ void delta_escape_string(char *in, int length)
 				in[write] = '\r';
 			else if(in[write + 1] == 't')
 				in[write] = '\t';
+			else if(in[write + 1] == 'x') {
+				char x[3], *end;
+				strncpy(x, in + write + 2, 2);
+				in[write] = (char) strtol(x, &end, 16);
+				i += 2;
+			}
 			else
 				in[write] = in[write + 1];
 			++i;
