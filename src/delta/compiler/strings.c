@@ -24,7 +24,7 @@ int delta_is_string(char* test)
 {
 	if(test == NULL)
 		return DELTA_NO;
-	if(test[0] == '"')
+	if(test[0] == '"' || test[0] == '\'')
 		return DELTA_YES;
 	return DELTA_NO;
 }
@@ -163,8 +163,9 @@ void delta_escape_string(char *in, int length)
 				in[write] = '\t';
 			else
 				in[write] = in[write + 1];
-			--write;
+			++i;
 		}
+		else in[write] = in[i];
 	}
 	
 	// chop off the useless bits

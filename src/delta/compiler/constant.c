@@ -10,7 +10,7 @@
 #include <string.h>
 
 
-int delta_push_constant(struct DeltaCompiler *c, char *token)
+int delta_push_constant(struct DeltaCompiler *c, char *token, int escape)
 {
 	if(delta_is_number(token))
 		return delta_push_number_constant(c, atof(token));
@@ -20,8 +20,9 @@ int delta_push_constant(struct DeltaCompiler *c, char *token)
 	c->constants[c->total_constants].value.ptr = token;
 	c->constants[c->total_constants].ram_location = var_temp;
 	c->constants[c->total_constants].size = strlen(token);
-	delta_escape_string(c->constants[c->total_constants].value.ptr,
-						c->constants[c->total_constants].size);
+	if(escape)
+		delta_escape_string(c->constants[c->total_constants].value.ptr,
+							c->constants[c->total_constants].size);
 	++c->total_constants;
 	return var_temp;
 }

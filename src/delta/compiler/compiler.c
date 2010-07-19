@@ -78,8 +78,10 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			++c->total_constants;
 		}
 		else if(delta_is_string(token)) {
+			int escape = (token[0] == '"');
 			sprintf(token, "#%d", delta_push_constant(c, delta_copy_substring(token, 1,
-																			  strlen(token) - 1)));
+																			  strlen(token) - 1),
+													  escape));
 		}
 		else if(!delta_is_keyword(token) && !delta_is_declared(c, token)) {
 			c->vars[c->total_vars].type = DELTA_TYPE_NUMBER;
@@ -343,7 +345,7 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 			blank_key = 1;
 			key = (char*) malloc(8);
 			sprintf(key, "%d", i);
-			key_addr = delta_push_constant(c, key);
+			key_addr = delta_push_constant(c, key, 0);
 		}
 		else
 			key_addr = delta_compile_line_part(c, key, strlen(key));

@@ -227,6 +227,22 @@ char* delta_read_token(struct DeltaCompiler *c, char* line, int* offset)
 		return r;
 	}
 	
+	// look for a string literal constant
+	if(line[*offset] == '\'') {
+		++*offset;
+		
+		// count the length of the string constant
+		for(; *offset < len; ++*offset) {
+			if(line[*offset] == '\'')
+				break;
+		}
+		++*offset;
+		
+		char* r = (char*) malloc(*offset - orig + 1);
+		strncpy(r, line + orig, *offset - orig);
+		return r;
+	}
+	
 	for(; *offset < len; ++*offset) {
 		if(!isalnum(line[*offset]) && line[*offset] != '_')
 			break;
