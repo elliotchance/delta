@@ -2,3 +2,4 @@ build/*
 doc.php
 sandbox/*
 *.xcodeproj
+cloc.pl
