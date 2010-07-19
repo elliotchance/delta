@@ -73,10 +73,11 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 			
 			// link the function by its name
 			if(instructions[i].func != NULL) {
-				int linked = -1;
+				int linked = -1, fargs = (instructions[i].args - 1) / 2;
 				for(j = 0; j < total_delta_functions; ++j) {
-					if(!strcmp(delta_functions[j]->name, instructions[i].func)) {
-						// TODO: issue #13: check argument count is with acceptable range
+					if(!strcmp(delta_functions[j]->name, instructions[i].func) &&
+					   fargs >= delta_functions[j]->min_args &&
+					   fargs <= delta_functions[j]->max_args) {
 						linked = j;
 						break;
 					}
