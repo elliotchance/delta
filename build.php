@@ -5,6 +5,8 @@ $bin = "sandbox/bin";
 $lib = "sandbox/lib";
 $files = array();
 $projects = array();
+$total_cloc = 0;
+$total_files = 0;
 
 function buildCheckPattern($path, $rules) {
 	$m = array();
@@ -89,12 +91,20 @@ function buildRecurseDirectory($d) {
 	}
 }
 
+function buildCountLines($file) {
+	$f = fopen($file, "r");
+	$c = 0;
+	while(false !== ($char = fgetc($f))) {
+	    if($char == "\n")
+			++$c;
+	}
+	fclose($f);
+	return $c;
+}
+
 echo "Building file list...\n";
 buildRecurseDirectory($root);
 echo "Done (", count($files), " build projects found)\n\n";
-
-//print_r($files);
-//die(0);
 
 echo "Preparing projects... ";
 
@@ -114,6 +124,8 @@ foreach($projects as $k => $v) {
 		system("gcc -c -w \"$f\" -o \"$f.o\" -Isrc");
 		$clean[] = "$f.o";
 		echo "Done\n";
+		++$total_files;
+		$total_cloc += buildCountLines($f);
 	}
 	echo "Done\n";
 	
@@ -142,5 +154,9 @@ foreach($projects as $k => $v) {
 		unlink($c);
 	echo "Done\n\n";
 }
+
+echo "===== SUCCESS =====\n";
+echo number_format($total_files), " total files compiled\n";
+echo number_format($total_cloc), " total lines compiled\n";
 
 ?>
