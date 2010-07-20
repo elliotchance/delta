@@ -7,6 +7,7 @@
 #include "delta/macros.h"
 #include "delta/vm/cast.h"
 #include "delta/vm/array.h"
+#include "delta/vm/new.h"
 #include <math.h>
 #include <string.h>
 
@@ -336,12 +337,7 @@ DELTA_INS(RTN)
  */
 DELTA_INS(SET)
 {
-	DELTA_DEST->type = d->varg[1]->type;
-	DELTA_DEST->size = d->varg[1]->size;
-	DELTA_DEST->value.number = d->varg[1]->value.number;
-	DELTA_DEST->value.ptr = d->varg[1]->value.ptr;
-	DELTA_DEST->value.array = d->varg[1]->value.array;
-	DELTA_DEST->value.resource = d->varg[1]->value.resource;
+	DELTA_COPY_VARIABLE(DELTA_DEST, d->varg[1]);
 }
 
 

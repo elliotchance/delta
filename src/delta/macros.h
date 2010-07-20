@@ -308,4 +308,15 @@
 	return f
 
 
+#define DELTA_COPY_VARIABLE(__dest, __src) \
+{ \
+	__dest->type = __src->type; \
+	__dest->size = __src->size; \
+	__dest->value.number = __src->value.number; \
+	__dest->value.ptr = __src->value.ptr; \
+	__dest->value.array = __src->value.array; \
+	__dest->value.resource = __src->value.resource; \
+}
+
+
 #endif

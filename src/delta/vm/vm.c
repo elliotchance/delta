@@ -114,13 +114,8 @@ int delta_vm_prepare(struct DeltaCompiler *c)
 {
 	// load constants
 	int i;
-	for(i = 0; i < c->total_constants; ++i) {
-		ram[c->constants[i].ram_location]->type = c->constants[i].type;
-		ram[c->constants[i].ram_location]->value.number = c->constants[i].value.number;
-		ram[c->constants[i].ram_location]->value.ptr = c->constants[i].value.ptr;
-		ram[c->constants[i].ram_location]->size = c->constants[i].size;
-		// TODO: issue #15: finish the rest of the attributes
-	}
+	for(i = 0; i < c->total_constants; ++i)
+		DELTA_COPY_VARIABLE(ram[c->constants[i].ram_location], (&c->constants[i]));
 	
 	return DELTA_SUCCESS;
 }
