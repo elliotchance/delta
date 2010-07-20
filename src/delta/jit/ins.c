@@ -6,6 +6,7 @@
 #include "delta/vm/vm.h"
 #include "delta/macros.h"
 #include "delta/vm/cast.h"
+#include "delta/vm/array.h"
 #include <math.h>
 #include <string.h>
 
@@ -474,7 +475,10 @@ DELTA_INS(ZST)
  */
 DELTA_INS(ZAR)
 {
-	DELTA_DEST->type = DELTA_TYPE_NULL;
+	DELTA_DEST->type = DELTA_TYPE_ARRAY;
+	DELTA_DEST->value.array.elements = 1;
+	DELTA_DEST->value.array.head = DELTA_DEST->value.array.tail =
+		delta_new_array_element("0", d->varg[1]);
 }
 
 
@@ -483,7 +487,11 @@ DELTA_INS(ZAR)
  */
 DELTA_INS(ZRS)
 {
-	DELTA_DEST->type = DELTA_TYPE_NULL;
+	DELTA_DEST->type = DELTA_TYPE_RESOURCE;
+	DELTA_DEST->value.resource.ptr = NULL;
+	DELTA_DEST->value.resource.id = 0;
+	// noty sure what else to put here or how one would ever cast a variable to aa resource, but
+	// this is here for bytecode completeness.
 }
 
 
@@ -492,5 +500,7 @@ DELTA_INS(ZRS)
  */
 DELTA_INS(ZOB)
 {
-	DELTA_DEST->type = DELTA_TYPE_NULL;
+	DELTA_DEST->type = DELTA_TYPE_OBJECT;
+	// noty sure what else to put here or how one would ever cast a variable to an object, but this
+	// is here for bytecode completeness.
 }
