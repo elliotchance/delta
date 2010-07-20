@@ -31,6 +31,7 @@
 // SUCH DAMAGE.
 // 
 
+
 static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
 {
   char *p;
@@ -76,6 +77,7 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
   } while (firstdig < p);
 }
 
+
 char *itoa(int val, char *buf, int radix)
 {
   if (radix == 10 && val < 0)
@@ -86,11 +88,13 @@ char *itoa(int val, char *buf, int radix)
   return buf;
 }
 
+
 char *ltoa(long val, char *buf, int radix)
 {
   xtoa((unsigned long) val, buf, radix, (radix == 10 && val < 0));
   return buf;
 }
+
 
 char *ultoa(unsigned long val, char *buf, int radix)
 {

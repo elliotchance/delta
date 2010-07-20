@@ -95,7 +95,8 @@ int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 #if DELTA_SHOW_BYTECODE
 		printf("BYTECODE_AG1 ( %d %d %d )\n", var_dest, location, var_dimention);
 #endif
-		DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location, var_dimention));
+		DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
+													var_dimention));
 		return var_dest;
 	}
 	

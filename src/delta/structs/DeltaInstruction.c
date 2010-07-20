@@ -29,7 +29,8 @@ struct DeltaInstruction new_DeltaInstruction1(char *name, DeltaByteCode bc, int 
 }
 
 
-struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination, int source1)
+struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int destination,
+											  int source1)
 {
 	struct DeltaInstruction d;
 	d.func = name;
@@ -43,7 +44,8 @@ struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int 
 }
 
 
-struct DeltaInstruction new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination, int source1, int source2)
+struct DeltaInstruction new_DeltaInstruction3(char *name, DeltaByteCode bc, int destination,
+											  int source1, int source2)
 {
 	struct DeltaInstruction d;
 	d.func = name;

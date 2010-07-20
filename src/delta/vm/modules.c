@@ -56,7 +56,8 @@ int delta_load_module(char *path)
 	for(i = 0; i < count; ++i) {
 		delta_module_function f = delta_get_module_function(module, functions[i].name);
 		if(f != NULL)
-			delta_vm_push_function(new_DeltaFunction(functions[i].name, f, functions[i].min_args, functions[i].max_args));
+			delta_vm_push_function(new_DeltaFunction(functions[i].name, f, functions[i].min_args,
+													 functions[i].max_args));
 	}
 	
 	

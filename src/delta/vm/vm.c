@@ -96,7 +96,8 @@ int delta_vm_init(struct DeltaCompiler *c)
 	// prepare built-in functions
 	alloc_delta_functions = 200;
 	total_delta_functions = 0;
-	delta_functions = (struct DeltaFunction**) calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
+	delta_functions = (struct DeltaFunction**)
+		calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
 	
 	delta_load_modules();
 	

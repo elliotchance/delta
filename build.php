@@ -7,6 +7,7 @@ $files = array();
 $projects = array();
 $total_cloc = 0;
 $total_files = 0;
+$total_projects = 0;
 
 function buildCheckPattern($path, $rules) {
 	$m = array();
@@ -115,13 +116,25 @@ foreach($files as $k => $v) {
 }
 echo "Done\n\n";
 
+// you can specify which projects you want to be compilied from the command line, but if this hansn't been given
+// then we compile all projects
+if($argc < 2)
+	$compile_projects = array_keys($projects);
+else
+	$compile_projects = $argv;
+
 foreach($projects as $k => $v) {
 	$clean = array();
+	
+	// skip if were not compiling this project
+	if(!in_array($k, $compile_projects))
+		continue;
+	++$total_projects;
 
 	echo "Compiling $k...\n";
 	foreach($files[$k] as $f) {
 		echo "  $f... ";
-		system("gcc -c -w \"$f\" -o \"$f.o\" -Isrc");
+		system("gcc -c -m32 -w \"$f\" -o \"$f.o\" -Isrc");
 		$clean[] = "$f.o";
 		echo "Done\n";
 		++$total_files;
@@ -134,9 +147,16 @@ foreach($projects as $k => $v) {
 	if($v['type'] == "module")
 		$sys .= " -dynamiclib";
 		
+	// must be 32bit
+	$sys .= " -m32";
+	
 	// might need to link against delta_core
 	if($v['type'] == "module" && $v['name'] != "libdelta_core.dylib")
 		$sys .= " \"$lib/libdelta_core.dylib\"";
+		
+	// other libraries
+	if(isset($v['lib']))
+		$sys .= " \"$lib/$v[lib]\"";
 		
 	$sys .= " -o ";
 	if($v['type'] == "executable")
@@ -156,7 +176,8 @@ foreach($projects as $k => $v) {
 }
 
 echo "===== SUCCESS =====\n";
+echo number_format($total_projects), " total projects compiled\n";
 echo number_format($total_files), " total files compiled\n";
-echo number_format($total_cloc), " total lines compiled\n";
+echo number_format($total_cloc), " total lines compiled\n\n";
 
 ?>

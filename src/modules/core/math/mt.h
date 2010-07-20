@@ -1,3 +1,7 @@
+/*
+ *  Delta programming language
+ */
+
 #define MT_LEN          624
 #define MT_IA           397
 #define MT_IB           (MT_LEN - MT_IA)

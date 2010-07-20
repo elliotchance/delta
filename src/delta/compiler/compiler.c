@@ -73,7 +73,6 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			c->constants[c->total_constants].value.number = atof(token);
 			c->constants[c->total_constants].ram_location = var_temp;
 			delta_vm_print_variable(&c->constants[c->total_constants]);
-			printf("\n");
 			sprintf(token, "#%d", var_temp);
 			++c->total_constants;
 		}
