@@ -375,6 +375,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	// prepare
 	char* line = (char*) malloc(1024);
 	int i, line_pos = 0, ii = 0;
+	char **split_semi; // this is used for 'for' statements
 	
 	// compile identifier
 	delta_skip_spaces(identifier, &ii);
@@ -387,6 +388,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	char *short_identifier = (char*) malloc(identifier_len + 1);
 	strncpy(short_identifier, identifier + ii, identifier_len);
 	
+	printf("identifier = '%s'\n", short_identifier);
 	if(identifier_len == 0) {
 		// do nothing
 	}
@@ -447,12 +449,53 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 #endif
 		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
 	}
+	else if(!strcmp(short_identifier, "for")) {
+		// for statements work basically the same way as while statements
+		
+		// get the expression
+		int expr_at = delta_strpos(identifier, "(") + 1;
+		int expr_end = delta_strrchr(identifier, ')');
+		char *expr = (char*) malloc(expr_end - expr_at + 1);
+		strncpy(expr, identifier + expr_at, expr_end - expr_at);
+		
+		// split up the expression on the ';'
+		split_semi = delta_split_semicolons(expr);
+		
+		// compile the 'before', we dont need the return register because its a stand alone line
+		// that doesn't have anything to do with the loop iterations
+		delta_compile_line_part(c, split_semi[0], strlen(split_semi[0]));
+		
+		// loop label
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_LBL ( %d )\n", label_id);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
+		
+		// evaluate expression
+		int expr_eval = delta_compile_line_part(c, split_semi[1], strlen(split_semi[1]));
+		
+		// convert the expression to a save BOOLEAN
+		++var_temp;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_ZBO (%d, %d)\n", var_temp, expr_eval);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		
+		// perform if statement
+		++label_id;
+#if DELTA_SHOW_BYTECODE
+		printf("BYTECODE_LOP (%d, %d)\n", label_id, var_temp);
+#endif
+		DeltaFunction_push(c, new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
+	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);
 		exit(0);
 	}
 	
 	// dissect lines
+	int br1 = 0; // ()
+	int br2 = 0; // []
 	for(i = at; i < end; ++i) {
 		// single line comment
 		if(block[i] == '/' && block[i + 1] == '/') {
@@ -460,19 +503,32 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 				if(block[i] == '\n')
 					break;
 			}
+			++i;
+			continue;
 		}
 		
 		// multi line comment
-		else if(block[i] == '/' && block[i + 1] == '*') {
+		if(block[i] == '/' && block[i + 1] == '*') {
 			++i;
 			for(; i < end; ++i) {
 				if(block[i] == '*' && block[i + 1] == '/')
 					break;
 			}
-			++i;
+			i += 2;
+			continue;
 		}
 		
-		else if(block[i] == '{') {
+		// count brackets
+		if(block[i] == '(')
+			++br1;
+		else if(block[i] == ')')
+			--br1;
+		else if(block[i] == '[')
+			++br2;
+		else if(block[i] == ']')
+			--br2;
+		
+		if(block[i] == '{') {
 			char *new_identifier = (char*) malloc(line_pos + 1);
 			strncpy(new_identifier, block + i - line_pos, line_pos);
 			
@@ -498,14 +554,17 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 				if(block[i] == '}' && !b1 && !b2 && !b3)
 					break;
 			}
+			
 			delta_compile_block(c, new_identifier, block, orig, i - 1);
 			line_pos = 0;
 		}
-		else if(block[i] == ';') {
+		
+		else if(block[i] == ';' && !br1 && !br2) {
 			line[line_pos] = 0;
 			delta_compile_line(c, line, line_pos);
 			line_pos = 0;
 		}
+		
 		else
 			line[line_pos++] = block[i];
 	}
@@ -527,6 +586,20 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "while")) {
+		// jump back to the while expression for the next iteration
+		printf("BYTECODE_GTO ( %d )\n", label_id - 1);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
+		
+		// patch the forward jump when the loops ends
+		printf("BYTECODE_PAT ( %d ) <- while\n", label_id);
+		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		--label_id;
+	}
+	else if(!strcmp(short_identifier, "for")) {
+		// the only thing different between the end of a while loop and a for loop is that we add
+		// in the incrementor for for statements
+		delta_compile_line_part(c, split_semi[2], strlen(split_semi[2]));
+		
 		// jump back to the while expression for the next iteration
 		printf("BYTECODE_GTO ( %d )\n", label_id - 1);
 		DeltaFunction_push(c, new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));

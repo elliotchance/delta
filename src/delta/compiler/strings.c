@@ -177,3 +177,27 @@ void delta_escape_string(char *in, int length)
 	// chop off the useless bits
 	in[write] = 0;
 }
+
+
+char** delta_split_semicolons(char *expr)
+{
+	char **r = (char**) calloc(3, sizeof(char*));
+	r[0] = (char*) malloc(128);
+	r[1] = (char*) malloc(128);
+	r[2] = (char*) malloc(128);
+	bzero(r[0], 128);
+	bzero(r[1], 128);
+	bzero(r[2], 128);
+	int i, len = strlen(expr), ri = 0, ci = 0;
+	
+	for(i = 0; i < len; ++i) {
+		if(expr[i] == ';') {
+			++ri;
+			ci = 0;
+		}
+		else
+			r[ri][ci++] = expr[i];
+	}
+	
+	return r;
+}
