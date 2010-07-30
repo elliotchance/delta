@@ -35,7 +35,7 @@ struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 		c->functions[i].alloc_constants = 100;
 		c->functions[i].total_constants = 0;
 		c->functions[i].constants = (struct DeltaVariable*)
-			malloc(c->functions[i].alloc_constants * sizeof(struct DeltaVariable));
+			calloc(c->functions[i].alloc_constants, sizeof(struct DeltaVariable));
 	}
 	
 	return c;

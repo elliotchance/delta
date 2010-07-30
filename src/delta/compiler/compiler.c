@@ -160,7 +160,6 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 		// 2 argument operators
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
-			//printf("'%s' = '%s'\n", tokens[highest_op_pos - 1], tokens[highest_op_pos + 1]);
 			int var_dest;
 			int var_id1 = delta_get_variable_id(c, function_id, tokens[highest_op_pos + 1]);
 			
@@ -642,12 +641,6 @@ int delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifi
 	free(line);
 	return DELTA_SUCCESS;
 }
-
-
-/*int delta_compile_function(struct DeltaCompiler *c, char *name, char *body)
-{
-	
-}*/
 
 
 int delta_compile_file(struct DeltaCompiler *c, const char* input_file)

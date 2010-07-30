@@ -17,7 +17,6 @@ extern int label_id;
 
 
 int  delta_push_label(struct DeltaCompiler *c, char *name);
-void delta_compile_function(struct DeltaFunction *df);
 int  delta_compile_file(struct DeltaCompiler *c, const char* input_file);
 int  delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifier, char *block,
 						 int start, int end);
