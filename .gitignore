@@ -1,5 +1,6 @@
 build/*
-*.xcodeproj
+*.xcodeproj/*.pbxuser
+*.xcodeproj/*.mode1v3
 cloc.pl
 sloc.sh
 doc*
