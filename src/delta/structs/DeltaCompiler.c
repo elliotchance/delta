@@ -3,28 +3,40 @@
  */
 
 #include "DeltaCompiler.h"
+#include "delta/macros.h"
 
 
 struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 {
 	struct DeltaCompiler *c = (struct DeltaCompiler*) malloc(sizeof(struct DeltaCompiler));
 	
-	c->alloc_ins = 100;
-	c->total_ins = 0;
-	c->ins = (struct DeltaInstruction*) malloc(c->alloc_ins * sizeof(struct DeltaInstruction));
+	c->alloc_functions = DELTA_MAX_FUNCTIONS;
+	c->total_functions = 0;
+	c->functions = (struct DeltaCompiledFunction*)
+		calloc(c->alloc_functions, sizeof(struct DeltaCompiledFunction));
 	
-	c->alloc_vars = 100;
-	c->total_vars = 0;
-	c->vars = (struct DeltaVariable*) malloc(c->alloc_vars * sizeof(struct DeltaVariable));
-	
-	c->alloc_labels = 100;
-	c->total_labels = 0;
-	c->labels = (struct DeltaLabel*) malloc(c->alloc_labels * sizeof(struct DeltaLabel));
-	
-	c->alloc_constants = 100;
-	c->total_constants = 0;
-	c->constants = (struct DeltaVariable*)
-		malloc(c->alloc_constants * sizeof(struct DeltaVariable));
+	int i;
+	for(i = 0; i < c->alloc_functions; ++i) {
+		c->functions[i].alloc_ins = 100;
+		c->functions[i].total_ins = 0;
+		c->functions[i].ins = (struct DeltaInstruction*)
+			calloc(c->functions[i].alloc_ins, sizeof(struct DeltaInstruction));
+		
+		c->functions[i].alloc_vars = 100;
+		c->functions[i].total_vars = 0;
+		c->functions[i].vars = (struct DeltaVariable*)
+			calloc(c->functions[i].alloc_vars, sizeof(struct DeltaVariable));
+		
+		c->functions[i].alloc_labels = 100;
+		c->functions[i].total_labels = 0;
+		c->functions[i].labels = (struct DeltaLabel*)
+			calloc(c->functions[i].alloc_labels, sizeof(struct DeltaLabel));
+		
+		c->functions[i].alloc_constants = 100;
+		c->functions[i].total_constants = 0;
+		c->functions[i].constants = (struct DeltaVariable*)
+			malloc(c->functions[i].alloc_constants * sizeof(struct DeltaVariable));
+	}
 	
 	return c;
 }

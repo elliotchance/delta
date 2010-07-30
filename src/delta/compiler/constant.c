@@ -10,31 +10,31 @@
 #include <string.h>
 
 
-int delta_push_constant(struct DeltaCompiler *c, char *token, int escape)
+int delta_push_constant(struct DeltaCompiler *c, int function_id, char *token, int escape)
 {
 	if(delta_is_number(token))
-		return delta_push_number_constant(c, atof(token));
+		return delta_push_number_constant(c, function_id, atof(token));
 	
 	++var_temp;
-	c->constants[c->total_constants].type = DELTA_TYPE_STRING;
-	c->constants[c->total_constants].value.ptr = token;
-	c->constants[c->total_constants].ram_location = var_temp;
-	c->constants[c->total_constants].size = strlen(token);
+	c->functions[function_id].constants[c->functions[function_id].total_constants].type = DELTA_TYPE_STRING;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].value.ptr = token;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].ram_location = var_temp;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].size = strlen(token);
 	if(escape)
-		delta_escape_string(c->constants[c->total_constants].value.ptr,
-							c->constants[c->total_constants].size);
-	++c->total_constants;
+		delta_escape_string(c->functions[function_id].constants[c->functions[function_id].total_constants].value.ptr,
+							c->functions[function_id].constants[c->functions[function_id].total_constants].size);
+	++c->functions[function_id].total_constants;
 	return var_temp;
 }
 
 
-int delta_push_number_constant(struct DeltaCompiler *c, double value)
+int delta_push_number_constant(struct DeltaCompiler *c, int function_id, double value)
 {
 	++var_temp;
-	c->constants[c->total_constants].type = DELTA_TYPE_NUMBER;
-	c->constants[c->total_constants].value.number = value;
-	c->constants[c->total_constants].ram_location = var_temp;
-	++c->total_constants;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].type = DELTA_TYPE_NUMBER;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].value.number = value;
+	c->functions[function_id].constants[c->functions[function_id].total_constants].ram_location = var_temp;
+	++c->functions[function_id].total_constants;
 	return var_temp;
 }
 

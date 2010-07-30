@@ -43,18 +43,18 @@ int delta_is_keyword(char* word)
 }
 
 
-int delta_is_declared(struct DeltaCompiler *c, char* varname)
+int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 {
 	int i;
-	for(i = 0; i < c->total_vars; ++i) {
-		if(!strcmp(c->vars[i].name, varname))
+	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
+		if(!strcmp(c->functions[function_id].vars[i].name, varname))
 			return 1;
 	}
 	return 0;
 }
 
 
-int delta_get_variable_id(struct DeltaCompiler *c, char* name)
+int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 {
 	// safety
 	if(name == NULL)
@@ -79,9 +79,9 @@ int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 	}
 	
 	int i, location = -1;
-	for(i = 0; i < c->total_vars; ++i) {
-		if(!strcmp(name, c->vars[i].name)) {
-			location = c->vars[i].ram_location;
+	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
+		if(!strcmp(name, c->functions[function_id].vars[i].name)) {
+			location = c->functions[function_id].vars[i].ram_location;
 			break;
 		}
 	}
@@ -90,13 +90,13 @@ int delta_get_variable_id(struct DeltaCompiler *c, char* name)
 	// value out into a temp place
 	if(location >= 0 && element != NULL) {
 		int var_dest = var_temp++;
-		int var_dimention = delta_compile_line_part(c, element, strlen(element));
+		int var_dimention = delta_compile_line_part(c, function_id, element, strlen(element));
 		
 #if DELTA_SHOW_BYTECODE
-		printf("BYTECODE_AG1 ( %d %d %d )\n", var_dest, location, var_dimention);
+		printf("{%d} BYTECODE_AG1 ( %d %d %d )\n", function_id, var_dest, location, var_dimention);
 #endif
-		DeltaFunction_push(c, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
-													var_dimention));
+		DeltaFunction_push(c, function_id, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest,
+																 location, var_dimention));
 		return var_dest;
 	}
 	
@@ -142,7 +142,7 @@ int delta_get_operator_order(char* op)
 }
 
 
-char* delta_read_token(struct DeltaCompiler *c, char* line, int* offset)
+char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
 	
@@ -187,20 +187,20 @@ char* delta_read_token(struct DeltaCompiler *c, char* line, int* offset)
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		delta_compile_line(c, r, strlen(r));
+		delta_compile_line(c, function_id, r, strlen(r));
 		
 		// if there was a function, apply it now
 		if(found > 0) {
 			int var_dest = ++var_temp;
 			
-			printf("BYTECODE_CAL %s(", function_name);
+			printf("{%d} BYTECODE_CAL %s(", function_id, function_name);
 			int _k;
 			arg_ptr[arg_depth][0] = var_dest;
 			for(_k = 0; _k < arg_count[arg_depth]; ++_k) {
 				printf(" %d", arg_ptr[arg_depth][_k]);
 			}
 			printf(" )\n");
-			DeltaFunction_push(c, new_DeltaInstructionN(function_name, BYTECODE_CAL));
+			DeltaFunction_push(c, function_id, new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
 			r = (char*) malloc(8);
 			sprintf(r, "#%d", var_dest);

@@ -13,8 +13,8 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file)
 	int i;
 	
 	// write instructions to output file
-	for(i = 0; i < c->total_ins; ++i)
-		fwrite((const void*) &c->ins[i], sizeof(struct DeltaInstruction), 1, f);
+	//for(i = 0; i < c->total_ins; ++i)
+	//	fwrite((const void*) &c->ins[i], sizeof(struct DeltaInstruction), 1, f);
 	
 	// clean up
 	fclose(f);

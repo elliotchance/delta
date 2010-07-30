@@ -102,19 +102,19 @@ struct DeltaInstruction
 typedef void (*stack_function)(struct DeltaInstruction*);
 
 
-struct DeltaFunction
+struct DeltaUncompiledFunction
 {
-	char* name;
-	void (*function_ptr)(struct DeltaInstruction *d);
-	int min_args;
-	int max_args;
+	char *name;
+	char *body;
 };
 
 
-struct DeltaCompiler
+struct DeltaCompiledFunction
 {
+	char *name;
 	int alloc_ins, total_ins;
 	struct DeltaInstruction *ins;
+	stack_function jit_ptr;
 	
 	int alloc_vars, total_vars;
 	struct DeltaVariable* vars;
@@ -124,6 +124,22 @@ struct DeltaCompiler
 	
 	int alloc_constants, total_constants;
 	struct DeltaVariable* constants;
+};
+
+
+struct DeltaFunction
+{
+	char* name;
+	stack_function function_ptr;
+	int min_args;
+	int max_args;
+};
+
+
+struct DeltaCompiler
+{
+	int alloc_functions, total_functions;
+	struct DeltaCompiledFunction *functions;
 };
 
 

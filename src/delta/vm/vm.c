@@ -8,8 +8,7 @@
 #include "modules.h"
 
 
-struct DeltaVariable **ram;
-#define total_ram 100
+//struct DeltaVariable **ram;
 int stack_pos = 0;
 long start;
 struct DeltaFunction **delta_functions;
@@ -55,7 +54,7 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 }
 
 
-void delta_vm_print_ram(struct DeltaCompiler *c)
+/*void delta_vm_print_ram(struct DeltaCompiler *c)
 {
 	int i;
 	for(i = 0; i < total_ram; ++i) {
@@ -65,7 +64,7 @@ void delta_vm_print_ram(struct DeltaCompiler *c)
 			printf("\n");
 		}
 	}
-}
+}*/
 
 
 int delta_vm_push_function(struct DeltaFunction* f)
@@ -101,21 +100,17 @@ int delta_vm_init(struct DeltaCompiler *c)
 	
 	delta_load_modules();
 	
-	// allocate memory
-	ram = (struct DeltaVariable**) malloc(total_ram * sizeof(struct DeltaVariable*));
-	for(i = 0; i < total_ram; ++i)
-		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
-	
 	return DELTA_SUCCESS;
 }
 
 
-int delta_vm_prepare(struct DeltaCompiler *c)
+int delta_vm_prepare(struct DeltaCompiler *c, int function_id, struct DeltaVariable **ram)
 {
 	// load constants
 	int i;
-	for(i = 0; i < c->total_constants; ++i)
-		DELTA_COPY_VARIABLE(ram[c->constants[i].ram_location], (&c->constants[i]));
+	for(i = 0; i < c->functions[function_id].total_constants; ++i)
+		DELTA_COPY_VARIABLE(ram[c->functions[function_id].constants[i].ram_location],
+							(&c->functions[function_id].constants[i]));
 	
 	return DELTA_SUCCESS;
 }

@@ -17,6 +17,7 @@
 #include "delta/jit/jit_compiler.h"
 #include "delta/jit/optimiser.h"
 #include "delta/structs/DeltaCompiler.h"
+#include "delta/macros.h"
 
 
 int main()
@@ -32,13 +33,12 @@ int main()
 	//delta_optimise_bytecode(c, 0, c->total_ins);
 	
 	// save bytecode
-	delta_save_file(c, "test.dc");
+	//delta_save_file(c, "test.dc");
 	
 	// compile bytecode to jit
-	stack_function f = delta_compile_jit(c, 0, c->total_ins);
+	stack_function f = delta_compile_jit(c, DELTA_MAIN_FUNCTION);
 	
 	// execute
-	delta_vm_prepare(c);
 	start = clock();
 	printf("\n\n==> BEGIN, hit enter to proceed\n");
 	//getchar();
@@ -47,5 +47,5 @@ int main()
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	
 	// show ram
-	delta_vm_print_ram(c);
+	//delta_vm_print_ram(c);
 }

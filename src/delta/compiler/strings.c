@@ -201,3 +201,23 @@ char** delta_split_semicolons(char *expr)
 	
 	return r;
 }
+
+
+char* delta_trim(char *line)
+{
+	int left = 0, right = strlen(line) - 1, off = 0;
+	
+	// start
+	for(; left < strlen(line); ++left)
+		if(!isspace(line[left]))
+			break;
+	
+	// end
+	for(; right >= 0; --right, ++off)
+		if(!isspace(line[right]))
+			break;
+	
+	char *r = (char*) malloc(strlen(line) - left - off - left + 1);
+	strncpy(r, line + left, strlen(line) - left - off);
+	return r;
+}

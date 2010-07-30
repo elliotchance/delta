@@ -25,11 +25,12 @@ int delta_is_compare_bytecode(DeltaByteCode bc)
 }
 
 
-int delta_is_temp(struct DeltaCompiler *c, int address)
+int delta_is_temp(struct DeltaCompiler *c, int function_id, int address)
 {
 	int i;
-	for(i = 0; i < c->total_ins; ++i) {
-		if(c->ins[i].args > 0 && c->ins[i].arg[0] == address)
+	for(i = 0; i < c->functions[function_id].total_ins; ++i) {
+		if(c->functions[function_id].ins[i].args > 0 &&
+		   c->functions[function_id].ins[i].arg[0] == address)
 			return DELTA_YES;
 	}
 	return DELTA_NO;
@@ -71,11 +72,11 @@ int delta_translate_safe_bytecode(int bc)
 }
 
 
-void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
+void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, int end)
 {
 	int i, dest = 0, j, k;
 	
-	struct DeltaInstruction* ins = c->ins;
+	struct DeltaInstruction* ins = c->functions[function_id].ins;
 	printf("\nBefore:\n");
 	for(i = at; i < end; ++i) {
 		printf("  id = %d, bc = %d |", i, ins[i].bc);
@@ -93,10 +94,10 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 				// recognise incrementing
 				int found_inc = 0;
 				
-				for(j = 0; j < c->total_constants; ++j) {
-					if(c->constants[j].ram_location == ins[i].arg[2]) {
-						if(c->constants[j].type == DELTA_TYPE_NUMBER &&
-						   c->constants[j].value.number == 1.0)
+				for(j = 0; j < c->functions[function_id].total_constants; ++j) {
+					if(c->functions[function_id].constants[j].ram_location == ins[i].arg[2]) {
+						if(c->functions[function_id].constants[j].type == DELTA_TYPE_NUMBER &&
+						   c->functions[function_id].constants[j].value.number == 1.0)
 							found_inc = 1;
 						break;
 					}
@@ -113,14 +114,14 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 	
 	// Phase 2: Try to determine safe types for variables
 	printf("\nPhase 2:\n");
-	for(j = 0; j < c->total_vars; ++j) {
+	for(j = 0; j < c->functions[function_id].total_vars; ++j) {
 		//printf("Resolving %s... ", c->vars[j].name);
 		int is_numerical = 1;
 		
 		for(i = at; i < end; ++i) {
 			int found = 0;
 			for(k = 0; k < ins[i].args; ++k) {
-				if(ins[i].arg[k] == c->vars[j].ram_location) {
+				if(ins[i].arg[k] == c->functions[function_id].vars[j].ram_location) {
 					found = 1;
 					break;
 				}
@@ -152,9 +153,9 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 		}
 		
 		if(is_numerical)
-			c->vars[j].safe_type = DELTA_TYPE_NUMBER;
+			c->functions[function_id].vars[j].safe_type = DELTA_TYPE_NUMBER;
 		else
-			c->vars[j].safe_type = DELTA_TYPE_UNKNOWN;
+			c->functions[function_id].vars[j].safe_type = DELTA_TYPE_UNKNOWN;
 	}
 	
 	// Phase 3: Use the safe type to resolve numerical only operations
@@ -169,18 +170,18 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 				int found = 0;
 				
 				// from a variable
-				for(k = 0; k < c->total_vars; ++k) {
-					if(c->vars[k].ram_location == ins[i].arg[j] &&
-					   c->vars[k].safe_type == DELTA_TYPE_NUMBER) {
+				for(k = 0; k < c->functions[function_id].total_vars; ++k) {
+					if(c->functions[function_id].vars[k].ram_location == ins[i].arg[j] &&
+					   c->functions[function_id].vars[k].safe_type == DELTA_TYPE_NUMBER) {
 						found = 1;
 						break;
 					}
 				}
 				
 				// from a constant
-				for(k = 0; k < c->total_constants; ++k) {
-					if(c->constants[k].ram_location == ins[i].arg[j] &&
-					   c->constants[k].type == DELTA_TYPE_NUMBER) {
+				for(k = 0; k < c->functions[function_id].total_constants; ++k) {
+					if(c->functions[function_id].constants[k].ram_location == ins[i].arg[j] &&
+					   c->functions[function_id].constants[k].type == DELTA_TYPE_NUMBER) {
 						found = 1;
 						break;
 					}
@@ -189,7 +190,7 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int at, int end)
 				// if its a temp variable then it will return a set type, because we are only
 				// looking at numerical operation we know that the temp value returned will always
 				// be a NUMBER
-				if(!found && !delta_is_temp(c, ins[i].arg[j])) {
+				if(!found && !delta_is_temp(c, function_id, ins[i].arg[j])) {
 					is_safe = 0;
 					printf(" %d", ins[i].arg[j]);
 					break;

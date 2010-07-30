@@ -12,19 +12,19 @@
 
 
 #define DELTA_ADD_BYTECODE(__BYTECODE) \
-	printf("BYTECODE_%s (", #__BYTECODE); \
+	printf("{%d} BYTECODE_%s (", function_id, #__BYTECODE); \
 	int _k; \
 	arg_ptr[arg_depth][0] = var_dest; \
 	for(_k = 0; _k < arg_count[arg_depth]; ++_k) { \
 		printf(" %d", arg_ptr[arg_depth][_k]); \
 	} \
 	printf(" )\n"); \
-	DeltaFunction_push(c, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
+	DeltaFunction_push(c, function_id, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
 
 
 #define DELTA_ADD_OPERATOR_BYTECODE(__BYTECODE) \
-	printf("BYTECODE_%s (%d, %d, %d)\n", #__BYTECODE, var_dest, var_id1, var_id2); \
-	DeltaFunction_push(c, new_DeltaInstruction3( \
+	printf("{%d} BYTECODE_%s (%d, %d, %d)\n", function_id, #__BYTECODE, var_dest, var_id1, var_id2); \
+	DeltaFunction_push(c, function_id, new_DeltaInstruction3( \
 		NULL, BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
 
 
@@ -202,6 +202,9 @@
 #define DELTA_TRUE    1
 #define DELTA_FALSE   0
 
+#define DELTA_MAX_FUNCTIONS 16
+
+
 /**
  * @brief Return a NULL value.
  */
@@ -317,6 +320,9 @@
 	__dest->value.array = __src->value.array; \
 	__dest->value.resource = __src->value.resource; \
 }
+
+
+#define DELTA_MAIN_FUNCTION "main"
 
 
 #endif

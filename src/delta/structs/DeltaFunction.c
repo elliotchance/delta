@@ -20,7 +20,7 @@ struct DeltaFunction* new_DeltaFunction(char *name,
 }
 
 
-void DeltaFunction_push(struct DeltaCompiler* c, struct DeltaInstruction ins)
+void DeltaFunction_push(struct DeltaCompiler* c, int function_id, struct DeltaInstruction ins)
 {
-	c->ins[c->total_ins++] = ins;
+	c->functions[function_id].ins[c->functions[function_id].total_ins++] = ins;
 }

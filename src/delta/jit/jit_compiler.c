@@ -6,25 +6,64 @@
 #include "delta/vm/vm.h"
 #include "delta/compiler/bytecode.h"
 #include "delta/jit/ins.h"
+#include "delta/vm/vm.h"
 #include <string.h>
 
 
-static jit_insn codeBuffer[1024];
-
-
-stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
+stack_function delta_compile_jit(struct DeltaCompiler *c, char *function_name)
 {
-	// pointer to generated code
-	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);
-	int i, loop_id = 0, j;
-	jit_insn **loop = (jit_insn**) calloc(16, sizeof(jit_insn*));
-	struct DeltaInstruction* instructions = c->ins;
+	int i, j, loop_id = 0, end = 0, function_id = 0;
+	struct DeltaInstruction *instructions = NULL;
 	
-	// take an argument we wont use
+	// try to find the function
+	for(i = 0; i < c->total_functions; ++i) {
+		if(!strcmp(function_name, c->functions[i].name)) {
+			// found it, if the function is already JIT compiled then great we saved some time
+			if(c->functions[i].jit_ptr != NULL)
+				return c->functions[i].jit_ptr;
+			
+			instructions = c->functions[i].ins;
+			end = c->functions[i].total_ins;
+			function_id = i;
+			break;
+		}
+	}
+	
+	// because functions cannot be recursivly compiled, JIT_V0 etc would be overriden we first
+	// take a quick look through the instructions and compile any required functions first
+	for(i = 0; i < end; ++i) {
+		if(instructions[i].bc == BYTECODE_CAL) {
+			// check if it is a user function
+			for(j = 0; j < c->total_functions; ++j) {
+				if(!strcmp(c->functions[j].name, instructions[i].func)) {
+					// FIXME: dont compile yourself
+					c->functions[j].jit_ptr = delta_compile_jit(c, instructions[i].func);
+					break;
+				}
+			}
+		}
+	}
+	
+	// prepare for JIT
+	jit_insn **loop = (jit_insn**) calloc(16, sizeof(jit_insn*));
+	jit_insn *codeBuffer = (jit_insn*) calloc(1000, sizeof(jit_insn));
+	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);
+	
+	// create a new RAM
+	struct DeltaVariable **ram = (struct DeltaVariable**)
+		calloc(total_ram, sizeof(struct DeltaVariable*));
+	for(i = 0; i < total_ram; ++i)
+		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
+	
+	// error
+	if(instructions == NULL)
+		return NULL;
+	
+	// I think we must have this
 	jit_leaf(0);
 	
 	// compile instructions
-	for(i = at; i < end; ++i) {
+	for(i = 0; i < end; ++i) {
 		// skip NUL bytecodes
 		if(instructions[i].bc == BYTECODE_NUL)
 			continue;
@@ -62,7 +101,7 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 		} else {
 			// link argument addresses
 			instructions[i].varg = (struct DeltaVariable**)
-				malloc(instructions[i].args * sizeof(struct DeltaVariable*));
+				calloc(instructions[i].args, sizeof(struct DeltaVariable*));
 			for(j = 0; j < instructions[i].args; ++j)
 				instructions[i].varg[j] = ram[instructions[i].arg[j]];
 			
@@ -73,23 +112,34 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 			
 			// link the function by its name
 			if(instructions[i].func != NULL) {
-				int linked = -1, fargs = (instructions[i].args - 1) / 2;
+				stack_function linked = NULL;
+				int fargs = (instructions[i].args - 1) / 2;
 				for(j = 0; j < total_delta_functions; ++j) {
 					if(!strcmp(delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= delta_functions[j]->min_args &&
 					   fargs <= delta_functions[j]->max_args) {
-						linked = j;
+						linked = delta_functions[j]->function_ptr;
 						break;
 					}
 				}
 				
-				if(linked < 0) {
+				// if the function could not be found, then maybe its a user function
+				if(linked == NULL) {
+					for(j = 0; j < c->total_functions; ++j) {
+						if(!strcmp(c->functions[j].name, instructions[i].func)) {
+							linked = c->functions[j].jit_ptr;
+							break;
+						}
+					}
+				}
+				
+				if(linked == NULL) {
 					printf("Delta VM Runtime Error: Cannot link function '%s' (bytecode = 0x%x)\n",
 						   instructions[i].func, instructions[i].bc);
 					exit(1);
 				}
 				
-				jit_finish(delta_functions[linked]->function_ptr);
+				jit_finish(linked);
 			}
 			else {
 				// mostly operator instructions
@@ -145,5 +195,10 @@ stack_function delta_compile_jit(struct DeltaCompiler *c, int at, int end)
 	
 	// all done
 	jit_flush_code(codeBuffer, jit_get_ip().ptr);
+	c->functions[i].jit_ptr = f;
+	
+	// prepare all the constant data
+	delta_vm_prepare(c, function_id, ram);
+	
 	return f;
 }

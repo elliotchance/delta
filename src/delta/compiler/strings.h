@@ -17,6 +17,7 @@ int    delta_strrchr(char *haystack, char needle);
 void   delta_escape_string(char *in, int length);
 int    stricmp(const char *s1, const char *s2);
 char** delta_split_semicolons(char *expr);
+char*  delta_trim(char *str);
 
 
 #endif
