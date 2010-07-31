@@ -39,12 +39,12 @@ int delta_push_number_constant(struct DeltaCompiler *c, int function_id, double 
 }
 
 
-char* delta_replace_constant(char *token)
+char* delta_replace_constant(struct DeltaCompiler *c, char *token)
 {
 	int i;
-	for(i = 0; i < total_delta_defines; ++i) {
-		if(!strcmp(token, delta_defines[i].name))
-			return delta_copy_string(delta_defines[i].value);
+	for(i = 0; i < c->total_delta_defines; ++i) {
+		if(!strcmp(token, c->delta_defines[i].name))
+			return delta_copy_string(c->delta_defines[i].value);
 	}
 	
 	return token;

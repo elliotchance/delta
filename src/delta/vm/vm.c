@@ -5,19 +5,12 @@
 #include "delta/vm/vm.h"
 #include "delta/compiler/bytecode.h"
 #include "delta/jit/ins.h"
+#include "delta/jit/jit_compiler.h"
 #include "delta/structs/DeltaVM.h"
 #include "modules.h"
 
 
-//struct DeltaVariable **ram;
-int stack_pos = 0;
-long start;
-struct DeltaFunction **delta_functions;
-int alloc_delta_functions;
-int total_delta_functions;
-struct DeltaDefine *delta_defines;
-int alloc_delta_defines;
-int total_delta_defines;
+struct DeltaVM *active_vm = NULL;
 
 
 void delta_vm_print_variable(struct DeltaVariable *v)
@@ -73,18 +66,18 @@ void delta_vm_print_ram(struct DeltaVM *vm)
 }
 
 
-int delta_vm_push_function(struct DeltaFunction* f)
+int delta_vm_push_function(struct DeltaVM *vm, struct DeltaFunction* f)
 {
-	delta_functions[total_delta_functions++] = f;
+	vm->delta_functions[vm->total_delta_functions++] = f;
 	return DELTA_SUCCESS;
 }
 
 
-int delta_vm_push_define(char *name, char *value)
+int delta_vm_push_define(struct DeltaCompiler *c, char *name, char *value)
 {
-	delta_defines[total_delta_defines].name = name;
-	delta_defines[total_delta_defines].value = value;
-	++total_delta_defines;
+	c->delta_defines[c->total_delta_defines].name = name;
+	c->delta_defines[c->total_delta_defines].value = value;
+	++c->total_delta_defines;
 	return DELTA_SUCCESS;
 }
 
@@ -93,7 +86,11 @@ struct DeltaVM* delta_vm_init()
 {	
 	struct DeltaVM *vm = new_DeltaVM();
 	
-	delta_load_modules();
+	// prepare built-in functions
+	vm->alloc_delta_functions = 200;
+	vm->total_delta_functions = 0;
+	vm->delta_functions = (struct DeltaFunction**)
+		calloc(vm->alloc_delta_functions, sizeof(struct DeltaFunction*));
 	
 	return vm;
 }
@@ -104,8 +101,6 @@ int delta_vm_prepare(struct DeltaVM *vm, int function_id, struct DeltaVariable *
 	// load constants
 	int i;
 	for(i = 0; i < vm->functions[function_id].total_constants; ++i) {
-		printf("Loading constant into %d:%d\n", function_id,
-			   vm->functions[function_id].constants[i].ram_location);
 		DELTA_COPY_VARIABLE(ram[vm->functions[function_id].constants[i].ram_location],
 							(&vm->functions[function_id].constants[i]));
 	}
@@ -163,4 +158,35 @@ void delta_release_variable(struct DeltaVariable *v)
 }
 
 
-//int delta_vm_function_exists()
+struct DeltaVM* delta_get_vm()
+{
+	return active_vm;
+}
+
+
+void delta_set_vm(struct DeltaVM *vm)
+{
+	active_vm = vm;
+}
+
+
+int delta_vm_function_exists()
+{
+	return DELTA_YES;
+}
+
+
+stack_function delta_vm_get_function(struct DeltaVM *vm, char *function)
+{
+	if(vm == NULL)
+		return NULL;
+	
+	int i;
+	for(i = 0; i < vm->total_functions; ++i) {
+		if(!strcmp(vm->functions[i].name, function))
+			return delta_compile_jit(vm, function);
+	}
+	
+	// function was not found
+	return NULL;
+}

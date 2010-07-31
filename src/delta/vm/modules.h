@@ -11,11 +11,12 @@
 
 typedef struct DeltaModuleFunction* (*delta_module_ptr)(int*);
 typedef void (*delta_module_function)(struct DeltaInstruction *d);
+typedef void (*delta_module_function_vm)(struct DeltaVM *vm);
 
 
-void                  delta_load_modules();
+void                  delta_load_modules(struct DeltaVM *vm);
 delta_module_function delta_get_module_function(void *module, char *name);
-int                   delta_load_module(char *path);
+int                   delta_load_module(struct DeltaVM *vm, char *path);
 
 
 #endif

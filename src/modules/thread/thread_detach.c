@@ -3,16 +3,36 @@
  */
 
 #include "delta/delta.h"
-#include <math.h>
+#include "module.h"
 
 
 DELTA_FUNCTION(thread_detach)
 {
+	
 #ifdef DELTA_PLATFORM_MAC
-	printf("detaching2!\n");
+	
+	// check we have the VM
+	if(DELTA_VM == NULL) {
+		DELTA_TRIGGER_ERROR("thread_detach() can't get the virtual machine.", DELTA_ERROR_ERROR);
+		DELTA_RETURN_NULL;
+	}
+	
+	// make sure the function to be detached exists
+	stack_function func = delta_vm_get_function(DELTA_VM, "func");
+	if(func == NULL) {
+		DELTA_TRIGGER_ERROR("thread_detach() can't link function.", DELTA_ERROR_ERROR);
+		DELTA_RETURN_NULL;
+	}
+	
+	// run the function on a detached thread
+	pthread_create(&threads[total_threads], NULL, func, NULL);
+	++total_threads;
+	
 #else
+	
 	DELTA_TRIGGER_ERROR("thread_detach() is not supported on your platform.", DELTA_ERROR_ERROR);
+	DELTA_RETURN_NULL;
+	
 #endif
 	
-	DELTA_RETURN_NULL;
 }

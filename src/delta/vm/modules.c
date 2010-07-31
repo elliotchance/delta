@@ -28,7 +28,7 @@ delta_module_function delta_get_module_function(void *module, char *name)
 }
 
 
-int delta_load_module(char *path)
+int delta_load_module(struct DeltaVM *vm, char *path)
 {
 	const char *error;
 	delta_module_ptr module_functions;
@@ -38,6 +38,12 @@ int delta_load_module(char *path)
 	if(!module) {
 		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
 		return DELTA_FAILURE;
+	}
+	
+	// pass the active VM
+	delta_module_function_vm send_vm = dlsym(module, "module_set_vm");
+	if(send_vm != NULL) {
+		(*send_vm)(delta_get_vm());
 	}
 	
 	// get the module functions
@@ -56,8 +62,9 @@ int delta_load_module(char *path)
 	for(i = 0; i < count; ++i) {
 		delta_module_function f = delta_get_module_function(module, functions[i].name);
 		if(f != NULL)
-			delta_vm_push_function(new_DeltaFunction(functions[i].name, f, functions[i].min_args,
-													 functions[i].max_args));
+			delta_vm_push_function(vm, new_DeltaFunction(functions[i].name, f,
+														 functions[i].min_args,
+														 functions[i].max_args));
 	}
 	
 	
@@ -67,13 +74,13 @@ int delta_load_module(char *path)
 }
 
 
-void delta_load_modules()
+void delta_load_modules(struct DeltaVM *vm)
 {
 	// TODO: issue #14: delta.ini loading
-	delta_load_module("libdelta_core.dylib");
-	delta_load_module("libdelta_mapm.dylib");
-	delta_load_module("libdelta_mysql.dylib");
-	delta_load_module("libdelta_sqlite3.dylib");
-	delta_load_module("libdelta_thread.dylib");
-	delta_load_module("libdelta_zlib.dylib");
+	delta_load_module(vm, "libdelta_core.dylib");
+	delta_load_module(vm, "libdelta_mapm.dylib");
+	delta_load_module(vm, "libdelta_mysql.dylib");
+	delta_load_module(vm, "libdelta_sqlite3.dylib");
+	delta_load_module(vm, "libdelta_thread.dylib");
+	delta_load_module(vm, "libdelta_zlib.dylib");
 }

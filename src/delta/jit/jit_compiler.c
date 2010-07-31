@@ -114,11 +114,11 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			if(instructions[i].func != NULL) {
 				stack_function linked = NULL;
 				int fargs = (instructions[i].args - 1) / 2;
-				for(j = 0; j < total_delta_functions; ++j) {
-					if(!strcmp(delta_functions[j]->name, instructions[i].func) &&
-					   fargs >= delta_functions[j]->min_args &&
-					   fargs <= delta_functions[j]->max_args) {
-						linked = delta_functions[j]->function_ptr;
+				for(j = 0; j < c->total_delta_functions; ++j) {
+					if(!strcmp(c->delta_functions[j]->name, instructions[i].func) &&
+					   fargs >= c->delta_functions[j]->min_args &&
+					   fargs <= c->delta_functions[j]->max_args) {
+						linked = c->delta_functions[j]->function_ptr;
 						break;
 					}
 				}
@@ -136,6 +136,9 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				if(linked == NULL) {
 					printf("Delta VM Runtime Error: Cannot link function '%s' (bytecode = 0x%x)\n",
 						   instructions[i].func, instructions[i].bc);
+					printf("Candidates (%d) are:\n", c->total_delta_functions);
+					for(j = 0; j < c->total_delta_functions; ++i)
+						printf("  %s\n", c->delta_functions[i]->name);
 					exit(1);
 				}
 				

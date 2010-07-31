@@ -82,7 +82,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 		delta_skip_spaces(line, &i);
 		
 		token = delta_read_token(c, function_id, line, &i);
-		token = delta_replace_constant(token);
+		token = delta_replace_constant(c, token);
 		if(strlen(token) > 0)
 			tokens[total_tokens++] = token;
 		
@@ -701,15 +701,10 @@ struct DeltaCompiler* delta_compiler_init()
 	int i;
 	
 	// prepare built-in predefined constants
-	alloc_delta_defines = 200;
-	total_delta_defines = 0;
-	delta_defines = (struct DeltaDefine*) calloc(alloc_delta_defines, sizeof(struct DeltaDefine));
-	
-	// prepare built-in functions
-	alloc_delta_functions = 200;
-	total_delta_functions = 0;
-	delta_functions = (struct DeltaFunction**)
-		calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
+	c->alloc_delta_defines = 200;
+	c->total_delta_defines = 0;
+	c->delta_defines = (struct DeltaDefine*)
+		calloc(c->alloc_delta_defines, sizeof(struct DeltaDefine));
 	
 	return c;
 }

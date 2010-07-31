@@ -27,11 +27,12 @@ void main_compile()
 
 void main_run()
 {
-	delta_load_modules();
 	struct DeltaVM *vm = delta_load_file("test.dc");
+	delta_set_vm(vm);
+	delta_load_modules(vm);
 	stack_function delta_entry = delta_compile_jit(vm, DELTA_MAIN_FUNCTION);
 	
-	start = clock() - 1;
+	long start = clock() - 1;
 	printf("\n\n==> BEGIN, hit enter to proceed\n");
 	delta_entry(NULL);
 	printf("==> END\n\n");

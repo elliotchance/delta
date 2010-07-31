@@ -52,7 +52,7 @@ struct DeltaVM* delta_load_file(const char* in_file)
 	// prepare
 	FILE *f = fopen(in_file, "r");
 	int i, j, k;
-	struct DeltaVM *vm = (struct DeltaVM*) malloc(sizeof(struct DeltaVM));
+	struct DeltaVM *vm = delta_vm_init();
 	
 	// read total functions
 	vm->total_functions = delta_read_int(f);

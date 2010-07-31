@@ -140,6 +140,10 @@ struct DeltaCompiler
 {
 	int alloc_functions, total_functions;
 	struct DeltaCompiledFunction *functions;
+	
+	struct DeltaDefine *delta_defines;
+	int alloc_delta_defines;
+	int total_delta_defines;
 };
 
 
@@ -147,6 +151,10 @@ struct DeltaVM
 {
 	int alloc_functions, total_functions;
 	struct DeltaCompiledFunction *functions;
+	
+	struct DeltaFunction **delta_functions;
+	int alloc_delta_functions;
+	int total_delta_functions;
 };
 
 
