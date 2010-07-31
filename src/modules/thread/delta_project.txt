@@ -1,0 +1,4 @@
+begin delta_thread
+  name=libdelta_thread.dylib
+  type=module
+end

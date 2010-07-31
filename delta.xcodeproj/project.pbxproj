@@ -247,6 +247,12 @@
 		8B8B10F011F53AEE00B67657 /* array.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B0F9011F460ED00B67657 /* array.c */; };
 		8B8B10F111F53AEE00B67657 /* new.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B0F9F11F4620D00B67657 /* new.c */; };
 		8BBD5ECF11F01E7600BC5AF2 /* strpos.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD5ECE11F01E7600BC5AF2 /* strpos.c */; };
+		8BC75ED81203014B004A21EB /* module.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC75ED41203014B004A21EB /* module.c */; };
+		8BC75ED91203014B004A21EB /* module.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BC75ED51203014B004A21EB /* module.h */; };
+		8BC75EDA1203014B004A21EB /* thread_detach.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC75ED61203014B004A21EB /* thread_detach.c */; };
+		8BC75EDD120302C8004A21EB /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
+		8BC75F2812040F38004A21EB /* DeltaVM.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC75F2712040F38004A21EB /* DeltaVM.c */; };
+		8BC760441204363E004A21EB /* DeltaVM.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC75F2712040F38004A21EB /* DeltaVM.c */; };
 		8DD76FB00486AB0100D96B5E /* delta.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* delta.1 */; };
 /* End PBXBuildFile section */
 
@@ -853,6 +859,16 @@
 		8B8B0F9E11F4620D00B67657 /* new.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = new.h; sourceTree = "<group>"; };
 		8B8B0F9F11F4620D00B67657 /* new.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = new.c; sourceTree = "<group>"; };
 		8BBD5ECE11F01E7600BC5AF2 /* strpos.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strpos.c; sourceTree = "<group>"; };
+		8BC75ECC1203009C004A21EB /* libdelta_thread.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libdelta_thread.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BC75ED21203014B004A21EB /* delta_build.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delta_build.txt; sourceTree = "<group>"; };
+		8BC75ED31203014B004A21EB /* delta_project.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delta_project.txt; sourceTree = "<group>"; };
+		8BC75ED41203014B004A21EB /* module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = module.c; sourceTree = "<group>"; };
+		8BC75ED51203014B004A21EB /* module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = module.h; sourceTree = "<group>"; };
+		8BC75ED61203014B004A21EB /* thread_detach.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread_detach.c; sourceTree = "<group>"; };
+		8BC75ED71203014B004A21EB /* VERSION.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION.txt; sourceTree = "<group>"; };
+		8BC75EE5120303E1004A21EB /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		8BC75F2612040F38004A21EB /* DeltaVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeltaVM.h; sourceTree = "<group>"; };
+		8BC75F2712040F38004A21EB /* DeltaVM.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DeltaVM.c; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* delta */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = delta; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* delta.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = delta.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -898,6 +914,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8BC75ECA1203009C004A21EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BC75EDD120302C8004A21EB /* libdelta_core.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76FAD0486AB0100D96B5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -937,6 +961,7 @@
 				8B8B049911F1852900B67657 /* libdelta_sqlite3.dylib */,
 				8B8B060611F2AC9400B67657 /* libdelta_mysql.dylib */,
 				8B8B0D9D11F2BA3C00B67657 /* libmysql.16.dylib */,
+				8BC75ECC1203009C004A21EB /* libdelta_thread.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -946,9 +971,10 @@
 			children = (
 				8B0CA0E411EE81DC00FA9821 /* core */,
 				8B0CA14611EE81DC00FA9821 /* mapm */,
-				8B8B048811F184F900B67657 /* sqlite3 */,
-				8B0CA1CE11EE81DC00FA9821 /* zlib */,
 				8B8B0CC311F2B17500B67657 /* mysql */,
+				8B8B048811F184F900B67657 /* sqlite3 */,
+				8BC75ED11203014B004A21EB /* thread */,
+				8B0CA1CE11EE81DC00FA9821 /* zlib */,
 			);
 			name = modules;
 			path = src/modules;
@@ -1833,6 +1859,7 @@
 				8B0CA4A511EE844000FA9821 /* structs */,
 				8B0CA4AC11EE844000FA9821 /* structs.h */,
 				8B0CA4AD11EE844000FA9821 /* vm */,
+				8BC75EE5120303E1004A21EB /* platform.h */,
 			);
 			name = delta;
 			path = src/delta;
@@ -1888,6 +1915,8 @@
 				8B0CA4A911EE844000FA9821 /* DeltaFunction.h */,
 				8B0CA4AA11EE844000FA9821 /* DeltaInstruction.c */,
 				8B0CA4AB11EE844000FA9821 /* DeltaInstruction.h */,
+				8BC75F2712040F38004A21EB /* DeltaVM.c */,
+				8BC75F2612040F38004A21EB /* DeltaVM.h */,
 			);
 			path = structs;
 			sourceTree = "<group>";
@@ -2060,6 +2089,19 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		8BC75ED11203014B004A21EB /* thread */ = {
+			isa = PBXGroup;
+			children = (
+				8BC75ED21203014B004A21EB /* delta_build.txt */,
+				8BC75ED31203014B004A21EB /* delta_project.txt */,
+				8BC75ED41203014B004A21EB /* module.c */,
+				8BC75ED51203014B004A21EB /* module.h */,
+				8BC75ED61203014B004A21EB /* thread_detach.c */,
+				8BC75ED71203014B004A21EB /* VERSION.txt */,
+			);
+			path = thread;
+			sourceTree = "<group>";
+		};
 		C6A0FF2B0290797F04C91782 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -2106,6 +2148,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BC75EC81203009C004A21EB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BC75ED91203014B004A21EB /* module.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2202,6 +2252,23 @@
 			productReference = 8B8B060611F2AC9400B67657 /* libdelta_mysql.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		8BC75ECB1203009C004A21EB /* delta_thread */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BC75ED01203009F004A21EB /* Build configuration list for PBXNativeTarget "delta_thread" */;
+			buildPhases = (
+				8BC75EC81203009C004A21EB /* Headers */,
+				8BC75EC91203009C004A21EB /* Sources */,
+				8BC75ECA1203009C004A21EB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = delta_thread;
+			productName = delta_thread;
+			productReference = 8BC75ECC1203009C004A21EB /* libdelta_thread.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
 		8DD76FA90486AB0100D96B5E /* delta */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB928508733DD80010E9CD /* Build configuration list for PBXNativeTarget "delta" */;
@@ -2239,6 +2306,7 @@
 				8B0CA3FB11EE824300FA9821 /* delta_zlib */,
 				8B8B049811F1852900B67657 /* delta_sqlite3 */,
 				8B8B060511F2AC9400B67657 /* delta_mysql */,
+				8BC75ECB1203009C004A21EB /* delta_thread */,
 			);
 		};
 /* End PBXProject section */
@@ -2329,6 +2397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC760441204363E004A21EB /* DeltaVM.c in Sources */,
 				8B0CA4CF11EE848D00FA9821 /* DeltaFunction.c in Sources */,
 				8B0CA4CE11EE848400FA9821 /* modules.c in Sources */,
 				8B0CA4CB11EE847D00FA9821 /* vm.c in Sources */,
@@ -2574,6 +2643,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8BC75EC91203009C004A21EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BC75ED81203014B004A21EB /* module.c in Sources */,
+				8BC75EDA1203014B004A21EB /* thread_detach.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76FAB0486AB0100D96B5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2596,6 +2674,7 @@
 				8B0CA4C111EE844000FA9821 /* modules.c in Sources */,
 				8B0CA4C211EE844000FA9821 /* vm.c in Sources */,
 				8B8B046C11F182AB00B67657 /* load.c in Sources */,
+				8BC75F2812040F38004A21EB /* DeltaVM.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2849,6 +2928,38 @@
 			};
 			name = Release;
 		};
+		8BC75ECD1203009D004A21EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = delta_thread;
+			};
+			name = Debug;
+		};
+		8BC75ECE1203009D004A21EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = delta_thread;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2911,6 +3022,15 @@
 			buildConfigurations = (
 				8B8B060711F2AC9500B67657 /* Debug */,
 				8B8B060811F2AC9500B67657 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BC75ED01203009F004A21EB /* Build configuration list for PBXNativeTarget "delta_thread" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BC75ECD1203009D004A21EB /* Debug */,
+				8BC75ECE1203009D004A21EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
