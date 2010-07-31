@@ -74,5 +74,6 @@ void delta_load_modules()
 	delta_load_module("libdelta_mapm.dylib");
 	delta_load_module("libdelta_mysql.dylib");
 	delta_load_module("libdelta_sqlite3.dylib");
+	delta_load_module("libdelta_thread.dylib");
 	delta_load_module("libdelta_zlib.dylib");
 }

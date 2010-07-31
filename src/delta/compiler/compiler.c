@@ -8,6 +8,7 @@
 #include "delta/compiler/strings.h"
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
+#include "delta/structs/DeltaCompiler.h"
 #include "token.h"
 #include "constant.h"
 #include "delta/macros.h"
@@ -47,6 +48,7 @@ void delta_function_reset()
 
 int delta_push_label(struct DeltaCompiler *c, char *name)
 {
+	// TODO: fixme
 	return 0;
 }
 
@@ -667,6 +669,7 @@ int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 	delta_compile_block(c, function_id++, "", whole_file, 0, total_bytes);
 	c->functions[c->total_functions].name = DELTA_MAIN_FUNCTION;
 	c->functions[c->total_functions].jit_ptr = NULL;
+	c->functions[c->total_functions].total_vars = var_temp;
 	++c->total_functions;
 	
 	// now we can compile the functions we've collected along the way
@@ -676,11 +679,37 @@ int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 							strlen(functions_to_compile[i].body));
 		c->functions[c->total_functions].name = functions_to_compile[i].name;
 		c->functions[c->total_functions].jit_ptr = NULL;
+		c->functions[c->total_functions].total_vars = var_temp;
 		++c->total_functions;
 	}
+	
+	// optimise bytecode for all functions
+	/*for(i = 0; i < total_functions_to_compile; ++i) {
+		delta_optimise_bytecode(c, 0, c->total_ins);
+	}*/
 	
 	// clean up
 	fclose(f);
 	free(whole_file);
 	return DELTA_SUCCESS;
+}
+
+
+struct DeltaCompiler* delta_compiler_init()
+{	
+	struct DeltaCompiler *c = new_DeltaCompiler();
+	int i;
+	
+	// prepare built-in predefined constants
+	alloc_delta_defines = 200;
+	total_delta_defines = 0;
+	delta_defines = (struct DeltaDefine*) calloc(alloc_delta_defines, sizeof(struct DeltaDefine));
+	
+	// prepare built-in functions
+	alloc_delta_functions = 200;
+	total_delta_functions = 0;
+	delta_functions = (struct DeltaFunction**)
+		calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
+	
+	return c;
 }

@@ -7,6 +7,7 @@
 #define _DELTA_MACROS_H 1
 
 
+#include "platform.h"
 #include "structs.h"
 #include <string.h>
 
@@ -46,8 +47,8 @@
 #define DELTA_PRINT_INS_ARGS(__BYTECODE) \
 	printf("*BYTECODE_%s (", #__BYTECODE); \
 	int i; \
-	for(i = 0; i < DELTA_ARGS + 1; ++i) \
-	printf(" %d", d->arg[i]); \
+	for(i = 0; i < d->args; ++i) \
+		printf(" %d", d->arg[i]); \
 	printf(" )\n");
 
 

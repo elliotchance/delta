@@ -8,7 +8,7 @@
 
 #include "delta/structs.h"
 
-stack_function delta_compile_jit(struct DeltaCompiler *c, char *function_name);
+stack_function delta_compile_jit(struct DeltaVM *c, char *function_name);
 
 
 #endif

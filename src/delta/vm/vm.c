@@ -5,6 +5,7 @@
 #include "delta/vm/vm.h"
 #include "delta/compiler/bytecode.h"
 #include "delta/jit/ins.h"
+#include "delta/structs/DeltaVM.h"
 #include "modules.h"
 
 
@@ -54,17 +55,22 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 }
 
 
-/*void delta_vm_print_ram(struct DeltaCompiler *c)
+void delta_vm_print_ram(struct DeltaVM *vm)
 {
-	int i;
-	for(i = 0; i < total_ram; ++i) {
-		if(ram[i]->type != DELTA_TYPE_NULL) {
-			printf("ram[%d](%d, %d) = ", i, ram[i]->type, ram[i]->size);
-			delta_vm_print_variable(ram[i]);
-			printf("\n");
+	int i, j;
+	
+	for(i = 0; i < vm->total_functions; ++i) {
+		printf("{RAM} Function '%s'\n", vm->functions[i].name);
+		for(j = 0; j < vm->functions[i].total_vars; ++j) {
+			if(vm->functions[i].vars[j].type != DELTA_TYPE_NULL) {
+				printf("ram[%d](%d, %d) = ", j, vm->functions[i].vars[j].type,
+					   vm->functions[i].vars[j].size);
+				delta_vm_print_variable(&vm->functions[i].vars[j]);
+				printf("\n");
+			}
 		}
 	}
-}*/
+}
 
 
 int delta_vm_push_function(struct DeltaFunction* f)
@@ -83,34 +89,26 @@ int delta_vm_push_define(char *name, char *value)
 }
 
 
-int delta_vm_init(struct DeltaCompiler *c)
+struct DeltaVM* delta_vm_init()
 {	
-	int i;
-	
-	// prepare built-in predefined constants
-	alloc_delta_defines = 200;
-	total_delta_defines = 0;
-	delta_defines = (struct DeltaDefine*) calloc(alloc_delta_defines, sizeof(struct DeltaDefine));
-	
-	// prepare built-in functions
-	alloc_delta_functions = 200;
-	total_delta_functions = 0;
-	delta_functions = (struct DeltaFunction**)
-		calloc(alloc_delta_functions, sizeof(struct DeltaFunction*));
+	struct DeltaVM *vm = new_DeltaVM();
 	
 	delta_load_modules();
 	
-	return DELTA_SUCCESS;
+	return vm;
 }
 
 
-int delta_vm_prepare(struct DeltaCompiler *c, int function_id, struct DeltaVariable **ram)
+int delta_vm_prepare(struct DeltaVM *vm, int function_id, struct DeltaVariable **ram)
 {
 	// load constants
 	int i;
-	for(i = 0; i < c->functions[function_id].total_constants; ++i)
-		DELTA_COPY_VARIABLE(ram[c->functions[function_id].constants[i].ram_location],
-							(&c->functions[function_id].constants[i]));
+	for(i = 0; i < vm->functions[function_id].total_constants; ++i) {
+		printf("Loading constant into %d:%d\n", function_id,
+			   vm->functions[function_id].constants[i].ram_location);
+		DELTA_COPY_VARIABLE(ram[vm->functions[function_id].constants[i].ram_location],
+							(&vm->functions[function_id].constants[i]));
+	}
 	
 	return DELTA_SUCCESS;
 }
@@ -163,3 +161,6 @@ void delta_release_variable(struct DeltaVariable *v)
 	// free self
 	free(v);
 }
+
+
+//int delta_vm_function_exists()

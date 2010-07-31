@@ -10,7 +10,7 @@
 #include <string.h>
 
 
-stack_function delta_compile_jit(struct DeltaCompiler *c, char *function_name)
+stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {
 	int i, j, loop_id = 0, end = 0, function_id = 0;
 	struct DeltaInstruction *instructions = NULL;

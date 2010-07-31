@@ -143,6 +143,13 @@ struct DeltaCompiler
 };
 
 
+struct DeltaVM
+{
+	int alloc_functions, total_functions;
+	struct DeltaCompiledFunction *functions;
+};
+
+
 struct DeltaModuleFunction
 {
 	char* name;
