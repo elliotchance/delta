@@ -196,9 +196,8 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 			printf("{%d} BYTECODE_CAL %s(", function_id, function_name);
 			int _k;
 			arg_ptr[arg_depth][0] = var_dest;
-			for(_k = 0; _k < arg_count[arg_depth]; ++_k) {
+			for(_k = 0; _k < arg_count[arg_depth]; ++_k)
 				printf(" %d", arg_ptr[arg_depth][_k]);
-			}
 			printf(" )\n");
 			DeltaFunction_push(c, function_id, new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			

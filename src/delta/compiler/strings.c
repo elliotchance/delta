@@ -221,3 +221,30 @@ char* delta_trim(char *line)
 	strncpy(r, line + left, strlen(line) - left - off);
 	return r;
 }
+
+
+int delta_is_magic_string(char *str)
+{
+	int i, len = strlen(str);
+	for(i = 0; i < len; ++i) {
+		if(str[i] == '$')
+			return 1;
+	}
+	
+	// this is not a magic string
+	return 0;
+}
+
+
+char* delta_translate_magic_string(char *str)
+{
+	char *r = (char*) malloc(64);
+	bzero(r, 64);
+	int i, len = strlen(str);
+	
+	for(i = 0; i < len; ++i) {
+		r[i] = str[i];
+	}
+	
+	return r;
+}

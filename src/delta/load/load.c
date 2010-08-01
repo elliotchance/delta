@@ -5,19 +5,16 @@
 
 #include "load.h"
 #include "delta/vm/vm.h"
+#include <assert.h>
 
 
 char* delta_read_string(FILE *fp)
 {
-	char *str = (char*) malloc(1024);
-	int i = 0;
+	int len = delta_read_int(fp);
+	char *str = (char*) malloc(len + 1);
 	
-	while(1) {
-		int ch = fgetc(fp);
-		str[i++] = (char) ch;
-		if(ch == '\0')
-			break;
-	}
+	fread((void*) str, len, 1, fp);
+	str[len] = '\0';
 	
 	return str;
 }
@@ -58,12 +55,12 @@ struct DeltaVM* delta_load_file(const char* in_file)
 	vm->total_functions = delta_read_int(f);
 	vm->functions = (struct DeltaCompiledFunction*)
 		calloc(vm->total_functions, sizeof(struct DeltaCompiledFunction));
-	printf("Loading %d functions\n", vm->total_functions);
+	//printf("Loading %d functions\n", vm->total_functions);
 	
 	// write functions to output file
 	for(i = 0; i < vm->total_functions; ++i) {
 		vm->functions[i].name = delta_read_string(f);
-		printf("  %s", vm->functions[i].name);
+		//printf("  %s", vm->functions[i].name);
 		
 		// instructions
 		vm->functions[i].alloc_ins = vm->functions[i].total_ins = delta_read_int(f);
@@ -78,13 +75,13 @@ struct DeltaVM* delta_load_file(const char* in_file)
 			for(k = 0; k < vm->functions[i].ins[j].args; ++k)
 				vm->functions[i].ins[j].arg[k] = delta_read_int(f);
 		}
-		printf(" -> %d ins\n", vm->functions[i].alloc_ins);
+		//printf(" -> %d ins\n", vm->functions[i].alloc_ins);
 		
 		// variables / RAM
 		vm->functions[i].alloc_vars = vm->functions[i].total_vars = delta_read_int(f);
 		vm->functions[i].vars = (struct DeltaVariable*)
 			calloc(vm->functions[i].alloc_vars, sizeof(struct DeltaVariable));
-		printf("RAM = %d\n", vm->functions[i].alloc_vars);
+		//printf("RAM = %d\n", vm->functions[i].alloc_vars);
 		
 		// labels
 		vm->functions[i].alloc_labels = vm->functions[i].total_labels = delta_read_int(f);
@@ -102,12 +99,19 @@ struct DeltaVM* delta_load_file(const char* in_file)
 			vm->functions[i].constants[j].type = type;
 			if(type == DELTA_TYPE_NULL) {
 				// do nothing
-			} else if(type == DELTA_TYPE_NUMBER) {
-				vm->functions[i].constants[j].value.number = delta_read_double(f);
-			} else if(type == DELTA_TYPE_STRING) {
-				// TODO: not binary safe
-				vm->functions[i].constants[j].value.ptr = delta_read_string(f);
 			}
+			else if(type == DELTA_TYPE_NUMBER) {
+				vm->functions[i].constants[j].value.number = delta_read_double(f);
+			}
+			else if(type == DELTA_TYPE_STRING) {
+				vm->functions[i].constants[j].size = delta_read_int(f);
+				vm->functions[i].constants[j].value.ptr =
+					(char*) malloc(vm->functions[i].constants[j].size);
+				fread((void*) vm->functions[i].constants[j].value.ptr,
+					  vm->functions[i].constants[j].size, 1, f);
+			}
+			else
+				assert(0);
 			
 			vm->functions[i].constants[j].ram_location = delta_read_int(f);
 			vm->functions[i].constants[j].size = delta_read_int(f);

@@ -8,11 +8,12 @@
 #include "delta/jit/ins.h"
 #include "delta/vm/vm.h"
 #include <string.h>
+#include <assert.h>
 
 
 stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
-{
-	int i, j, loop_id = 0, end = 0, function_id = 0;
+{	
+	int i, j, loop_id = 0, end = 0, function_id = -1;
 	struct DeltaInstruction *instructions = NULL;
 	
 	// try to find the function
@@ -28,6 +29,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			break;
 		}
 	}
+	assert(function_id >= 0);
 	
 	// because functions cannot be recursivly compiled, JIT_V0 etc would be overriden we first
 	// take a quick look through the instructions and compile any required functions first
@@ -54,10 +56,6 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 		calloc(total_ram, sizeof(struct DeltaVariable*));
 	for(i = 0; i < total_ram; ++i)
 		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
-	
-	// error
-	if(instructions == NULL)
-		return NULL;
 	
 	// I think we must have this
 	jit_leaf(0);
@@ -111,9 +109,10 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			jit_pusharg_p(JIT_V0);
 			
 			// link the function by its name
-			if(instructions[i].func != NULL) {
+			if(instructions[i].bc == BYTECODE_CAL) {
 				stack_function linked = NULL;
 				int fargs = (instructions[i].args - 1) / 2;
+				
 				for(j = 0; j < c->total_delta_functions; ++j) {
 					if(!strcmp(c->delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= c->delta_functions[j]->min_args &&
@@ -136,9 +135,9 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				if(linked == NULL) {
 					printf("Delta VM Runtime Error: Cannot link function '%s' (bytecode = 0x%x)\n",
 						   instructions[i].func, instructions[i].bc);
-					printf("Candidates (%d) are:\n", c->total_delta_functions);
-					for(j = 0; j < c->total_delta_functions; ++i)
-						printf("  %s\n", c->delta_functions[i]->name);
+					//printf("Candidates (%d) are:\n", c->total_delta_functions);
+					//for(j = 0; j < c->total_delta_functions; ++i)
+					//	printf("  %s\n", c->delta_functions[i]->name);
 					exit(1);
 				}
 				

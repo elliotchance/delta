@@ -6,7 +6,7 @@
 #define _DELTA_BYTECODE_H
 
 
-#define BYTECODE_NUL 0x0000 // do nothing
+#define BYTECODE_NUL 0x00 // do nothing
 
 
 //-----------------------------------------------

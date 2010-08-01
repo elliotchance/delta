@@ -7,6 +7,7 @@
 #define _DELTA_H 1
 
 
+#include "delta/platform.h"
 #include "delta/structs.h"
 #include "delta/macros.h"
 #include "delta/vm/cast.h"

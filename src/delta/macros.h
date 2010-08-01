@@ -57,12 +57,13 @@
 #define FUNC(name) delta_function_##name
 
 
-#define DELTA_PRINT_INS_ARGS(__BYTECODE) \
-	printf("*BYTECODE_%s (", #__BYTECODE); \
+#define DELTA_PRINT_ARGS() \
+{ \
 	int i; \
 	for(i = 0; i < d->args; ++i) \
 		printf(" %d", d->arg[i]); \
-	printf(" )\n");
+	printf(" )\n"); \
+}
 
 
 /**

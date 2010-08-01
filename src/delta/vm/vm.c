@@ -8,6 +8,7 @@
 #include "delta/jit/jit_compiler.h"
 #include "delta/structs/DeltaVM.h"
 #include "modules.h"
+#include <assert.h>
 
 
 struct DeltaVM *active_vm = NULL;
@@ -15,6 +16,8 @@ struct DeltaVM *active_vm = NULL;
 
 void delta_vm_print_variable(struct DeltaVariable *v)
 {
+	assert(v != NULL);
+	
 	if(v->type == DELTA_TYPE_NULL)
 		printf("(null)");
 	else if(v->type == DELTA_TYPE_BOOLEAN)

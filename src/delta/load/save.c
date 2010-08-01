@@ -5,12 +5,20 @@
 
 #include "save.h"
 #include "../macros.h"
+#include "../compiler/bytecode.h"
+#include <assert.h>
 
 
 int delta_write_string(FILE *fp, char *str)
 {
+	if(str == NULL) {
+		delta_write_int(fp, 0);
+		return 1;
+	}
+	
+	delta_write_int(fp, strlen(str));
 	fwrite(str, strlen(str), 1, fp);
-	fwrite("\0", 1, 1, fp);
+	
 	return 1;
 }
 
@@ -75,12 +83,17 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file)
 			delta_write_int(f, type);
 			if(type == DELTA_TYPE_NULL) {
 				// do nothing
-			} else if(type == DELTA_TYPE_NUMBER) {
-				delta_write_double(f, c->functions[i].constants[j].value.number);
-			} else if(type == DELTA_TYPE_STRING) {
-				// TODO: not binary safe
-				delta_write_string(f, c->functions[i].constants[j].value.ptr);
 			}
+			else if(type == DELTA_TYPE_NUMBER) {
+				delta_write_double(f, c->functions[i].constants[j].value.number);
+			}
+			else if(type == DELTA_TYPE_STRING) {
+				delta_write_int(f, c->functions[i].constants[j].size);
+				fwrite(c->functions[i].constants[j].value.ptr, c->functions[i].constants[j].size, 1,
+					   f);
+			}
+			else
+				assert(0);
 			
 			delta_write_int(f, c->functions[i].constants[j].ram_location);
 			delta_write_int(f, c->functions[i].constants[j].size);

@@ -111,8 +111,8 @@ struct DeltaModuleFunction* module_functions(int *count)
 	// variables
 	DELTA_PUSH_FUNCTION(is_array, 1, 1);
 	DELTA_PUSH_FUNCTION(echo, 1, DELTA_MAX_ARGS);
-	DELTA_PUSH_FUNCTION(print, 1, DELTA_MAX_ARGS);
-	DELTA_PUSH_FUNCTION(println, 1, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(print, 0, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(println, 0, DELTA_MAX_ARGS);
 	
 	DELTA_END_MODULE_FUNCTIONS;
 }
