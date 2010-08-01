@@ -29,6 +29,7 @@ int arg_depth = 0;
 int label_id = 0;
 struct DeltaUncompiledFunction *functions_to_compile = NULL;
 int total_functions_to_compile = 0;
+int subexpression_depth = 0;
 
 
 void delta_function_reset()
@@ -37,6 +38,7 @@ void delta_function_reset()
 	result_register = 0;
 	arg_depth = 0;
 	label_id = 0;
+	subexpression_depth = 1;
 	arg_count = (int*) calloc(DELTA_MAX_NESTED_FUNCTIONS, sizeof(int));
 	arg_ptr = (int**) calloc(DELTA_MAX_NESTED_FUNCTIONS, sizeof(int*));
 	
@@ -67,7 +69,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 	
 	// check for negation
 	if(line[0] == '-') {
-		// FIXME: leak, should this even need to be here?
+		// FIXME: Issue #22: leak, should this even need to be here?
 		char *new_line = (char*) malloc(length + 2);
 		new_line[0] = '0';
 		strncpy(new_line + 1, line, length);
@@ -94,12 +96,16 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 			++c->functions[function_id].total_constants;
 		}
 		else if(delta_is_string(token)) {
-			//if(delta_is_magic_string(token))
-			//	token = delta_translate_magic_string(token);
-			//printf("token = '%s'\n", token);
-			int escape = (token[0] == '"');
-			char *str = delta_copy_substring(token, 1, strlen(token) - 1);
-			sprintf(token, "#%d", delta_push_constant(c, function_id, str, escape));
+			if(delta_is_magic_string(token)) {
+				token = delta_translate_magic_string(token);
+				printf("token = '%s'\n", token);
+				int res_reg = delta_compile_line_part(c, function_id, token, strlen(token));
+				sprintf(token, "#%d", res_reg);
+			} else {
+				int escape = (token[0] == '"');
+				char *str = delta_copy_substring(token, 1, strlen(token) - 1);
+				sprintf(token, "#%d", delta_push_constant(c, function_id, str, escape));
+			}
 		}
 		else if(!delta_is_keyword(token) && !delta_is_declared(c, function_id, token)) {
 			int total_vars = c->functions[function_id].total_vars;
@@ -123,11 +129,15 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 	else if(total_tokens == 1) {
 		// because we cant risk a constant being modified we will copy any constants out into a new
 		// address
-		int var_id1;
+		int var_id1 = var_temp;
+		
+		if(tokens[0][0] == '#') {
+			sscanf(tokens[0], "#%d", &var_temp);
+			return var_temp;
+		}
+		
 		if(delta_is_declared(c, function_id, tokens[0]))
 			var_id1 = delta_get_variable_id(c, function_id, tokens[0]);
-		else
-			var_id1 = var_temp;
 		
 		return var_id1;
 	}
@@ -585,6 +595,32 @@ int delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifi
 			}
 			i += 2;
 			continue;
+		}
+		
+		// TOOD: single and double quotes do not handle the escape character.
+		
+		// single-quotes
+		if(block[i] == '\'') {
+			line[line_pos++] = block[i];
+			++i;
+			for(; i < end; ++i) {
+				line[line_pos++] = block[i];
+				if(block[i] == '\'')
+					break;
+			}
+			++i;
+		}
+		
+		// double-quotes
+		if(block[i] == '\"') {
+			line[line_pos++] = block[i];
+			++i;
+			for(; i < end; ++i) {
+				line[line_pos++] = block[i];
+				if(block[i] == '\"')
+					break;
+			}
+			++i;
 		}
 		
 		// count brackets

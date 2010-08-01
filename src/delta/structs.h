@@ -112,18 +112,22 @@ struct DeltaUncompiledFunction
 struct DeltaCompiledFunction
 {
 	char *name;
+	
 	int alloc_ins, total_ins;
 	struct DeltaInstruction *ins;
+	
 	stack_function jit_ptr;
 	
 	int alloc_vars, total_vars;
-	struct DeltaVariable* vars;
+	struct DeltaVariable *vars;
 	
 	int alloc_labels, total_labels;
-	struct DeltaLabel* labels;
+	struct DeltaLabel *labels;
 	
 	int alloc_constants, total_constants;
-	struct DeltaVariable* constants;
+	struct DeltaVariable *constants;
+	
+	struct DeltaVariable **ram;
 };
 
 

@@ -58,12 +58,10 @@ void delta_vm_print_ram(struct DeltaVM *vm)
 	for(i = 0; i < vm->total_functions; ++i) {
 		printf("{RAM} Function '%s'\n", vm->functions[i].name);
 		for(j = 0; j < vm->functions[i].total_vars; ++j) {
-			if(vm->functions[i].vars[j].type != DELTA_TYPE_NULL) {
-				printf("ram[%d](%d, %d) = ", j, vm->functions[i].vars[j].type,
-					   vm->functions[i].vars[j].size);
-				delta_vm_print_variable(&vm->functions[i].vars[j]);
-				printf("\n");
-			}
+			printf("ram[%d](%d, %d) = ", j, vm->functions[i].ram[j]->type,
+				   vm->functions[i].ram[j]->size);
+			delta_vm_print_variable(vm->functions[i].ram[j]);
+			printf("\n");
 		}
 	}
 }

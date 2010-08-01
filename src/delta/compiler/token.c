@@ -183,6 +183,7 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 			}
 		}
 		++*offset;
+		++subexpression_depth;
 		
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
@@ -205,8 +206,17 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 			sprintf(r, "#%d", var_dest);
 		} else {
 			r = (char*) malloc(8);
-			sprintf(r, "#%d", var_temp);
+			// depth    offset
+			// 3     -> -1
+			// 4     -> -3
+			// 5     -> -5
+			// ((depth - 3) * 2)
+			//int subexp = ((subexpression_depth - 3) * 2) + 1;
+			//printf("subexpression_depth = %d -> %d\n", subexpression_depth, -subexp);
+			//var_temp -= subexp;
+			sprintf(r, "#%d", var_temp - 1);
 		}
+		--subexpression_depth;
 		
 		return r;
 	}

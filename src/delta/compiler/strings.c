@@ -240,10 +240,39 @@ char* delta_translate_magic_string(char *str)
 {
 	char *r = (char*) malloc(64);
 	bzero(r, 64);
-	int i, len = strlen(str);
+	int i, j, len = strlen(str);
 	
-	for(i = 0; i < len; ++i) {
-		r[i] = str[i];
+	for(i = 0, j = 0; i < len; ++i) {
+		if(str[i] == '$') {
+			strcpy(r + j, "\" . ");
+			j += 4;
+			
+			// find the end of the expression
+			++i;
+			if(str[i] == '{') {
+				++i;
+				r[j++] = '(';
+				for(; i < len; ++i) {
+					if(str[i] == '}')
+						break;
+					r[j++] = str[i];
+				}
+				r[j++] = ')';
+				++i;
+			} else {
+				for(; i < len; ++i) {
+					if(!isalnum(str[i]))
+						break;
+					r[j++] = str[i];
+				}
+			}
+			
+			strcpy(r + j, " . \"");
+			j += 4;
+			r[j++] = str[i];
+		}
+		else
+			r[j++] = str[i];
 	}
 	
 	return r;

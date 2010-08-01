@@ -14,6 +14,7 @@ extern int *arg_count;
 extern int **arg_ptr;
 extern int arg_depth;
 extern int label_id;
+extern int subexpression_depth;
 
 
 int                   delta_push_label(struct DeltaCompiler *c, char *name);

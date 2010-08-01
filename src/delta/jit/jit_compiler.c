@@ -57,6 +57,10 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 	for(i = 0; i < total_ram; ++i)
 		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
 	
+	// TODO: this will have to be changed for multithreaded apps, for now we'll just add the ram to
+	// the function
+	c->functions[function_id].ram = ram;
+	
 	// I think we must have this
 	jit_leaf(0);
 	
