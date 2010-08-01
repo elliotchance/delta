@@ -277,3 +277,11 @@ char* delta_translate_magic_string(char *str)
 	
 	return r;
 }
+
+
+char* delta_int_to_string(int value)
+{
+	char *buf = (char*) malloc(32);
+	sprintf(buf, "%d", value);
+	return buf;
+}

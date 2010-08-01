@@ -11,8 +11,10 @@ struct DeltaModuleFunction* module_functions(int *count)
 	
 	// array
 	DELTA_PUSH_FUNCTION(array, 0, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(array_keys, 1, 1);
 	DELTA_PUSH_FUNCTION(array_push, 3, 3);
 	DELTA_PUSH_FUNCTION(array_sum, 0, DELTA_MAX_ARGS);
+	DELTA_PUSH_FUNCTION(array_values, 1, 1);
 	DELTA_PUSH_FUNCTION(count, 1, 1);
 	
 	// ctype

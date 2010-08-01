@@ -20,6 +20,7 @@ char** delta_split_semicolons(char *expr);
 char*  delta_trim(char *str);
 int    delta_is_magic_string(char *str);
 char*  delta_translate_magic_string(char *str);
+char*  delta_int_to_string(int value);
 
 
 #endif
