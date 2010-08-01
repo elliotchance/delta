@@ -5,6 +5,8 @@
 #include "delta/vm/cast.h"
 #include "delta/structs.h"
 #include "delta/vm/vm.h"
+#include "delta/vm/new.h"
+#include "delta/vm/array.h"
 #include "delta/macros.h"
 #include <string.h>
 
@@ -204,4 +206,22 @@ inline int delta_cast_boolean(struct DeltaVariable *v)
 	
 	// hopefully we will never get to here
 	return DELTA_FALSE;
+}
+
+
+inline struct DeltaVariable* delta_cast_array(struct DeltaVariable *v, int *release)
+{
+	if(v->type == DELTA_TYPE_ARRAY) {
+		*release = 0;
+		return v;
+	}
+	
+	*release = 1;
+	struct DeltaVariable *r = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable*));
+	r->type = DELTA_TYPE_ARRAY;
+	r->value.array = delta_new_array();
+	
+	delta_array_push_kv(&r->value.array, "0", v);
+	
+	return r;
 }

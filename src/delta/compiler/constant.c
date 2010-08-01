@@ -10,30 +10,43 @@
 #include <string.h>
 
 
-int delta_push_constant(struct DeltaCompiler *c, int function_id, char *token, int escape)
+int delta_push_string_constant(struct DeltaCompiler *c, int function_id, char *token, int escape)
 {
-	if(delta_is_number(token))
-		return delta_push_number_constant(c, function_id, atof(token));
+	int total = c->functions[function_id].total_constants;
+	struct DeltaVariable* v = &c->functions[function_id].constants[total];
 	
 	++var_temp;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].type = DELTA_TYPE_STRING;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].value.ptr = token;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].ram_location = var_temp;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].size = strlen(token);
+	v->type = DELTA_TYPE_STRING;
+	v->value.ptr = token;
+	v->ram_location = var_temp;
+	v->size = strlen(token);
+	
 	if(escape)
-		delta_escape_string(c->functions[function_id].constants[c->functions[function_id].total_constants].value.ptr,
-							c->functions[function_id].constants[c->functions[function_id].total_constants].size);
+		delta_escape_string(v->value.ptr, v->size);
+	
 	++c->functions[function_id].total_constants;
 	return var_temp;
 }
 
 
+int delta_push_constant(struct DeltaCompiler *c, int function_id, char *token, int escape)
+{
+	if(delta_is_number(token))
+		return delta_push_number_constant(c, function_id, atof(token));
+	return delta_push_string_constant(c, function_id, token, escape);
+}
+
+
 int delta_push_number_constant(struct DeltaCompiler *c, int function_id, double value)
 {
+	int total = c->functions[function_id].total_constants;
+	struct DeltaVariable* v = &c->functions[function_id].constants[total];
+	
 	++var_temp;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].type = DELTA_TYPE_NUMBER;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].value.number = value;
-	c->functions[function_id].constants[c->functions[function_id].total_constants].ram_location = var_temp;
+	v->type = DELTA_TYPE_NUMBER;
+	v->value.number = value;
+	v->ram_location = var_temp;
+	
 	++c->functions[function_id].total_constants;
 	return var_temp;
 }

@@ -362,7 +362,7 @@ int delta_compile_line(struct DeltaCompiler *c, int function_id, char* line, int
 			blank_key = 1;
 			key = (char*) malloc(8);
 			sprintf(key, "%d", i);
-			key_addr = delta_push_constant(c, function_id, key, 0);
+			key_addr = delta_push_string_constant(c, function_id, key, 0);
 		}
 		else
 			key_addr = delta_compile_line_part(c, function_id, key, strlen(key));

@@ -11,33 +11,12 @@
  */
 DELTA_FUNCTION(array)
 {
-	DELTA_DEST->type = DELTA_TYPE_ARRAY;
-	DELTA_DEST->value.array.elements = DELTA_ARGS;
-	DELTA_DEST->value.array.head = NULL;
-	DELTA_DEST->value.array.tail = NULL;
+	struct DeltaArray array = delta_new_array();
 	
 	// push the elements
 	int i;
-	for(i = 0; i < DELTA_ARGS; ++i) {
-		// create the array element
-		struct DeltaArrayValue *dav = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
-		int release;
-		
-		struct DeltaVariable *v = delta_cast_string(DELTA_ARG_NAME(i), &release);
-		dav->key = (char*) malloc(v->size + 1);
-		strncpy(dav->key, v->value.ptr, v->size);
-		dav->value = DELTA_ARG(i);
-		
-		// push the element onto the tail
-		if(DELTA_DEST->value.array.head == NULL) {
-			DELTA_DEST->value.array.head = dav;
-			DELTA_DEST->value.array.tail = dav;
-		}
-		
-		DELTA_DEST->value.array.tail->next = dav;
-		DELTA_DEST->value.array.tail = dav;
-		
-		// clean up
-		DELTA_RELEASE(release, v);
-	}
+	for(i = 0; i < DELTA_ARGS; ++i)
+		delta_array_push_kv(&array, DELTA_ARG_NAME(i), DELTA_ARG(i));
+	
+	DELTA_RETURN_ARRAY(array);
 }
