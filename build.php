@@ -1,13 +1,32 @@
 <?php
 
+$os_names = array(
+	'darwin' => 'mac',
+	'freebsd' => 'bsd',
+	'hp-ux' => 'hpux',
+	'irix64' => 'irix64',
+	'linux' => 'linux',
+	'NetBSD' => 'bsd',
+	'OpenBSD' => 'bsd',
+	'SunOS' => 'solaris',
+	'unix' => 'unix',
+	'win32' => 'windows',
+	'winnt' => 'windows',
+	'windows' => 'windows'
+);
+
 $root = "src";
-$bin = "sandbox.mac/bin";
-$lib = "sandbox.mac/lib";
+$os = $os_names[strtolower(PHP_OS)];
+$sandbox = "sandbox.$os";
+$bin = "$sandbox/bin";
+$etc = "$sandbox/etc";
+$lib = "$sandbox/lib";
 $files = array();
 $projects = array();
 $total_cloc = 0;
 $total_files = 0;
 $total_projects = 0;
+$gcc = "gcc";
 
 function buildCheckPattern($path, $rules) {
 	$m = array();
@@ -103,13 +122,19 @@ function buildCountLines($file) {
 	return $c;
 }
 
+echo "Creating directories... ";
+@mkdir($sandbox);
+@mkdir($bin);
+@mkdir($etc);
+@mkdir($lib);
+echo "Done\n";
+
 echo "Building file list...\n";
 buildRecurseDirectory($root);
 echo "Done (", count($files), " build projects found)\n\n";
 
-echo "Preparing projects... ";
-
 // make sure that we have the build details for each project
+echo "Preparing projects... ";
 foreach($files as $k => $v) {
 	if(!in_array($k, array_keys($projects)))
 		die("\nCan not find project information for '$k', exiting.\n\n");
@@ -134,7 +159,7 @@ foreach($projects as $k => $v) {
 	echo "Compiling $k...\n";
 	foreach($files[$k] as $f) {
 		echo "  $f... ";
-		system("gcc -c -m32 -w \"$f\" -o \"$f.o\" -Isrc");
+		system("$gcc -c -m32 -w \"$f\" -o \"$f.o\" -Isrc");
 		$clean[] = "$f.o";
 		echo "Done\n";
 		++$total_files;
@@ -143,7 +168,7 @@ foreach($projects as $k => $v) {
 	echo "Done\n";
 	
 	echo "Building $v[name]... ";
-	$sys = "gcc";
+	$sys = $gcc;
 	if($v['type'] == "module")
 		$sys .= " -dynamiclib";
 		
@@ -154,9 +179,23 @@ foreach($projects as $k => $v) {
 	if($v['type'] == "module" && $v['name'] != "libdelta_core.dylib")
 		$sys .= " \"$lib/libdelta_core.dylib\"";
 		
-	// other libraries
-	if(isset($v['lib']))
-		$sys .= " \"$lib/$v[lib]\"";
+	// generic libraries
+	if(isset($v['lib'])) {
+		// perform 'copy' operation
+		copy($v['lib'], "$lib/" . basename($v['lib']));
+		
+		// add compiler argument
+		$sys .= " \"$lib/" . basename($v['lib']) . "\"";
+	}
+	
+	// specific libraries
+	if(isset($v["lib.$os"])) {
+		// perform 'copy' operation
+		copy($v["lib.$os"], "$lib/" . basename($v["lib.$os"]));
+		
+		// add compiler argument
+		$sys .= " \"$lib/" . basename($v["lib.$os"]) . "\"";
+	}
 		
 	$sys .= " -o ";
 	if($v['type'] == "executable")

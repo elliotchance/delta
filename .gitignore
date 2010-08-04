@@ -4,6 +4,7 @@ build/*
 cloc.pl
 sloc.sh
 doc*
+sandbox.*
 test/*
 
 !*/blank.file
