@@ -1,5 +1,6 @@
 begin delta_mysql
   name=libdelta_mysql.dylib
   type=module
-  lib=libmysql.16.dylib
+  lib.mac=src/modules/mysql/lib/libmysql.16.0.0.dylib
+  lib.linux=src/modules/mysql/lib/libmysql.so.16.0.0
 end
