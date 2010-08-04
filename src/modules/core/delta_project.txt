@@ -1,4 +1,5 @@
 begin delta_core
-  name=libdelta_core.dylib
+  name=libdelta_core
   type=module
+  args.linux=-lm -ldl
 end

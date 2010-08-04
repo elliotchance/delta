@@ -1,4 +1,4 @@
 begin delta_sqlite3
-  name=libdelta_sqlite3.dylib
+  name=libdelta_sqlite3
   type=module
 end

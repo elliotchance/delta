@@ -1,4 +1,4 @@
 begin delta_thread
-  name=libdelta_thread.dylib
+  name=libdelta_thread
   type=module
 end

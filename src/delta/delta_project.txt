@@ -1,4 +1,5 @@
 begin delta
   name=delta
   type=executable
+  args.linux=-lm -ldl
 end

@@ -1,4 +1,4 @@
 begin delta_mapm
-  name=libdelta_mapm.dylib
+  name=libdelta_mapm
   type=module
 end

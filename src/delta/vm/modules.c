@@ -6,6 +6,7 @@
 #include "delta/vm/vm.h"
 #include "delta/structs/DeltaFunction.h"
 #include <dlfcn.h>
+#include "delta/platform.h"
 
 
 delta_module_function delta_get_module_function(void *module, char *name)
@@ -77,10 +78,22 @@ int delta_load_module(struct DeltaVM *vm, char *path)
 void delta_load_modules(struct DeltaVM *vm)
 {
 	// TODO: issue #14: delta.ini loading
+	
+#ifdef DELTA_PLATFORM_MAC
 	delta_load_module(vm, "libdelta_core.dylib");
 	delta_load_module(vm, "libdelta_mapm.dylib");
 	delta_load_module(vm, "libdelta_mysql.dylib");
 	delta_load_module(vm, "libdelta_sqlite3.dylib");
 	delta_load_module(vm, "libdelta_thread.dylib");
 	delta_load_module(vm, "libdelta_zlib.dylib");
+#endif	
+
+#ifdef DELTA_PLATFORM_LINUX
+	delta_load_module(vm, "../lib/libdelta_core.so.1");
+	delta_load_module(vm, "../lib/libdelta_mapm.so.1");
+	delta_load_module(vm, "../lib/libdelta_mysql.so.1");
+	delta_load_module(vm, "../lib/libdelta_sqlite3.so.1");
+	delta_load_module(vm, "../lib/libdelta_thread.so.1");
+	delta_load_module(vm, "../lib/libdelta_zlib.so.1");
+#endif
 }

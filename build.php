@@ -21,6 +21,7 @@ $sandbox = "sandbox.$os";
 $bin = "$sandbox/bin";
 $etc = "$sandbox/etc";
 $lib = "$sandbox/lib";
+$test = "$sandbox/test";
 $files = array();
 $projects = array();
 $total_cloc = 0;
@@ -30,6 +31,10 @@ $gcc = "gcc";
 
 function buildCheckPattern($path, $rules) {
 	$m = array();
+	
+	// this is for macs, ignore files that start with ':'
+	if(substr(basename($path), 0, 1) == ':')
+		return $m;
 	
 	// check exclude patterns first
 	foreach($rules as $r) {
@@ -127,6 +132,7 @@ echo "Creating directories... ";
 @mkdir($bin);
 @mkdir($etc);
 @mkdir($lib);
+@mkdir($test);
 echo "Done\n";
 
 echo "Building file list...\n";
@@ -155,11 +161,23 @@ foreach($projects as $k => $v) {
 	if(!in_array($k, $compile_projects))
 		continue;
 	++$total_projects;
+	
+	// correct 'name' property with appropriate extension for this OS
+	if($os == 'mac')
+		$v['name'] .= ".dylib";
+	elseif($os == 'linux')
+		$v['name'] .= ".so.1";
 
+	// start compilation
 	echo "Compiling $k...\n";
 	foreach($files[$k] as $f) {
 		echo "  $f... ";
-		system("$gcc -c -m32 -w \"$f\" -o \"$f.o\" -Isrc");
+		
+		$cmd = "$gcc -c -m32 -w \"$f\" -o \"$f.o\" -Isrc";
+		if($os == 'linux')
+			$cmd .= " -fPIC";
+			
+		system($cmd);
 		$clean[] = "$f.o";
 		echo "Done\n";
 		++$total_files;
@@ -169,15 +187,32 @@ foreach($projects as $k => $v) {
 	
 	echo "Building $v[name]... ";
 	$sys = $gcc;
-	if($v['type'] == "module")
-		$sys .= " -dynamiclib";
+	if($v['type'] == "module") {
+		if($os == 'mac')
+			$sys .= " -dynamiclib";
+			
+		if($os == 'linux')
+			$sys .= " -shared -Wl,-soname,lib$v[name].so.1";
+	}
 		
 	// must be 32bit
 	$sys .= " -m32";
 	
 	// might need to link against delta_core
-	if($v['type'] == "module" && $v['name'] != "libdelta_core.dylib")
-		$sys .= " \"$lib/libdelta_core.dylib\"";
+	if($v['type'] == "module" && substr($v['name'], 0, 13) != "libdelta_core") {
+		if($os == 'mac')
+			$sys .= " \"$lib/libdelta_core.dylib\"";
+		elseif($os == 'linux')
+			$sys .= " \"$lib/libdelta_core.so.1\"";
+	}
+		
+	// generic args
+	if(isset($v['args']))
+		$sys .= " $v[args]";
+		
+	// specific args
+	if(isset($v["args.$os"]))
+		$sys .= " " . $v["args.$os"];
 		
 	// generic libraries
 	if(isset($v['lib'])) {
@@ -218,5 +253,7 @@ echo "===== SUCCESS =====\n";
 echo number_format($total_projects), " total projects compiled\n";
 echo number_format($total_files), " total files compiled\n";
 echo number_format($total_cloc), " total lines compiled\n\n";
+
+file_put_contents("$bin/test.delta", "println(\"Hello World, from Delta!\");\n");
 
 ?>

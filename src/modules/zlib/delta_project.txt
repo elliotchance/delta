@@ -1,4 +1,4 @@
 begin delta_zlib
-  name=libdelta_zlib.dylib
+  name=libdelta_zlib
   type=module
 end

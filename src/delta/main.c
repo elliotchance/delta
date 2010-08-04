@@ -17,6 +17,11 @@
 #include "delta/vm/modules.h"
 
 
+#ifndef CLOCKS_PER_SEC
+#define CLOCKS_PER_SEC 1000000
+#endif
+
+
 void main_compile()
 {
 	struct DeltaCompiler *c = delta_compiler_init();

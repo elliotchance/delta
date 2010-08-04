@@ -12,7 +12,7 @@ int delta_is_number(char *word)
 {
 	int i, len = strlen(word);
 	for(i = 0; i < len; ++i) {
-		if(!isnumber(word[i]) && word[i] != '.' && word[i] != '-' && word[i] != '+' &&
+		if(!isdigit(word[i]) && word[i] != '.' && word[i] != '-' && word[i] != '+' &&
 		   word[i] != 'e')
 			return 0;
 	}
