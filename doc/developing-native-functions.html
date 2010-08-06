@@ -27,14 +27,31 @@
         <!-- InstanceEndEditable -->
         <!-- InstanceBeginEditable name="SectionBody" -->
         <ul>
-          <li><a href="#basics">Basics</a></li>
-          <li><a href="#function">Writing the C Function</a></li>
-          <li><a href="#returning">Returning a Value</a></li>
-          <li><a href="#args">Getting Arguments</a></li>
-          <li><a href="#args2">Getting Argument Count and Types</a></li>
-          <li><a href="#resources">Using Resources</a></li>
-          <li><a href="#arrays">Using Arrays</a></li>
-        </ul>
+          <li>Introduction
+            <ul>
+              <li><a href="#basics">Basics</a></li>
+              <li><a href="#function">Writing the C Function</a></li>
+            </ul>
+          </li>
+          <li>Getting Started
+            <ul>
+              <li><a href="#returning">Returning a Value</a></li>
+              <li><a href="#args">Getting Arguments</a></li>
+              <li><a href="#args2">Getting Argument Count and Types</a> </li>
+              </ul>
+          </li>
+          <li>Arrays
+                <ul>
+                  <li><a href="#enumarray">Enumerating Arrays</a></li>
+                  <li><a href="#arrays">Manipulating Arrays</a></li>
+                </ul>
+          </li>
+          <li>Resources
+            <ul>
+              <li><a href="#resources">Using Resources</a></li>
+            </ul>
+          </li>
+</ul>
     <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
       <div class="section">
         <!-- InstanceBeginEditable name="SectionTitle" --><h2><a name="basics" id="basics"></a>Basics</h2>
@@ -263,7 +280,7 @@
         <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
       <div class="section">
         <!-- InstanceBeginEditable name="SectionTitle" -->
-        <h2><a name="arrays" id="arrays"></a>Using Arrays</h2>
+        <h2><a name="arrays" id="arrays"></a>Manipulating Arrays</h2>
         <!-- InstanceEndEditable -->
         <!-- InstanceBeginEditable name="SectionBody" -->
         <p>Start with an example of returning an array:</p>
@@ -380,6 +397,50 @@
             <td valign="top">Create a new null-terminated string variable.</td>
           </tr>
         </table>
+        <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceBeginRepeatEntry -->
+      <div class="section">
+        <!-- InstanceBeginEditable name="SectionTitle" -->
+        <h2><a name="enumarray" id="enumarray"></a>Enumerating Arrays</h2>
+        <!-- InstanceEndEditable -->
+        <!-- InstanceBeginEditable name="SectionBody" -->
+        <p>Delta provides macros for enumerating (walking-through) arrays easily. The following example is taken directly from the C source of the delta function <a href="array-array_sum.html">array_sum()</a> which calculates the total fo all the numerical elements.</p>
+        <pre><span class="codemacro">DELTA_FUNCTION</span>(array_sum)
+{
+  <span class="codecomment">// this is to hold the final total</span>
+  <span class="codekw">double</span> total = <span class="codenum">0</span>;
+
+  <span class="codecomment">// convert the first argument set to this function into an array, we have to
+  // do this because DELTA_ENUMERATE_ARRAY() expects an ARRAY type</span>
+  <span class="codekw">int</span> i, release;
+  <span class="codekw">struct</span> DeltaVariable *array = <span class="codefunc">delta_cast_array</span>(<span class="codemacro">DELTA_ARG0</span>, &amp;release);
+
+  <span class="codecomment">// as we walk through the array 'element' will hold the current key-value
+  // pair of the array element</span>
+  <span class="codekw">struct</span> DeltaArrayValue *element;
+<span class="codecomment">
+  // DELTA_ENUMERATE_ARRAY() is used like for() statement, you can use it as one
+  // line or use block brackets {}.
+  // 
+  // DELTA_ENUMERATE_ARRAY(</span><span class="param">array</span><span class="codecomment">, </span><span class="param">element</span><span class="codecomment">, </span><span class="param">iterator</span><span class="codecomment">)
+  //   </span><span class="param">array</span><span class="codecomment">     Must be passed by reference as a DeltaArray*
+  //   </span><span class="param">element</span><span class="codecomment">   The variable to store each walking array element into. This will
+  //             also store by reference to the REAL array, so if you modify
+  //             </span><span class="param">element</span><span class="codecomment"> you will modify the original </span><span class="param">array</span><span class="codecomment">.
+  //   </span><span class="param">iterator</span><span class="codecomment">  This is just an int that will start at 0 so you can keep track
+  //             of the numerical index of the array - this has nothing to do with
+  //             actual array keys. After DELTA_ENUMERATE_ARRAY() is finished,
+  //             </span><span class="param">iterator</span><span class="codecomment"> will have number of elements parsed which will be the
+  //             total elements in the array.</span>
+  <span class="codemacro">DELTA_ENUMERATE_ARRAY</span>(&amp;array-&gt;value.array, element, i) {
+    total += <span class="codefunc">delta_cast_number</span>(element-&gt;value);
+  }
+ 
+  <span class="codecomment">// be nice and release the array if needed</span>
+<span class="codemacro">  DELTA_RELEASE</span>(release, array);
+
+  <span class="codecomment">// return the total</span>
+<span class="codemacro">  DELTA_RETURN_NUMBER</span>(total);
+}</pre>
         <!-- InstanceEndEditable --></div><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->
     </td>
   </tr>
