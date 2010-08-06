@@ -8,6 +8,8 @@
 
 /**
  * @page file-fwrite.html
+ * @category modules/core/file
+ *
  * @brief Write to a file handle.
  * @syntax int fwrite ( resource handle , string string [, int length ] )
  */

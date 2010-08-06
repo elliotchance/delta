@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-upper.html
+ * @category modules/core/ctype
+ *
  * @brief Check for uppercase character(s).
  * @syntax bool ctype_upper ( string text )
  *

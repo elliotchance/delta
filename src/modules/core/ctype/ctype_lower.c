@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-lower.html
+ * @category modules/core/ctype
+ *
  * @brief Check for lowercase character(s).
  * @syntax bool ctype_lower ( string text )
  *

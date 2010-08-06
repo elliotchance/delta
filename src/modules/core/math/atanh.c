@@ -8,6 +8,8 @@
 
 /**
  * @page math-atanh.html
+ * @category modules/core/math
+ * 
  * @brief Inverse hyperbolic tangent.
  * @syntax number atanh ( number arg )
  *

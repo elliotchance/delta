@@ -8,6 +8,8 @@
 
 /**
  * @page file-fgets.html
+ * @category modules/core/file
+ *
  * @brief Gets line from file pointer.
  * @syntax string fgets ( resource handle [, int length ] )
  *

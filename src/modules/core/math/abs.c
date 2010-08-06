@@ -8,6 +8,8 @@
 
 /**
  * @page math-abs.html
+ * @category modules/core/math
+ *
  * @brief Absolute value.
  * @syntax number abs ( number number )
  *

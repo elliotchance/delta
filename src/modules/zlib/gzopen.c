@@ -9,6 +9,8 @@
 
 /**
  * @page zlib-gzopen.html
+ * @category modules/zlib
+ * 
  * @brief Open gz-file.
  */
 DELTA_FUNCTION(gzopen)

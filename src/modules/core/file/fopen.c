@@ -8,6 +8,8 @@
 
 /**
  * @page file-fopen.html
+ * @category modules/core/file
+ *
  * @brief Opens file handle.
  * @syntax resource fopen ( string filename , string mode )
  */

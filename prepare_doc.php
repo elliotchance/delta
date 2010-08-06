@@ -15,6 +15,7 @@ function parse_doc($fileid, $doc, $full) {
 	
 	// extract tags
 	$tags = array();
+	$tags['name'] = $name;
 	for($i = 0; $i < count($lines); ++$i) {
 		$l = $lines[$i];
 		
@@ -22,6 +23,8 @@ function parse_doc($fileid, $doc, $full) {
 			$tags['brief'] = trim(substr($l, strpos($l, "@brief") + 6));
 		elseif(strpos($l, "@page") !== false)
 			$tags['page'] = trim(substr($l, strpos($l, "@page") + 5));
+		elseif(strpos($l, "@category") !== false)
+			$tags['category'] = trim(substr($l, strpos($l, "@category") + 9));
 		elseif(strpos($l, "@param") !== false) {
 			$param = trim(substr($l, strpos($l, "@param") + 6));
 			$key = substr($param, 0, strpos($param, " "));

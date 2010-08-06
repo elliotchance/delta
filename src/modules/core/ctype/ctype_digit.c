@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-digit.html
+ * @category modules/core/ctype
+ *
  * @brief Check for numeric character(s).
  * @syntax bool ctype_digit ( string text )
  *

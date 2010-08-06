@@ -499,6 +499,8 @@ static void MDFilter ()
 
 /**
  * @page string-md5.html
+ * @category modules/core/string
+ * 
  * @brief Get the MD5 of a string.
  */
 DELTA_FUNCTION(md5)

@@ -8,6 +8,8 @@
 
 /**
  * @page math-floor.html
+ * @category modules/core/math
+ * 
  * @brief Round down to the nearest integer.
  */
 DELTA_FUNCTION(floor)

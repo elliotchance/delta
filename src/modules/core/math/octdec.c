@@ -13,6 +13,8 @@ char* base_convert(char* in, int base1, int base2);
 
 /**
  * @page math-octdec.html
+ * @category modules/core/math
+ * 
  * @brief Octal to decimal.
  * @syntax number octdec ( string octal_string )
  *

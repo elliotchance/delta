@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-punct.html
+ * @category modules/core/ctype
+ *
  * @brief Check for any printable character which is not whitespace or an alphanumeric character.
  * @syntax bool ctype_punct ( string text )
  *

@@ -8,6 +8,8 @@
 
 /**
  * @page date-time.html
+ * @category modules/core/date
+ *
  * @brief Return current Unix timestamp.
  * @syntax number time ( )
  *

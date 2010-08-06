@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-print.html
+ * @category modules/core/ctype
+ *
  * @brief Check for printable character(s).
  * @syntax bool ctype_print ( string text )
  *

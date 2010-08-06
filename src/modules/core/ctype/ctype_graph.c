@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-graph.html
+ * @category modules/core/ctype
+ *
  * @brief Check for any printable character(s) except space.
  * @syntax bool ctype_graph ( string text )
  *

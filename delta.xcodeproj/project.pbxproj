@@ -854,7 +854,6 @@
 		8B8B0D0911F2B17500B67657 /* waiting_threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = waiting_threads.h; sourceTree = "<group>"; };
 		8B8B0D0A11F2B17500B67657 /* wqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wqueue.h; sourceTree = "<group>"; };
 		8B8B0D0C11F2B17500B67657 /* libmysql.16.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysql.16.0.0.dylib; sourceTree = "<group>"; };
-		8B8B0D0D11F2B17500B67657 /* module-version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "module-version.txt"; sourceTree = "<group>"; };
 		8B8B0D0E11F2B17500B67657 /* module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = module.c; sourceTree = "<group>"; };
 		8B8B0D0F11F2B17500B67657 /* module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = module.h; sourceTree = "<group>"; };
 		8B8B0D1011F2B17500B67657 /* mysql_connect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mysql_connect.c; sourceTree = "<group>"; };
@@ -2002,7 +2001,6 @@
 				8B8B0CC511F2B17500B67657 /* delta_project.txt */,
 				8B8B0CC611F2B17500B67657 /* include */,
 				8B8B0D0B11F2B17500B67657 /* lib */,
-				8B8B0D0D11F2B17500B67657 /* module-version.txt */,
 			);
 			path = mysql;
 			sourceTree = "<group>";

@@ -8,6 +8,8 @@
 
 /**
  * @page math-sqrt.html
+ * @category modules/core/math
+ * 
  * @brief Square root.
  * @syntax number sqrt ( number arg )
  *

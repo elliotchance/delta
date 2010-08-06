@@ -8,6 +8,8 @@
 
 /**
  * @page file-fgetc.html
+ * @category modules/core/file
+ *
  * @brief Gets character from file pointer.
  * @syntax string fgetc ( resource handle )
  *

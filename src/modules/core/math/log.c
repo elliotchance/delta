@@ -8,6 +8,8 @@
 
 /**
  * @page math-log.html
+ * @category modules/core/math
+ * 
  * @brief Natural logarithm.
  */
 DELTA_FUNCTION(log)

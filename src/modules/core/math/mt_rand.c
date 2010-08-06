@@ -9,6 +9,8 @@
 
 /**
  * @page math-mt_rand.html
+ * @category modules/core/math
+ * 
  * @brief Generate a better random value.
  * @syntax void mt_rand ( )
  * @syntax void mt_rand ( int min, int max )

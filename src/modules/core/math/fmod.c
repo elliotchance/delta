@@ -8,6 +8,8 @@
 
 /**
  * @page math-fmod.html
+ * @category modules/core/math
+ * 
  * @brief Returns the floating point remainder (modulo) of the division of the arguments.
  * @syntax number fmod ( number x , number y )
  *

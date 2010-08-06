@@ -13,6 +13,8 @@ char* base_convert(char* in, int base1, int base2);
 
 /**
  * @page math-decoct.html
+ * @category modules/core/math
+ * 
  * @brief Decimal to octal.
  * @syntax string decoct ( int number )
  *

@@ -8,6 +8,8 @@
 
 /**
  * @page math-sinh.html
+ * @category modules/core/math
+ * 
  * @brief Hyperbolic sine.
  * @syntax number sinh ( number arg )
  *

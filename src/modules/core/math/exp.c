@@ -8,6 +8,8 @@
 
 /**
  * @page math-exp.html
+ * @category modules/core/math
+ * 
  * @brief Calculates the exponent of e.
  */
 DELTA_FUNCTION(exp)

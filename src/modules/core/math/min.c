@@ -8,6 +8,8 @@
 
 /**
  * @page math-min.html
+ * @category modules/core/math
+ * 
  * @brief Find lowest value.
  * @syntax number min ( array values )
  * @syntax number min ( number value1 , number value2 [, number value3... ] )

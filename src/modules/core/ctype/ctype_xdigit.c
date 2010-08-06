@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-xdigit.html
+ * @category modules/core/ctype
+ *
  * @brief Check for character(s) representing a hexadecimal digit.
  * @syntax bool ctype_xdigit ( string text )
  *

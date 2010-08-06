@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-space.html
+ * @category modules/core/ctype
+ *
  * @brief Check for whitespace character(s).
  * @syntax bool ctype_space ( string text )
  *

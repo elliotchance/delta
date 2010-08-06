@@ -8,6 +8,8 @@
 
 /**
  * @page math-mt_getrandmax.html
+ * @category modules/core/math
+ * 
  * @brief Show largest possible random value.
  * @syntax int mt_getrandmax ( )
  *

@@ -8,6 +8,8 @@
 
 /**
  * @page math-log1p.html
+ * @category modules/core/math
+ * 
  * @brief Returns log(1 + number), computed in a way that is accurate even when the value of number
  *        is close to zero.
  * @syntax number log1p ( number number )

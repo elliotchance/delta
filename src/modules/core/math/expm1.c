@@ -8,6 +8,8 @@
 
 /**
  * @page math-expm1.html
+ * @category modules/core/math
+ * 
  * @brief Returns exp(number) - 1, computed in a way that is accurate even when the value of number
  *        is close to zero.
  * @syntax number expm1 ( number arg )

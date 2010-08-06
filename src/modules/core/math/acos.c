@@ -8,6 +8,8 @@
 
 /**
  * @page math-acos.html
+ * @category modules/core/math
+ * 
  * @brief Arc cosine.
  * @syntax number acos ( number arg )
  *

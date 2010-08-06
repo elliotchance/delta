@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-alpha.html
+ * @category modules/core/ctype
+ *
  * @brief Check for alphabetic character(s).
  * @syntax bool ctype_alpha ( string text )
  *

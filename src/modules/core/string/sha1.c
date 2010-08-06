@@ -452,6 +452,8 @@ void endianTest(int *endian_ness)
 
 /**
  * @page string-sha1.html
+ * @category modules/core/string
+ * 
  * @brief Get the SHA-1 of a string.
  */
 DELTA_FUNCTION(sha1)

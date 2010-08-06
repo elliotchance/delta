@@ -8,6 +8,8 @@
 
 /**
  * @page math-tan.html
+ * @category modules/core/math
+ * 
  * @brief Tangent.
  * @syntax number tan ( number arg )
  *

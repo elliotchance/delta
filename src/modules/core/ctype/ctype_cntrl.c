@@ -8,6 +8,8 @@
 
 /**
  * @page ctype-cntrl.html
+ * @category modules/core/ctype
+ *
  * @brief Check for control character(s).
  * @syntax bool ctype_cntrl ( string text )
  *

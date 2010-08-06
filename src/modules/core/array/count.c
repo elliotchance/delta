@@ -7,6 +7,8 @@
 
 /**
  * @page array-count.html
+ * @category modules/core/array
+ *
  * @brief Count the number of elements in an array.
  * 
  * If the argument provided is not an array it will return 1.

@@ -8,6 +8,8 @@
 
 /**
  * @page math-lcg_value.html
+ * @category modules/core/math
+ * 
  * @brief Random number between 0 and 1.
  * @syntax number lcg_value ( )
  *

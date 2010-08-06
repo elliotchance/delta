@@ -8,6 +8,8 @@
 
 /**
  * @page math-atan.html
+ * @category modules/core/math
+ * 
  * @brief Arc tangent.
  * @syntax number atan ( number arg )
  *

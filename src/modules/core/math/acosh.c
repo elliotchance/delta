@@ -8,6 +8,8 @@
 
 /**
  * @page math-acosh.html
+ * @category modules/core/math
+ * 
  * @brief Inverse hyperbolic cosine.
  * @syntax number acosh ( number arg )
  *

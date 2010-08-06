@@ -8,6 +8,8 @@
 
 /**
  * @page math-max.html
+ * @category modules/core/math
+ * 
  * @brief Find highest value.
  * @syntax number max ( array values )
  * @syntax number max ( number value1 , number value2 [, number value3... ] )

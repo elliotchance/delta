@@ -8,6 +8,8 @@
 
 /**
  * @page file-feof.html
+ * @category modules/core/file
+ *
  * @brief Tests for end-of-file on a file pointer.
  * @syntax boolean feof ( resource handle )
  *

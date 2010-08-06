@@ -8,6 +8,8 @@
 
 /**
  * @page math-asinh.html
+ * @category modules/core/math
+ * 
  * @brief Inverse hyperbolic sine.
  * @syntax number asinh ( number arg )
  *

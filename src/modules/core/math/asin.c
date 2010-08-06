@@ -8,6 +8,8 @@
 
 /**
  * @page math-asin.html
+ * @category modules/core/math
+ * 
  * @brief Arc sine.
  * @syntax number asin ( number arg )
  *

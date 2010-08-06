@@ -8,6 +8,8 @@
 
 /**
  * @page math-cosh.html
+ * @category modules/core/math
+ * 
  * @brief Hyperbolic cosine.
  * @syntax number cosh ( number arg )
  *

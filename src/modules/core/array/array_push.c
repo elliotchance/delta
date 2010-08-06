@@ -8,6 +8,8 @@
 
 /**
  * @page array-array_push.html
+ * @category modules/core/array
+ *
  * @brief Push an element onto an array.
  * 
  * If the type of variable is not an array its value will be taken and converted into the first

@@ -9,6 +9,8 @@
 
 /**
  * @page math-mt_srand.html
+ * @category modules/core/math
+ * 
  * @brief Seed the better random number generator.
  * @syntax void mt_srand ( )
  * @syntax void mt_srand ( int seed )
