@@ -7,7 +7,7 @@
 
 struct DeltaModuleFunction* module_functions(int *count)
 {
-	DELTA_PREPARE_MODULE_FUNCTIONS(150);
+	DELTA_PREPARE_MODULE_FUNCTIONS(160);
 	
 	// array
 	DELTA_PUSH_FUNCTION(array, 0, DELTA_MAX_ARGS);
@@ -107,7 +107,10 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(sha1, 1, 1);
 	DELTA_PUSH_FUNCTION(soundex, 1, 1);
 	DELTA_PUSH_FUNCTION(strlen, 1, 1);
+	DELTA_PUSH_FUNCTION(strtolower, 1, 1);
+	DELTA_PUSH_FUNCTION(strtoupper, 1, 1);
 	DELTA_PUSH_FUNCTION(substr, 2, 3);
+	
 	DELTA_PUSH_FUNCTION(strpos, 2, 2);
 	
 	// variables
