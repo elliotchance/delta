@@ -79,19 +79,21 @@ function read_file($file) {
 	
 	// read whole file
 	$contents = file_get_contents($file);
-	
-	// if the page does not contain @page we ignore
-	if(strpos($contents, "@category") === false)
-		return false;
 		
-	echo "+ $file\n";
 	$db->exec("insert into files (filepath, mtime) values " .
 			  "(\"$file\", \"" . filemtime($file) . "\")");
 	$fileid = $db->querySingle('SELECT max(id) FROM files');
 	
-	// extract doc tag
-	$pos = strpos($contents, "/**") + 3;
+	// extract the right doc tag
+	$pos = strpos($contents, '@category');
+	$pos = strrpos(substr($contents, 0, $pos), "/**") + 3;
 	$doc = substr($contents, $pos, strpos($contents, "*/", $pos) - $pos);
+
+	// if the doctag does not contain @category we ignore
+	if(strpos($doc, "@category") === false)
+		return false;
+		
+	echo "+ $file\n";
 	parse_doc($fileid, $doc, $contents);
 }
 
