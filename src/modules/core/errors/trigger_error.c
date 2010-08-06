@@ -9,7 +9,6 @@
 
 
 /**
- * @page errors-trigger_error.html
  * @category modules/core/errors
  *
  * @brief Generates a user-level error/warning/notice message.

@@ -8,7 +8,6 @@
 
 
 /**
- * @page zlib-gzopen.html
  * @category modules/zlib
  * 
  * @brief Open gz-file.

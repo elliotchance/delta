@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-pi.html
  * @category modules/core/math
  * 
  * @brief Get value of pi.

@@ -10,7 +10,6 @@ char* MDFile(char *filename);
 
 
 /**
- * @page string-md5_file.html
  * @category modules/core/string
  * 
  * @brief Get the MD5 of a string.

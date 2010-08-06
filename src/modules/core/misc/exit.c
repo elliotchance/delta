@@ -6,7 +6,6 @@
 
 
 /**
- * @page misc-exit.html
  * @category modules/core/misc
  * 
  * @brief Terminate the current script.

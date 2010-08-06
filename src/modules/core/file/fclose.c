@@ -7,7 +7,6 @@
 
 
 /**
- * @page file-fclose.html
  * @category modules/core/file
  *
  * @brief Close a file handle.

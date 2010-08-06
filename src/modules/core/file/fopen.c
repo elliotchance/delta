@@ -7,7 +7,6 @@
 
 
 /**
- * @page file-fopen.html
  * @category modules/core/file
  *
  * @brief Opens file handle.

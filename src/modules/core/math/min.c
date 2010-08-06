@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-min.html
  * @category modules/core/math
  * 
  * @brief Find lowest value.

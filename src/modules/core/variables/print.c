@@ -6,7 +6,6 @@
 
 
 /**
- * @page variables-print.html
  * @category modules/core/variables
  * 
  * @brief Write one or more arguments to the stdout.

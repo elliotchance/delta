@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-rand.html
  * @category modules/core/math
  * 
  * @brief Generate a random integer.

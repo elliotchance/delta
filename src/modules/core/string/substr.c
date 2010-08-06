@@ -7,7 +7,6 @@
 
 
 /**
- * @page string-substr.html
  * @category modules/core/string
  * 
  * @brief Fetch a substring.

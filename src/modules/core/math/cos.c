@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-cos.html
  * @category modules/core/math
  * 
  * @brief Cosine.

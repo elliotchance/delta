@@ -6,7 +6,6 @@
 
 
 /**
- * @page string-strlen.html
  * @category modules/core/string
  * 
  * @brief Get the length of a string.

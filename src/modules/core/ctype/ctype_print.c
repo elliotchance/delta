@@ -7,7 +7,6 @@
 
 
 /**
- * @page ctype-print.html
  * @category modules/core/ctype
  *
  * @brief Check for printable character(s).

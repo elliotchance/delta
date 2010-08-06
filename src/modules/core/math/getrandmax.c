@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-getrandmax.html
  * @category modules/core/math
  * 
  * @brief Show largest possible random value.

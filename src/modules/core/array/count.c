@@ -6,7 +6,6 @@
 
 
 /**
- * @page array-count.html
  * @category modules/core/array
  *
  * @brief Count the number of elements in an array.

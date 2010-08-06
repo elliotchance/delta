@@ -12,7 +12,6 @@ char* base_convert(char* in, int base1, int base2);
 
 
 /**
- * @page math-hexdec.html
  * @category modules/core/math
  * 
  * @brief Hexadecimal to decimal.

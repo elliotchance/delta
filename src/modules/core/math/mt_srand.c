@@ -8,7 +8,6 @@
 
 
 /**
- * @page math-mt_srand.html
  * @category modules/core/math
  * 
  * @brief Seed the better random number generator.

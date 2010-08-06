@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-rad2deg.html
  * @category modules/core/math
  * 
  * @brief Converts the radian number to the equivalent number in degrees.

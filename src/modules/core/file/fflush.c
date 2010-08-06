@@ -7,7 +7,6 @@
 
 
 /**
- * @page file-fflush.html
  * @category modules/core/file
  *
  * @brief Flushes the output to a file.

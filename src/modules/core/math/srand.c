@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-srand.html
  * @category modules/core/math
  * 
  * @brief Seed the random number generator.

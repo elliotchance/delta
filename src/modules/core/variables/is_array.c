@@ -6,7 +6,6 @@
 
 
 /**
- * @page variables-is_array.html
  * @category modules/core/variables
  * 
  * @brief Returns TRUE if the argument is an array.

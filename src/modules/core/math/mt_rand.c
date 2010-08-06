@@ -8,7 +8,6 @@
 
 
 /**
- * @page math-mt_rand.html
  * @category modules/core/math
  * 
  * @brief Generate a better random value.

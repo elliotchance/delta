@@ -7,7 +7,6 @@
 
 
 /**
- * @page array-array_push.html
  * @category modules/core/array
  *
  * @brief Push an element onto an array.

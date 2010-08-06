@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-sin.html
  * @category modules/core/math
  * 
  * @brief Sine.

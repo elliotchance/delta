@@ -39,7 +39,6 @@ char* base_convert(char* in, int base1, int base2)
 
 
 /**
- * @page math-base_convert.html
  * @category modules/core/math
  * 
  * @brief Convert a number between arbitrary bases.

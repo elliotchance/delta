@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-tanh.html
  * @category modules/core/math
  * 
  * @brief Hyperbolic tangent.

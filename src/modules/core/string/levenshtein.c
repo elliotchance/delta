@@ -73,7 +73,6 @@ int minimum(int a,int b,int c)
 
 
 /**
- * @page string-levenshtein.html
  * @category modules/core/string
  * 
  * @brief Calculate Levenshtein distance between two strings.

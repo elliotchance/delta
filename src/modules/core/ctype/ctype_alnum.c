@@ -7,7 +7,6 @@
 
 
 /**
- * @page ctype-alnum.html
  * @category modules/core/ctype
  *
  * @brief Check for alphanumeric character(s).

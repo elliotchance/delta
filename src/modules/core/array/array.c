@@ -7,7 +7,6 @@
 
 
 /**
- * @page array-array.html
  * @category modules/core/array
  *
  * @brief Create an array.

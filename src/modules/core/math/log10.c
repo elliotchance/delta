@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-log10.html
  * @category modules/core/math
  * 
  * @brief Base-10 logarithm.

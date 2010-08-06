@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-asin.html
  * @category modules/core/math
  * 
  * @brief Arc sine.

@@ -7,7 +7,6 @@
 
 
 /**
- * @page file-fwrite.html
  * @category modules/core/file
  *
  * @brief Write to a file handle.

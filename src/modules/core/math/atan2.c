@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-atan2.html
  * @category modules/core/math
  * 
  * @brief Arc tangent of two variables.

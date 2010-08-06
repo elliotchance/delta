@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-abs.html
  * @category modules/core/math
  *
  * @brief Absolute value.

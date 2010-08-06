@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-max.html
  * @category modules/core/math
  * 
  * @brief Find highest value.

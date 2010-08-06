@@ -81,7 +81,7 @@ function read_file($file) {
 	$contents = file_get_contents($file);
 	
 	// if the page does not contain @page we ignore
-	if(strpos($contents, "@page") === false)
+	if(strpos($contents, "@category") === false)
 		return false;
 		
 	echo "+ $file\n";

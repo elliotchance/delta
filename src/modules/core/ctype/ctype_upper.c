@@ -7,7 +7,6 @@
 
 
 /**
- * @page ctype-upper.html
  * @category modules/core/ctype
  *
  * @brief Check for uppercase character(s).

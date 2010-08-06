@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-pow.html
  * @category modules/core/math
  * 
  * @brief Exponential expression.

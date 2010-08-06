@@ -7,7 +7,6 @@
 
 
 /**
- * @page math-ceil.html
  * @category modules/core/math
  * 
  * @brief Round up to the nearest integer.
