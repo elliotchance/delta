@@ -80,9 +80,6 @@ function read_file($file) {
 	// read whole file
 	$contents = file_get_contents($file);
 		
-	$db->exec("insert into files (filepath, mtime) values " .
-			  "(\"$file\", \"" . filemtime($file) . "\")");
-	$fileid = $db->querySingle('SELECT max(id) FROM files');
 	
 	// extract the right doc tag
 	$pos = strpos($contents, '@category');
@@ -94,6 +91,9 @@ function read_file($file) {
 		return false;
 		
 	echo "+ $file\n";
+	$db->exec("insert into files (filepath, mtime) values " .
+			  "(\"$file\", \"" . filemtime($file) . "\")");
+	$fileid = $db->querySingle('SELECT max(id) FROM files');
 	parse_doc($fileid, $doc, $contents);
 }
 
