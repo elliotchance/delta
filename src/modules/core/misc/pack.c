@@ -57,6 +57,7 @@ inline unsigned long long endian_swap_u64(unsigned long long x)
  * NO			x		NUL byte
  * NO			X		Back up one byte
  * NO			@		NUL-fill to absolute position
+ * NO			*		Repeat the last character for the rest of the arguments.
  */
 DELTA_FUNCTION(pack)
 {
@@ -68,6 +69,27 @@ DELTA_FUNCTION(pack)
 	// first we need to count how much ram we will use
 	for(i = 0; i < arg0->size; ++i) {
 		switch(format[i]) {
+			case 'a':
+				DELTA_TRIGGER_ERROR("'a' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case 'A':
+				DELTA_TRIGGER_ERROR("'A' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case 'h':
+				DELTA_TRIGGER_ERROR("'h' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case 'H':
+				DELTA_TRIGGER_ERROR("'H' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case 'X':
+				DELTA_TRIGGER_ERROR("'X' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case '@':
+				DELTA_TRIGGER_ERROR("'@' is not supported, ignoring.", DELTA_ERROR_ERROR);
+				
+			case '*':
+				DELTA_TRIGGER_ERROR("'*' is not supported, ignoring.", DELTA_ERROR_ERROR);
+			
 			case 'c':
 			case 'C':
 			case 'x':
@@ -158,6 +180,42 @@ DELTA_FUNCTION(pack)
 		}
 		
 		if(format[i] == 'L') {
+			unsigned long temp = (unsigned long) delta_cast_number(DELTA_ARG(argid));
+			memmove(result + reslen, (char*) &temp, sizeof(long));
+			reslen += sizeof(long);
+			continue;
+		}
+		
+		if(format[i] == 'n') {
+			DELTA_TRIGGER_ERROR("'n' will use machine-dependant endianness.", DELTA_ERROR_WARNING);
+			
+			unsigned short temp = (unsigned short) delta_cast_number(DELTA_ARG(argid));
+			memmove(result + reslen, (char*) &temp, sizeof(short));
+			reslen += sizeof(short);
+			continue;
+		}
+		
+		if(format[i] == 'N') {
+			DELTA_TRIGGER_ERROR("'N' will use machine-dependant endianness.", DELTA_ERROR_WARNING);
+			
+			unsigned long temp = (unsigned long) delta_cast_number(DELTA_ARG(argid));
+			memmove(result + reslen, (char*) &temp, sizeof(long));
+			reslen += sizeof(long);
+			continue;
+		}
+		
+		if(format[i] == 'v') {
+			DELTA_TRIGGER_ERROR("'v' will use machine-dependant endianness.", DELTA_ERROR_WARNING);
+			
+			unsigned short temp = (unsigned short) delta_cast_number(DELTA_ARG(argid));
+			memmove(result + reslen, (char*) &temp, sizeof(short));
+			reslen += sizeof(short);
+			continue;
+		}
+		
+		if(format[i] == 'V') {
+			DELTA_TRIGGER_ERROR("'V' will use machine-dependant endianness.", DELTA_ERROR_WARNING);
+			
 			unsigned long temp = (unsigned long) delta_cast_number(DELTA_ARG(argid));
 			memmove(result + reslen, (char*) &temp, sizeof(long));
 			reslen += sizeof(long);
