@@ -171,18 +171,19 @@ while($rnav = $qnav->fetchArray()) {
 	// set sections
 	$sections = <<<EOF
 	  <tr>
-	    <td style="border-bottom: solid 1px #666; background-color: #DDDDDD"><!-- TemplateBeginEditable name="SectionTitle" --><strong><a href="index.html" target="_parent">Delta Documentation</a></strong><!-- TemplateEndEditable --></td>
+	    <td class="nav_module"><!-- TemplateBeginEditable name="SectionTitle" --><strong><a href="index.html" target="_parent">Delta Documentation</a></strong><!-- TemplateEndEditable --></td>
 	  </tr>
 EOF;
 
 	$catsplit = explode('/', $category);
 	for($i = 0; $i < count($catsplit); ++$i) {
-		$url = implode("-", array_slice($catsplit, 0, $i + 1)) . '.html';
+		$url = implode("-", array_slice($catsplit, 0, $i + 1)) . '-index.html';
+		$before = str_repeat('&nbsp;', ($i + 1) * 2);
 		$title = ucfirst($catsplit[$i]);
 
 		$sections .= <<<EOF
 		  <tr>
-		    <td style="border-bottom: solid 1px #666; background-color: #DDDDDD"><!-- TemplateBeginEditable name="SectionTitle" --><strong><a href="$url" target="_parent">$title</a></strong><!-- TemplateEndEditable --></td>
+		    <td class="nav_module"><!-- TemplateBeginEditable name="SectionTitle" --><strong>$before<a href="$url" target="_parent">$title</a></strong><!-- TemplateEndEditable --></td>
 		  </tr>
 EOF;
 	}
