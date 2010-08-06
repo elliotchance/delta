@@ -1,5 +1,8 @@
 <?php
 
+$keywords = array(
+	'if', 'for'
+);
 
 function replaceEditableRegion($fileid, $template, $region, $tag, $content = false) {
 	global $db;
@@ -8,9 +11,11 @@ function replaceEditableRegion($fileid, $template, $region, $tag, $content = fal
 	$pos1 = strpos($template, '<!-- TemplateBeginEditable name="' . $region . '" -->') + $len;
 	$pos2 = strpos($template, '<!-- TemplateEndEditable -->', $pos1);
 	if($content === false) {
-		$template = substr($template, 0, $pos1) .
-		            $db->querySingle("select value from tags where fileid=$fileid and name='$tag'") .
-		            substr($template, $pos2);
+		$data = $db->querySingle("select value from tags where fileid=$fileid and name='$tag'");
+		if($data == '')
+			$data = '<i>No information.</i>';
+			
+		$template = substr($template, 0, $pos1) . $data . substr($template, $pos2);
 	}
 	else
 		$template = substr($template, 0, $pos1) . $tag . substr($template, $pos2);
@@ -39,6 +44,9 @@ function replaceRepeatRegion($fileid, $template, $region, $region2, $repeat) {
 
 
 function formatSyntax($raw) {
+	if(trim($raw) == '')
+		return '<i>No information.</i>';
+	
 	$parts = explode(" ", $raw);
 	$parts[1] = "<b>$parts[1]</b>";
 	
@@ -62,7 +70,112 @@ function turnOnSection($template, $name, $bool) {
 
 
 function formatCode($code) {
-	return $code;
+	global $keywords;
+	$code = trim($code);
+	
+	// this algorithm is fairly simple
+	$r = "";
+	$term = "";
+	$last_term = "";
+	$classes = array();
+	for($i = 0; $i < strlen($code); ++$i) {
+		
+		// string
+		if(substr($code, $i, 1) == "\"") {
+			$string = "\"";
+			++$i;
+			for(; $i < strlen($code); ++$i) {
+				$c = substr($code, $i, 1);
+				$string .= $c;
+				if($c == "\"" && substr($code, $i - 1, 1) != "\\") {
+					++$i;
+					break;
+				}
+			}
+			$r .= "<span class=\"codestring\">$string</span>";
+		}
+		
+		// character constant
+		if(substr($code, $i, 1) == "'") {
+			$string = "\"";
+			++$i;
+			for(; $i < strlen($code); ++$i) {
+				$c = substr($code, $i, 1);
+				$string .= $c;
+				if($c == "'" && substr($code, $i - 1, 1) != "\\") {
+					++$i;
+					break;
+				}
+			}
+			$r .= "<span class=\"codestring\">$string</span>";
+		}
+		
+		// comments
+		if(substr($code, $i, 2) == "//") {
+			$comment = "";
+			for(; $i < strlen($code); ++$i) {
+				$c = substr($code, $i, 1);
+				if($c == "\n") break;
+				$comment .= $c;
+			}
+			$r .= "<span class=\"codecomment\">$comment</span>";
+		}
+		if(substr($code, $i, 2) == "/*") {
+			$comment = "";
+			for(; $i < strlen($code); ++$i) {
+				$c = substr($code, $i, 1);
+				if($c == "*" && substr($code, $i + 1, 1) == "/") {
+					$comment .= "*/";
+					$i += 2;
+					break;
+				}
+				$comment .= $c;
+			}
+			$r .= "<span class=\"codecomment\">$comment</span>";
+		}
+		
+		// normal code
+		$c = substr($code, $i, 1);
+		if(ctype_alnum($c) || $c == '.') $term .= $c;
+		else {
+			if($last_term == "class") {
+				$r .= "<span class=\"codeobject\">$term</span>";
+				array_push($classes, $term);
+			} elseif(in_array($term, $keywords))
+				$r .= "<span class=\"codekw\">$term</span>";
+			elseif(in_array($term, $classes))
+				$r .= "<span class=\"codeobject\">$term</span>";
+			elseif(is_numeric($term) || is_numeric(substr($term, 0, strlen($term) - 1)))
+				$r .= "<span class=\"codenum\">$term</span>";
+			else $r .= $term;
+			
+			if($c == "\n")
+				$r .= "<br/>";
+			else if($c == " ")
+				$r .= "&nbsp;";
+			else if($c == "\t")
+				$r .= "&nbsp;&nbsp;";
+			else
+				$r .= htmlspecialchars($c);
+			
+			$last_term = $term;
+			$term = "";
+		}
+	}
+	$r .= $term;
+	
+	return $r;
+}
+
+
+function removeConditionalRegion($template, $name) {
+	// make sure we turn the region off
+	$template = turnOnSection($template, $name, false);
+	
+	$pos1 = strpos($template, '<!-- TemplateBeginIf cond="' . $name . '" -->');
+	$pos2 = strpos($template, '<!-- TemplateEndIf -->', $pos1);
+	
+	return substr($template, 0, $pos1) . substr($template, $pos2 + strlen('<!-- TemplateEndIf -->'));
 }
 
 
@@ -101,8 +214,6 @@ while($r = $q->fetchArray()) {
 	$template = replaceEditableRegion($fileid, $template, 'Syntax', $syntax, true);
 	
 	// parameters
-	$template = turnOnSection($template, "ParametersSection", count($synparts) > 3);
-	
 	$qparams = $db->query("select * from tags where fileid=$fileid and name='param' order by tagorder");
 	$params = array();
 	while($param = $qparams->fetchArray()) {
@@ -118,7 +229,10 @@ EOF;
 		$params[] = $out;
 	}
 	
-	$template = replaceRepeatRegion($fileid, $template, 'Parameters', 'Parameter', $params);
+	if(count($params))
+		$template = replaceRepeatRegion($fileid, $template, 'Parameters', 'Parameter', $params);
+	else
+		$template = removeConditionalRegion($template, 'ParametersSection');
 	
 	// return
 	$template = replaceEditableRegion($fileid, $template, 'Return', 'return');
@@ -142,18 +256,28 @@ EOF;
 		$examples[] = $out;
 	}
 	
-	$template = replaceRepeatRegion($fileid, $template, 'Examples', 'Example', $examples);
+	if(count($examples))
+		$template = replaceRepeatRegion($fileid, $template, 'Examples', 'Example', $examples);
+	else
+		$template = removeConditionalRegion($template, 'ExamplesSection');
 	
 	// see also
 	$qseealso = $db->query("select * from tags where fileid=$fileid and name='seealso' order by tagorder");
 	$total_seealso = 0;
 	$seealso = "\n\t<ul>\n";
 	while($see = $qseealso->fetchArray()) {
-		$seealso .= "\t\t<li><a href=\"#\">$see[value]()</a> - $see[value]</li>\n";
+		$url = str_replace('/', '-', $category) . '-' . $see['value'] . '.html';
+		$briefid = $db->querySingle("select tags.fileid from tags join tags t2 on t2.fileid=tags.fileid where tags.name='category' and tags.value='modules/core/math' and t2.name='name' and t2.value='$see[value]'");
+		$brief = $db->querySingle("select value from tags where name='brief' and fileid='$briefid'");
+		$seealso .= "\t\t<li><a href=\"$url\">$see[value]()</a> - $brief</li>\n";
 		++$total_seealso;
 	}
 	$seealso .= "\t</ul>\n";
-	$template = replaceEditableRegion($fileid, $template, 'SeeAlso', $seealso, true);
+	
+	if($total_seealso)
+		$template = replaceEditableRegion($fileid, $template, 'SeeAlso', $seealso, true);
+	else
+		$template = removeConditionalRegion($template, 'SeeAlsoSection');
 	
 	echo $filename, "\n";
 	file_put_contents($filename, $template);

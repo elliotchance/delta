@@ -1,9 +1,13 @@
 @charset "UTF-8";
+html {
+	height:100%;
+}
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 12px;
 	padding: 0;
 	margin: 0;
+	height:100%;
 }
 a, a:visited {
 	color: #039;
