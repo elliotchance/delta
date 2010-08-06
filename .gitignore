@@ -3,3 +3,4 @@ doc.php
 sandbox/*
 *.xcodeproj
 cloc.pl
+docdb.sqlite3
