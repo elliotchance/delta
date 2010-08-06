@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+<!-- TemplateParam name="SeeAlsoSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ExamplesSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ParametersSection" type="boolean" value="true" -->
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" --><iframe src="modules-core-math.html" id="navframe"></iframe><!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- TemplateBeginEditable name="FunctionName" -->base_convert<!-- TemplateEndEditable --></span><br />
+<div style="padding-top: 5px">
+<!-- TemplateBeginEditable name="ShortDescription" -->Convert a number between arbitrary bases.<!-- TemplateEndEditable --></div>
+<br />
+
+<h2>Syntax</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Syntax" --><span class="syntax">string <b>base_convert</b> ( string <span class="param">number</span> , int <span class="param">frombase</span> , int <span class="param">tobase</span> )</span><!-- TemplateEndEditable -->
+</div>
+
+<h2>Description</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Description" -->Returns a string containing number represented in base tobase. The base in which number is given is specified in frombase. Both frombase and tobase have to be between 2 and 36, inclusive. Digits in numbers with a base higher than 10 will be represented with the letters a-z, with a meaning 10, b meaning 11 and z meaning 35.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ParametersSection" -->
+<h2>Parameters</h2>
+<div class="section">
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+<!-- TemplateBeginRepeat name="Parameters" -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">number</td>
+		<td>The number to convert.</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">frombase</td>
+		<td>The base number is in.</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">tobase</td>
+		<td>The base to convert number to.</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat -->
+</table>
+</div>
+<!-- TemplateEndIf -->
+
+<h2>Return Values</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Return" -->number converted to base tobase.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ExamplesSection" -->
+<h2>Examples</h2>
+<div class="section">
+<!-- TemplateBeginRepeat name="Examples" -->
+<!-- TemplateEndRepeat --></div>
+<!-- TemplateEndIf -->
+
+<!-- TemplateBeginIf cond="_document['SeeAlsoSection']" -->
+<h2>See Also</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="SeeAlso" -->
+	<ul>
+	</ul>
+<!-- TemplateEndEditable -->
+</div>
+<!-- TemplateEndIf --></td>
+  </tr>
+</table>
+
+</body>
+</html>

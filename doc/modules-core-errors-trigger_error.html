@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+<!-- TemplateParam name="SeeAlsoSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ExamplesSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ParametersSection" type="boolean" value="true" -->
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td colspan="2" valign="top" style="border-bottom: solid 1px #999"><h1>Delta Documentation</h1></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" --><iframe src="modules-core-errors.html" id="navframe"></iframe><!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- TemplateBeginEditable name="FunctionName" -->trigger_error<!-- TemplateEndEditable --></span><br />
+<div style="padding-top: 5px">
+<!-- TemplateBeginEditable name="ShortDescription" -->Generates a user-level error/warning/notice message.<!-- TemplateEndEditable --></div>
+<br />
+
+<h2>Syntax</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Syntax" --><span class="syntax">bool <b>trigger_error</b> ( string <span class="param">error_msg</span> [, int <span class="param">error_type</span> = E_USER_NOTICE <span class="param">]</span> )</span><!-- TemplateEndEditable -->
+</div>
+
+<h2>Description</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Description" -->Used to trigger a user error condition, it can be used by in conjunction with the built-in error handler, or with a user defined function that has been set as the new error handler (set_error_handler()). This function is useful when you need to generate a particular response to an exception at runtime.  length. Any additional characters beyond 1024 will be truncated. of constants, and will default to E_USER_NOTICE.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ParametersSection" -->
+<h2>Parameters</h2>
+<div class="section">
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+<!-- TemplateBeginRepeat name="Parameters" -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">error_msg</td>
+		<td>The designated error message for this error. It's limited to 1024 characters in</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">error_type</td>
+		<td>The designated error type for this error. It only works with the E_USER family</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat -->
+</table>
+</div>
+<!-- TemplateEndIf -->
+
+<h2>Return Values</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Return" -->This function returns FALSE if wrong error_type is specified, TRUE otherwise.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ExamplesSection" -->
+<h2>Examples</h2>
+<div class="section">
+<!-- TemplateBeginRepeat name="Examples" -->
+<!-- TemplateEndRepeat --></div>
+<!-- TemplateEndIf -->
+
+<!-- TemplateBeginIf cond="_document['SeeAlsoSection']" -->
+<h2>See Also</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="SeeAlso" -->
+	<ul>
+	</ul>
+<!-- TemplateEndEditable -->
+</div>
+<!-- TemplateEndIf --></td>
+  </tr>
+</table>
+
+</body>
+</html>
