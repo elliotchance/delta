@@ -7,7 +7,6 @@
 #include "module.h"
 
 
-
 DELTA_FUNCTION(apm_lcm)
 {
 	// do calculation

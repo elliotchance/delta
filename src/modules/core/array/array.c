@@ -7,6 +7,7 @@
 
 
 /**
+ * @page array-array.html
  * @brief Create an array.
  */
 DELTA_FUNCTION(array)

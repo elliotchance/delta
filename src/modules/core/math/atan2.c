@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-atan2.html
  * @brief Arc tangent of two variables.
  * @syntax number atan2 ( number y , number x )
  * 

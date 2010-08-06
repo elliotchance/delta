@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fgetc.html
  * @brief Gets character from file pointer.
  * @syntax string fgetc ( resource handle )
  *

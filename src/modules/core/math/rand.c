@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-rand.html
  * @brief Generate a random integer.
  */
 DELTA_FUNCTION(rand)

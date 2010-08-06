@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-sinh.html
  * @brief Hyperbolic sine.
  * @syntax number sinh ( number arg )
  *

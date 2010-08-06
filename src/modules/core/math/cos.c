@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-cos.html
  * @brief Cosine.
  * @syntax number cos ( number arg )
  *

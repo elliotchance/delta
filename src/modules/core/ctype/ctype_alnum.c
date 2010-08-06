@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-alnum.html
  * @brief Check for alphanumeric character(s).
  * @syntax bool ctype_alnum ( string text )
  *

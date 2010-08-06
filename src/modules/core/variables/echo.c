@@ -6,7 +6,9 @@
 
 
 /**
+ * @page variables-echo.html
  * @brief Write one or more arguments to the stdout.
+ *
  * This does the same thing as print()
  */
 DELTA_FUNCTION(echo)

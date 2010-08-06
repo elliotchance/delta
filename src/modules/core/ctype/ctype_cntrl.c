@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-cntrl.html
  * @brief Check for control character(s).
  * @syntax bool ctype_cntrl ( string text )
  *

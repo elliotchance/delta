@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-alpha.html
  * @brief Check for alphabetic character(s).
  * @syntax bool ctype_alpha ( string text )
  *

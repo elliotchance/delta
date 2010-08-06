@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-tan.html
  * @brief Tangent.
  * @syntax number tan ( number arg )
  *

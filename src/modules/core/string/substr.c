@@ -7,6 +7,7 @@
 
 
 /**
+ * @page string-substr.html
  * @brief Fetch a substring.
  */
 DELTA_FUNCTION(substr)

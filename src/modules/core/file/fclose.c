@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fclose.html
  * @brief Close a file handle.
  * @syntax boolean fclose ( resource handle )
  */

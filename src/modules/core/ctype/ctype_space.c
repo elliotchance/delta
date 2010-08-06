@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-space.html
  * @brief Check for whitespace character(s).
  * @syntax bool ctype_space ( string text )
  *

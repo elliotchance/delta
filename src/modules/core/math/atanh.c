@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-atanh.html
  * @brief Inverse hyperbolic tangent.
  * @syntax number atanh ( number arg )
  *

@@ -13,6 +13,7 @@ char* base_convert(char* in, int base1, int base2);
 
 
 /**
+ * @page math-bindec.html
  * @brief Binary to decimal.
  * @syntax number bindec ( string binary_string )
  *

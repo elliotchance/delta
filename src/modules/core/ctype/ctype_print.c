@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-print.html
  * @brief Check for printable character(s).
  * @syntax bool ctype_print ( string text )
  *

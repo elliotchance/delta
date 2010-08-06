@@ -8,5 +8,6 @@ sloc.sh
 doc*
 sandbox.*
 test/*
+docdb.sqlite3
 
 !*/blank.file

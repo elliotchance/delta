@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-log.html
  * @brief Natural logarithm.
  */
 DELTA_FUNCTION(log)

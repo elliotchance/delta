@@ -8,6 +8,7 @@
 
 
 /**
+ * @page zlib-gzclose.html
  * @brief Close an open gz-file pointer.
  * @syntax boolean gzclose ( resource zp )
  *

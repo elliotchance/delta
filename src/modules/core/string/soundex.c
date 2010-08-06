@@ -51,6 +51,7 @@ char *soundex(char *instr, char *outstr)
 
 
 /**
+ * @page string-soundex.html
  * @brief Calculate the soundex key of a string.
  * @syntax string soundex ( string str )
  *

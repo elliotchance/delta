@@ -6,6 +6,7 @@
 
 
 /**
+ * @page variables-print.html
  * @brief Write one or more arguments to the stdout.
  */
 DELTA_FUNCTION(print)

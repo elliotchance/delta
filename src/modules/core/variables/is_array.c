@@ -6,6 +6,7 @@
 
 
 /**
+ * @page variables-is_array.html
  * @brief Returns TRUE if the argument is an array.
  */
 DELTA_FUNCTION(is_array)

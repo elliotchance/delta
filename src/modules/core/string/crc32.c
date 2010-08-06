@@ -128,6 +128,7 @@ static unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
 
 
 /**
+ * @page string-crc32.html
  * @brief Calculates the crc32 polynomial of a string.
  * @syntax int crc32 ( string str )
  *

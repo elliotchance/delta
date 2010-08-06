@@ -12,6 +12,7 @@ char* base_convert(char* in, int base1, int base2);
 
 
 /**
+ * @page math-dechex.html
  * @brief Decimal to hexadecimal.
  * @syntax string dechex ( int number )
  *

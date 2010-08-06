@@ -7,7 +7,6 @@
 #include "module.h"
 
 
-
 DELTA_FUNCTION(apm_arctan2)
 {
 	// do calculation

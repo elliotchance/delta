@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-digit.html
  * @brief Check for numeric character(s).
  * @syntax bool ctype_digit ( string text )
  *

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fflush.html
  * @brief Flushes the output to a file.
  * @syntax boolean fflush ( resource handle )
  *

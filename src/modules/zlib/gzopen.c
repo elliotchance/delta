@@ -8,6 +8,7 @@
 
 
 /**
+ * @page zlib-gzopen.html
  * @brief Open gz-file.
  */
 DELTA_FUNCTION(gzopen)

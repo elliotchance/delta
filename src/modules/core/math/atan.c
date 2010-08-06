@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-atan.html
  * @brief Arc tangent.
  * @syntax number atan ( number arg )
  *

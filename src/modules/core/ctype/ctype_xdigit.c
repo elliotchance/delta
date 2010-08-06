@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-xdigit.html
  * @brief Check for character(s) representing a hexadecimal digit.
  * @syntax bool ctype_xdigit ( string text )
  *

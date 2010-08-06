@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-abs.html
  * @brief Absolute value.
  * @syntax number abs ( number number )
  *

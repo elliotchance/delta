@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-upper.html
  * @brief Check for uppercase character(s).
  * @syntax bool ctype_upper ( string text )
  *

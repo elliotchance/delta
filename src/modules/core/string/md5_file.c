@@ -10,6 +10,7 @@ char* MDFile(char *filename);
 
 
 /**
+ * @page string-md5_file.html
  * @brief Get the MD5 of a string.
  */
 DELTA_FUNCTION(md5_file)

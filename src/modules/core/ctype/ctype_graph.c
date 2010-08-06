@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-graph.html
  * @brief Check for any printable character(s) except space.
  * @syntax bool ctype_graph ( string text )
  *

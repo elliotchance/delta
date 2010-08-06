@@ -9,6 +9,7 @@
 
 
 /**
+ * @page errors-trigger_error.html
  * @brief Generates a user-level error/warning/notice message.
  * @syntax bool trigger_error ( string error_msg [, int error_type = E_USER_NOTICE ] )
  *

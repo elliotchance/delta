@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fopen.html
  * @brief Opens file handle.
  * @syntax resource fopen ( string filename , string mode )
  */

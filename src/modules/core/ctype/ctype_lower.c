@@ -7,6 +7,7 @@
 
 
 /**
+ * @page ctype-lower.html
  * @brief Check for lowercase character(s).
  * @syntax bool ctype_lower ( string text )
  *

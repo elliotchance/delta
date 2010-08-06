@@ -6,6 +6,7 @@
 
 
 /**
+ * @page variables-println.html
  * @brief Write one or more arguments to the stdout with a new line after each argument.
  */
 DELTA_FUNCTION(println)

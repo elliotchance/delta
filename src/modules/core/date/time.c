@@ -7,6 +7,7 @@
 
 
 /**
+ * @page date-time.html
  * @brief Return current Unix timestamp.
  * @syntax number time ( )
  *

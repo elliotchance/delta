@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-pow.html
  * @brief Exponential expression.
  */
 DELTA_FUNCTION(pow)

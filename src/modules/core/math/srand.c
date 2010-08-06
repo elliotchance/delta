@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-srand.html
  * @brief Seed the random number generator.
  */
 DELTA_FUNCTION(srand)

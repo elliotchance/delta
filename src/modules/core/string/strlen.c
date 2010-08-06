@@ -6,6 +6,7 @@
 
 
 /**
+ * @page string-strlen.html
  * @brief Get the length of a string.
  */
 DELTA_FUNCTION(strlen)

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-asinh.html
  * @brief Inverse hyperbolic sine.
  * @syntax number asinh ( number arg )
  *

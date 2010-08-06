@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-min.html
  * @brief Find lowest value.
  * @syntax number min ( array values )
  * @syntax number min ( number value1 , number value2 [, number value3... ] )

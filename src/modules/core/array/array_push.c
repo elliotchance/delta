@@ -7,7 +7,9 @@
 
 
 /**
+ * @page array-array_push.html
  * @brief Push an element onto an array.
+ * 
  * If the type of variable is not an array its value will be taken and converted into the first
  * element of the array resulting in a two element array.
  */

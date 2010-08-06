@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-lcg_value.html
  * @brief Random number between 0 and 1.
  * @syntax number lcg_value ( )
  *

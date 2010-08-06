@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-acos.html
  * @brief Arc cosine.
  * @syntax number acos ( number arg )
  *

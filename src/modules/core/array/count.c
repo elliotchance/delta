@@ -6,7 +6,9 @@
 
 
 /**
+ * @page array-count.html
  * @brief Count the number of elements in an array.
+ * 
  * If the argument provided is not an array it will return 1.
  */
 DELTA_FUNCTION(count)

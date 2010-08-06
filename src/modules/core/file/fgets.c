@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fgets.html
  * @brief Gets line from file pointer.
  * @syntax string fgets ( resource handle [, int length ] )
  *

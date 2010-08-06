@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-max.html
  * @brief Find highest value.
  * @syntax number max ( array values )
  * @syntax number max ( number value1 , number value2 [, number value3... ] )

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-rad2deg.html
  * @brief Converts the radian number to the equivalent number in degrees.
  */
 DELTA_FUNCTION(rad2deg)

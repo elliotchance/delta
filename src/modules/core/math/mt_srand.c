@@ -8,6 +8,7 @@
 
 
 /**
+ * @page math-mt_srand.html
  * @brief Seed the better random number generator.
  * @syntax void mt_srand ( )
  * @syntax void mt_srand ( int seed )

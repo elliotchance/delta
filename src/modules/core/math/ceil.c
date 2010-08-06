@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-ceil.html
  * @brief Round up to the nearest integer.
  */
 DELTA_FUNCTION(ceil)

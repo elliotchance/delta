@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-exp.html
  * @brief Calculates the exponent of e.
  */
 DELTA_FUNCTION(exp)

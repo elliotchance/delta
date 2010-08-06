@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-fwrite.html
  * @brief Write to a file handle.
  * @syntax int fwrite ( resource handle , string string [, int length ] )
  */

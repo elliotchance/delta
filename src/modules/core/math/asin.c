@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-asin.html
  * @brief Arc sine.
  * @syntax number asin ( number arg )
  *

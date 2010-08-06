@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-cosh.html
  * @brief Hyperbolic cosine.
  * @syntax number cosh ( number arg )
  *

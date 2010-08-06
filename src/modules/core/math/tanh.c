@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-tanh.html
  * @brief Hyperbolic tangent.
  * @syntax number tanh ( number arg )
  *

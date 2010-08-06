@@ -7,6 +7,7 @@
 
 
 /**
+ * @page file-feof.html
  * @brief Tests for end-of-file on a file pointer.
  * @syntax boolean feof ( resource handle )
  *

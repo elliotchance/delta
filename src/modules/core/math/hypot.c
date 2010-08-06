@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-hypot.html
  * @brief Calculate the length of the hypotenuse of a right-angle triangle.
  */
 DELTA_FUNCTION(hypot)

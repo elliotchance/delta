@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-log10.html
  * @brief Base-10 logarithm.
  */
 DELTA_FUNCTION(log10)

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-sqrt.html
  * @brief Square root.
  * @syntax number sqrt ( number arg )
  *

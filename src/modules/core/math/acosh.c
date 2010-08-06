@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-acosh.html
  * @brief Inverse hyperbolic cosine.
  * @syntax number acosh ( number arg )
  *

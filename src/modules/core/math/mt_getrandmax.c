@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-mt_getrandmax.html
  * @brief Show largest possible random value.
  * @syntax int mt_getrandmax ( )
  *

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-sin.html
  * @brief Sine.
  * @syntax number sin ( number arg )
  *

@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-floor.html
  * @brief Round down to the nearest integer.
  */
 DELTA_FUNCTION(floor)

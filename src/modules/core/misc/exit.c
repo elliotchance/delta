@@ -6,6 +6,7 @@
 
 
 /**
+ * @page misc-exit.html
  * @brief Terminate the current script.
  * @syntax void exit ( int status )
  */

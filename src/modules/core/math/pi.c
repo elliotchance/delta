@@ -7,6 +7,7 @@
 
 
 /**
+ * @page math-pi.html
  * @brief Get value of pi.
  */
 DELTA_FUNCTION(pi)
