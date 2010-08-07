@@ -9,6 +9,7 @@
 #include "delta/vm/vm.h"
 #include <string.h>
 #include <assert.h>
+#include "delta/compiler/strings.h"
 
 
 stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
@@ -118,7 +119,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				int fargs = (instructions[i].args - 1) / 2;
 				
 				for(j = 0; j < c->total_delta_functions; ++j) {
-					if(!strcmp(c->delta_functions[j]->name, instructions[i].func) &&
+					if(!stricmp(c->delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= c->delta_functions[j]->min_args &&
 					   fargs <= c->delta_functions[j]->max_args) {
 						linked = c->delta_functions[j]->function_ptr;
@@ -129,7 +130,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				// if the function could not be found, then maybe its a user function
 				if(linked == NULL) {
 					for(j = 0; j < c->total_functions; ++j) {
-						if(!strcmp(c->functions[j].name, instructions[i].func)) {
+						if(!stricmp(c->functions[j].name, instructions[i].func)) {
 							linked = c->functions[j].jit_ptr;
 							break;
 						}
