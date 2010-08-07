@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Delta Documentation</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link href="../doc/style.css" rel="stylesheet" type="text/css" />
+<!-- TemplateParam name="SeeAlsoSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ExamplesSection" type="boolean" value="false" -->
+<!-- TemplateParam name="ParametersSection" type="boolean" value="true" -->
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="5" style="height:100%">
+  <tr>
+    <td height="40" colspan="2" valign="top" style="border-bottom: solid 1px #999; padding: 0; background-image: url(bg2.png)">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="10" height="40" align="left" valign="middle">&nbsp;</td>
+          <td width="29" align="left" valign="middle"><img src="../doc/books.png" width="24" height="24" /></td>
+          <td style="font-size: 18px; color: #E4EBF7; font-weight: bold">Delta Documentation</td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="180" valign="top" bgcolor="#EEEEEE" style="border-right: solid 1px #999; border-bottom: solid 1px #999; padding: 0; margin: 0"><!-- TemplateBeginEditable name="Nav" --><iframe src="modules-core-array.html" id="navframe"></iframe><!-- TemplateEndEditable --></td>
+    <td valign="top" style="border-bottom: solid 1px #999"><span class="functionname"><!-- TemplateBeginEditable name="FunctionName" -->array_keys<!-- TemplateEndEditable --></span><br />
+<div style="padding-top: 5px">
+<!-- TemplateBeginEditable name="ShortDescription" -->Return all the keys or a subset of the keys of an array.<!-- TemplateEndEditable --></div>
+<br />
+
+<h2>Syntax</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Syntax" --><span class="syntax">array <b>array_keys</b> ( array <span class="param">input</span> )</span><!-- TemplateEndEditable -->
+</div>
+
+<h2>Description</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Description" -->array_keys() returns the keys, numeric and string, from the input array.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ParametersSection" -->
+<h2>Parameters</h2>
+<div class="section">
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+<!-- TemplateBeginRepeat name="Parameters" -->
+<!-- TemplateBeginEditable name="Parameter" -->
+	<tr>
+		<td width="25" nowrap="nowrap" class="paramd">input</td>
+		<td>An array containing keys to return.</td>
+	</tr>
+<!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat -->
+</table>
+</div>
+<!-- TemplateEndIf -->
+
+<h2>Return Values</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="Return" -->Returns an array of all the keys in input.<!-- TemplateEndEditable -->
+</div>
+
+<!-- TemplateBeginIf cond="ExamplesSection" -->
+<h2>Examples</h2>
+<div class="section">
+<!-- TemplateBeginRepeat name="Examples" -->
+<!-- TemplateBeginEditable name="Example" -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="3" class="examplebox">
+		<tr>
+			<td class="examplehead">Example #1 array_keys() example</td>
+		</tr>
+		<tr>
+			<td class="examplebody"><pre style="margin: 0; border: none">array&nbsp;=&nbsp;array(<span class="codenum">0</span>&nbsp;=&gt;&nbsp;<span class="codenum">100</span>,&nbsp;<span class="codestring">"color"</span>&nbsp;=&gt;&nbsp;<span class="codestring">"red"</span>);<br/>print_r(array_keys(array));<br/><br/>array&nbsp;=&nbsp;array(<span class="codestring">"blue"</span>,&nbsp;<span class="codestring">"red"</span>,&nbsp;<span class="codestring">"green"</span>,&nbsp;<span class="codestring">"blue"</span>,&nbsp;<span class="codestring">"blue"</span>);<br/>print_r(array_keys(array,&nbsp;<span class="codestring">"blue"</span>));<br/><br/>array&nbsp;=&nbsp;array(<span class="codestring">"color"</span>&nbsp;=&gt;&nbsp;array(<span class="codestring">"blue"</span>,&nbsp;<span class="codestring">"red"</span>,&nbsp;<span class="codestring">"green"</span>),<br/><span class="codestring">"size"</span>&nbsp;&nbsp;=&gt;&nbsp;array(<span class="codestring">"small"</span>,&nbsp;<span class="codestring">"medium"</span>,&nbsp;<span class="codestring">"large"</span>));<br/>print_r(array_keys(array));</pre></tr>
+	</table>
+<!-- TemplateEndEditable -->
+<!-- TemplateEndRepeat --></div>
+<!-- TemplateEndIf -->
+
+<!-- TemplateBeginIf cond="SeeAlsoSection" -->
+<h2>See Also</h2>
+<div class="section">
+<!-- TemplateBeginEditable name="SeeAlso" -->
+	<ul>
+		<li><a href="modules-core-array-array_values.html">array_values()</a> - </li>
+		<li><a href="modules-core-array-array_key_exists.html">array_key_exists()</a> - </li>
+		<li><a href="modules-core-array-array_search.html">array_search()</a> - </li>
+	</ul>
+<!-- TemplateEndEditable -->
+</div>
+<!-- TemplateEndIf --></td>
+  </tr>
+</table>
+
+</body>
+</html>
