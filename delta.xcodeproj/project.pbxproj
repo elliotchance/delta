@@ -249,6 +249,7 @@
 		8BB0D795120CC6F500A3CDF2 /* strtoupper.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D794120CC6F500A3CDF2 /* strtoupper.c */; };
 		8BB0D7B6120CC88600A3CDF2 /* strtolower.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D7B5120CC88600A3CDF2 /* strtolower.c */; };
 		8BB0D89C120D262E00A3CDF2 /* array_key_exists.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D89B120D262E00A3CDF2 /* array_key_exists.c */; };
+		8BB0D8B6120D278D00A3CDF2 /* array_value_exists.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D8B5120D278D00A3CDF2 /* array_value_exists.c */; };
 		8BBD5ECF11F01E7600BC5AF2 /* strpos.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD5ECE11F01E7600BC5AF2 /* strpos.c */; };
 		8BC75ED81203014B004A21EB /* module.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC75ED41203014B004A21EB /* module.c */; };
 		8BC75ED91203014B004A21EB /* module.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BC75ED51203014B004A21EB /* module.h */; };
@@ -870,6 +871,7 @@
 		8BB0D794120CC6F500A3CDF2 /* strtoupper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strtoupper.c; sourceTree = "<group>"; };
 		8BB0D7B5120CC88600A3CDF2 /* strtolower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strtolower.c; sourceTree = "<group>"; };
 		8BB0D89B120D262E00A3CDF2 /* array_key_exists.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_key_exists.c; sourceTree = "<group>"; };
+		8BB0D8B5120D278D00A3CDF2 /* array_value_exists.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_value_exists.c; sourceTree = "<group>"; };
 		8BBD5ECE11F01E7600BC5AF2 /* strpos.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strpos.c; sourceTree = "<group>"; };
 		8BC75ECC1203009C004A21EB /* libdelta_thread.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libdelta_thread.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC75ED21203014B004A21EB /* delta_build.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delta_build.txt; sourceTree = "<group>"; };
@@ -1023,6 +1025,7 @@
 				8BC76A501205B4C1004A21EB /* array_keys.c */,
 				8B0CA0E711EE81DC00FA9821 /* array_push.c */,
 				8BC7635B12047A74004A21EB /* array_sum.c */,
+				8BB0D8B5120D278D00A3CDF2 /* array_value_exists.c */,
 				8BC76A601205B655004A21EB /* array_values.c */,
 				8B0CA0E811EE81DC00FA9821 /* count.c */,
 			);
@@ -2521,6 +2524,7 @@
 				8BB0D795120CC6F500A3CDF2 /* strtoupper.c in Sources */,
 				8BB0D7B6120CC88600A3CDF2 /* strtolower.c in Sources */,
 				8BB0D89C120D262E00A3CDF2 /* array_key_exists.c in Sources */,
+				8BB0D8B6120D278D00A3CDF2 /* array_value_exists.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
