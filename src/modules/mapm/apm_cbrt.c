@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Cube root.
+ */
 DELTA_FUNCTION(apm_cbrt)
 {
 	// do calculation

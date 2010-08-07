@@ -6,6 +6,11 @@
 #include <math.h>
 
 
+/**
+ * @category modules/thread
+ *
+ * @brief Get the active thread's ID.
+ */
 DELTA_FUNCTION(thread_id)
 {
 #ifdef DELTA_PLATFORM_MAC

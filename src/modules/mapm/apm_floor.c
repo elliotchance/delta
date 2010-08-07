@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Round down to the nearest integer.
+ */
 DELTA_FUNCTION(apm_floor)
 {
 	// do calculation

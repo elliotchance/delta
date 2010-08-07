@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Base-10 logarithm.
+ */
 DELTA_FUNCTION(apm_log10)
 {
 	// do calculation

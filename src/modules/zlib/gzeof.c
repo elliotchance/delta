@@ -7,6 +7,11 @@
 #include "zlib-external/zlib.h"
 
 
+/**
+ * @category modules/zlib
+ *
+ * @brief End Of File.
+ */
 DELTA_FUNCTION(gzeof)
 {
 	// check for correct resource type

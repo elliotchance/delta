@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Tangent.
+ */
 DELTA_FUNCTION(apm_tan)
 {
 	// do calculation

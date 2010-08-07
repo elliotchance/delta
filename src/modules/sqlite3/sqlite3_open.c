@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Open SQLite3 handle.
+ */
 DELTA_FUNCTION(sqlite3_open)
 {
 	char* arg0 = delta_cast_new_string(DELTA_ARG0, NULL);

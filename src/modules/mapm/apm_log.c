@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Natural logarithm.
+ */
 DELTA_FUNCTION(apm_log)
 {
 	// do calculation

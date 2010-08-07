@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Is integer.
+ */
 DELTA_FUNCTION(apm_is_integer)
 {
 	DELTA_RETURN_BOOLEAN(m_apm_is_integer(apm_get(DELTA_ARG0)));

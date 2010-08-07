@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Count columns in a query.
+ */
 DELTA_FUNCTION(sqlite3_column_count)
 {
 	// check for valid resource

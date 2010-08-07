@@ -85,7 +85,7 @@ int minimum(int a,int b,int c)
  *
  * @param str1 One of the strings being evaluated for Levenshtein distance.
  * @param str2 One of the strings being evaluated for Levenshtein distance.
- * @retrun This function returns the Levenshtein-Distance between the two argument strings or -1,
+ * @return This function returns the Levenshtein-Distance between the two argument strings or -1,
  *         if one of the argument strings is longer than the limit of 255 characters.
  */
 DELTA_FUNCTION(levenshtein)

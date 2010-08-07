@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Subtraction.
+ */
 DELTA_FUNCTION(apm_subtract)
 {
 	// do calculation

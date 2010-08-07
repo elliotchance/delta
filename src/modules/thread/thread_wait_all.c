@@ -6,6 +6,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/thread
+ *
+ * @brief Wait for all other threads to finish.
+ */
 DELTA_FUNCTION(thread_wait_all)
 {
 	

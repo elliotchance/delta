@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Total changes.
+ */
 DELTA_FUNCTION(sqlite3_total_changes)
 {
 	// check for valid resource

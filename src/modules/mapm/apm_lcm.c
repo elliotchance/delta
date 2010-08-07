@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Lowest common multiple.
+ */
 DELTA_FUNCTION(apm_lcm)
 {
 	// do calculation

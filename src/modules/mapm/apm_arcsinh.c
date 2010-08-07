@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse hyperbolic sine.
+ */
 DELTA_FUNCTION(apm_arcsinh)
 {
 	// do calculation

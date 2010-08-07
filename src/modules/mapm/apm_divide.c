@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Division.
+ */
 DELTA_FUNCTION(apm_divide)
 {
 	// do calculation

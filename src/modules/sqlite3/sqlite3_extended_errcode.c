@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Extended error code.
+ */
 DELTA_FUNCTION(sqlite3_extended_errcode)
 {
 	// check for valid resource

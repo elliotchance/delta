@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Exponential.
+ */
 DELTA_FUNCTION(apm_exp)
 {
 	// do calculation

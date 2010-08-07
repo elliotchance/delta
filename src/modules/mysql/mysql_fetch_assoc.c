@@ -7,6 +7,11 @@
 #include "include/mysql.h"
 
 
+/**
+ * @category modules/mysql
+ *
+ * @brief Fetch the next row of a query.
+ */
 DELTA_FUNCTION(mysql_fetch_assoc)
 {
 	// check for valid resource

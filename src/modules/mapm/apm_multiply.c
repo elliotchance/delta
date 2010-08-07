@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Multiply.
+ */
 DELTA_FUNCTION(apm_multiply)
 {
 	// do calculation

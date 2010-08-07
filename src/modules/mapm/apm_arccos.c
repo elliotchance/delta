@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse cosine.
+ */
 DELTA_FUNCTION(apm_arccos)
 {
 	// do calculation

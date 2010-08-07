@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Negate.
+ */
 DELTA_FUNCTION(apm_negate)
 {
 	// do calculation

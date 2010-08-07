@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Square root.
+ */
 DELTA_FUNCTION(apm_sqrt)
 {
 	// do calculation

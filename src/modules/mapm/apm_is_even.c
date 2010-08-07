@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Is even.
+ */
 DELTA_FUNCTION(apm_is_even)
 {
 	DELTA_RETURN_BOOLEAN(m_apm_is_even(apm_get(DELTA_ARG0)));

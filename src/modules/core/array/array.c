@@ -10,6 +10,9 @@
  * @category modules/core/array
  *
  * @brief Create an array.
+ * @syntax array array ( [ mixed ... ] )
+ *
+ * Creates an array.
  */
 DELTA_FUNCTION(array)
 {

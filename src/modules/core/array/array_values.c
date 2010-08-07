@@ -5,6 +5,11 @@
 #include "delta/delta.h"
 
 
+/**
+ * @category modules/core/array
+ *
+ * @brief Return the values of an array as a new array.
+ */
 DELTA_FUNCTION(array_values)
 {
 	struct DeltaArray r = delta_new_array();

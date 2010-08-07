@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse hyperbolic tangent.
+ */
 DELTA_FUNCTION(apm_arctanh)
 {
 	// do calculation

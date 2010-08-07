@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Sine.
+ */
 DELTA_FUNCTION(apm_sin)
 {
 	// do calculation

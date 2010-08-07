@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Hyperbolic tangent.
+ */
 DELTA_FUNCTION(apm_tanh)
 {
 	// do calculation

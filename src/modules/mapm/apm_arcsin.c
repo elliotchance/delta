@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse sine.
+ */
 DELTA_FUNCTION(apm_arcsin)
 {
 	// do calculation

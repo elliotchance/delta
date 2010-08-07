@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Round.
+ */
 DELTA_FUNCTION(apm_round)
 {
 	// do calculation

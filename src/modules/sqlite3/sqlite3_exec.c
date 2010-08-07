@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Execute query with no return handle.
+ */
 DELTA_FUNCTION(sqlite3_exec)
 {
 	// check for valid resource

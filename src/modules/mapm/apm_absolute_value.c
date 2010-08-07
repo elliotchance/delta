@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Absolute value.
+ */
 DELTA_FUNCTION(apm_absolute_value)
 {
 	// do calculation

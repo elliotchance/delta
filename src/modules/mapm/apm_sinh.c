@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Hyperbolic sine.
+ */
 DELTA_FUNCTION(apm_sinh)
 {
 	// do calculation

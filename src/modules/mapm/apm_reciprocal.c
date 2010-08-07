@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Reciprocal.
+ */
 DELTA_FUNCTION(apm_reciprocal)
 {
 	// do calculation

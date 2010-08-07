@@ -5,6 +5,11 @@
 #include "delta/delta.h"
 
 
+/**
+ * @category modules/core/array
+ *
+ * @brief Sum (total) of an array.
+ */
 DELTA_FUNCTION(array_sum)
 {
 	double total = 0;

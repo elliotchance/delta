@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Greatest common denominator.
+ */
 DELTA_FUNCTION(apm_gcd)
 {
 	// do calculation

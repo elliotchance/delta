@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Get random value.
+ */
 DELTA_FUNCTION(apm_get_random)
 {
 	M_APM random_value = m_apm_init(), r = m_apm_init();

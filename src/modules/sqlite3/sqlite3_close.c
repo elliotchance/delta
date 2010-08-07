@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Close database handle.
+ */
 DELTA_FUNCTION(sqlite3_close)
 {
 	// check for valid resource

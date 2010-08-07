@@ -6,6 +6,11 @@
 #include "mapm-external/m_apm.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Full library version.
+ */
 DELTA_FUNCTION(apm_lib_version)
 {
 	char *lib_version = (char*) malloc(80);

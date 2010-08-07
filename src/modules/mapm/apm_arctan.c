@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse tangent.
+ */
 DELTA_FUNCTION(apm_arctan)
 {
 	// do calculation

@@ -7,6 +7,11 @@
 #include "include/mysql.h"
 
 
+/**
+ * @category modules/mysql
+ *
+ * @brief Connect to a MySQL server.
+ */
 DELTA_FUNCTION(mysql_connect)
 {
 	// get arguments

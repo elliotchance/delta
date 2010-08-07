@@ -6,6 +6,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/thread
+ *
+ * @brief Detach a thread.
+ */
 DELTA_FUNCTION(thread_detach)
 {
 	

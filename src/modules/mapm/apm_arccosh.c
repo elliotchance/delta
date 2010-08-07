@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Inverse hyperbolic cosine.
+ */
 DELTA_FUNCTION(apm_arccosh)
 {
 	// do calculation

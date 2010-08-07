@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Set precision.
+ */
 DELTA_FUNCTION(apm_set_precision)
 {
 	mapm_precision = delta_cast_number(DELTA_ARG0);

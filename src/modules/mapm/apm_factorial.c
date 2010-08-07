@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Factorial.
+ */
 DELTA_FUNCTION(apm_factorial)
 {
 	// do calculation

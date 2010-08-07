@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Power.
+ */
 DELTA_FUNCTION(apm_pow)
 {
 	// TODO: maybe use m_apm_integer_pow() where possible, it might be faster

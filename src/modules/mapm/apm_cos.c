@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Cosine.
+ */
 DELTA_FUNCTION(apm_cos)
 {
 	// do calculation

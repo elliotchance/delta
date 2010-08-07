@@ -25,16 +25,13 @@
  */
 DELTA_FUNCTION(strtoupper)
 {
-	// prepare incoming arguments
-	int release_arg0;
-	struct DeltaVariable *arg0 = delta_cast_string(DELTA_ARG0, &release_arg0);
+	int size;
+	char *arg0 = delta_cast_new_string(DELTA_ARG0, &size);
 	
 	// convert each character to uppercase
 	int i;
-	for(i = 0; i < arg0->size; ++i)
-		arg0->value.ptr[i] = toupper(arg0->value.ptr[i]);
+	for(i = 0; i < size; ++i)
+		arg0[i] = toupper(arg0[i]);
 	
-	// be nice and release
-	DELTA_RELEASE(release_arg0, arg0);
-	DELTA_RETURN_BINARY_STRING(arg0->value.ptr, arg0->size);
+	DELTA_RETURN_BINARY_STRING(arg0, size);
 }

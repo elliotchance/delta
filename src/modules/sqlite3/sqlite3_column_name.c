@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Get a column name.
+ */
 DELTA_FUNCTION(sqlite3_column_name)
 {
 	// check for valid resource

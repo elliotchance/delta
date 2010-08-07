@@ -7,6 +7,11 @@
 #include "module.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Hyperbolic cosine.
+ */
 DELTA_FUNCTION(apm_cosh)
 {
 	// do calculation

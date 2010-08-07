@@ -7,6 +7,11 @@
 #include "sqlite3-external/sqlite3.h"
 
 
+/**
+ * @category modules/sqlite3
+ *
+ * @brief Fetch the next row in a query.
+ */
 DELTA_FUNCTION(sqlite3_fetch)
 {
 	// check for valid resource

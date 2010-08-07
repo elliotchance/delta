@@ -7,6 +7,11 @@
 #include "include/mysql.h"
 
 
+/**
+ * @category modules/mysql
+ *
+ * @brief Create a MySQL query.
+ */
 DELTA_FUNCTION(mysql_query)
 {
 	// check for valid resource

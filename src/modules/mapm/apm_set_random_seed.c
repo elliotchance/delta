@@ -8,6 +8,11 @@
 #include "delta/compiler/strings.h"
 
 
+/**
+ * @category modules/mapm
+ *
+ * @brief Set random seed.
+ */
 DELTA_FUNCTION(apm_set_random_seed)
 {
 	int release;

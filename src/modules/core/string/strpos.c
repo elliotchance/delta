@@ -6,6 +6,11 @@
 #include <string.h>
 
 
+/**
+ * @category modules/core/string
+ *
+ * @brief Find the location of a string inside another string.
+ */
 DELTA_FUNCTION(strpos)
 {
 	int release0, release1;
