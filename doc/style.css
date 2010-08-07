@@ -130,6 +130,14 @@ pre {
 	height: 100%;
 	width: 100%;
 }
+.navleft {
+	width: 250px;
+	border-right: solid 1px #999;
+	border-bottom: solid 1px #999;
+	padding: 0;
+	margin: 0;
+	background-color: #EEEEEE;
+}
 
 .nav_body {
 	background-color: #E4EBF7;
