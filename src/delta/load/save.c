@@ -7,6 +7,8 @@
 #include "../macros.h"
 #include "../compiler/bytecode.h"
 #include <assert.h>
+#include <sys/stat.h>
+#include <utime.h>
 
 
 int delta_write_string(FILE *fp, char *str)
@@ -44,7 +46,7 @@ int delta_write_bytecode(FILE *fp, DeltaByteCode bc)
 }
 
 
-int delta_save_file(struct DeltaCompiler *c, const char* out_file)
+int delta_save_file(struct DeltaCompiler *c, const char* out_file, char* orig)
 {
 	// prepare
 	FILE *f = fopen(out_file, "w");
@@ -102,5 +104,18 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file)
 	
 	// clean up
 	fclose(f);
+	
+	// update mtime
+	if(orig != NULL) {
+		struct stat stat1;
+		stat(orig, &stat1);
+		
+		struct utimbuf stat2;
+		stat2.actime = stat1.st_atime;
+		stat2.modtime = stat1.st_mtime;
+		
+		utime(out_file, &stat2);
+	}
+	
 	return DELTA_SUCCESS;
 }

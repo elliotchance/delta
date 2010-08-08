@@ -24,10 +24,12 @@
 
 void main_compile()
 {
+	printf(">>>> Compiling\n");
 	struct DeltaCompiler *c = delta_compiler_init();
 	delta_load_defines(c);
 	delta_compile_file(c, "test.delta");
-	delta_save_file(c, "test.dc");
+	delta_save_file(c, "test.dc", "test.delta");
+	printf(">>>> Compiling Done\n");
 }
 
 
@@ -51,6 +53,7 @@ void main_run()
 int main()
 {
 	delta_load_ini();
-	main_compile();
+	if(delta_needs_compile("test.delta", "test.dc"))
+		main_compile();
 	main_run();
 }

@@ -28,6 +28,7 @@ int                   delta_compile_line_part(struct DeltaCompiler *c, int funct
 											  int length);
 void                  delta_function_reset();
 struct DeltaCompiler* delta_compiler_init();
+int                   delta_needs_compile(char *file1, char *file2);
 
 
 #endif

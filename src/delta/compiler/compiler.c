@@ -14,6 +14,7 @@
 #include "delta/macros.h"
 #include <string.h>
 #include <ctype.h>
+#include <sys/stat.h>
 
 
 #define DELTA_SHOW_BYTECODE 1
@@ -783,4 +784,14 @@ struct DeltaCompiler* delta_compiler_init()
 		calloc(c->alloc_delta_defines, sizeof(struct DeltaDefine));
 	
 	return c;
+}
+
+
+int delta_needs_compile(char *file1, char *file2)
+{
+	struct stat stat1, stat2;
+	stat(file1, &stat1);
+	stat(file2, &stat2);
+	
+	return stat1.st_mtime != stat2.st_mtime;
 }
