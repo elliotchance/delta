@@ -179,6 +179,83 @@ function removeConditionalRegion($template, $name) {
 }
 
 
+function countRows($q) {
+	$i = 0;
+	while($q->fetchArray())
+		++$i;
+	$q->reset();
+	return $i;
+}
+
+
+function writeModulePage($category) {
+	global $db;
+
+	// get template
+	$template = file_get_contents("Templates/general.dwt");
+
+	// title
+	$category2 = str_replace('/', ' &gt; ', $category);
+	$template = replaceEditableRegion($fileid, $template, 'Name', "<h1>$category2</h1>", true);
+
+	// nav
+	if($category != '') {
+		$nav = '<iframe src="' . str_replace('/', '-', $category) . '.html" id="navframe"></iframe>';
+		$template = replaceEditableRegion($fileid, $template, 'Nav', $nav, true);
+	}
+	
+	$sections = '<div class="section">';
+	
+	// functions
+	$q = $db->query("select t2.fileid, t2.value from tags as t1 join tags as t2 on t1.fileid=t2.fileid where t1.name='category' and t1.value='$category' and t2.name='name'");
+	if(countRows($q)) {
+		$sections .= <<<EOF
+	<!-- TemplateBeginEditable name="SectionTitle" -->
+		<h2><a name="functions" id="functions"></a>Functions</h2>
+	<!-- TemplateEndEditable -->
+	<!-- TemplateBeginEditable name="SectionBody" -->
+EOF;
+
+		while($r = $q->fetchArray()) {
+			$brief = $db->querySingle("select value from tags where fileid=$r[fileid] and name='brief'");
+			$url = str_replace('/', '-', $category) . "-$r[value].html";
+			$sections .= "\n\t\t<a href=\"$url\">$r[value]()</a> - $brief<br/>";
+		}
+		$sections .= "\n\t<!-- TemplateEndEditable -->";
+	}
+	
+	// submodules
+	$q = $db->query("select distinct value from tags where name='category' and value like '$category/%'");
+	if(countRows($q)) {
+		$sections .= <<<EOF
+	<!-- TemplateBeginEditable name="SectionTitle" -->
+		<h2><a name="functions" id="functions"></a>Submodules</h2>
+	<!-- TemplateEndEditable -->
+	<!-- TemplateBeginEditable name="SectionBody" -->
+EOF;
+
+		while($r = $q->fetchArray()) {
+			$r['value'] = substr($r['value'], strrpos($r['value'], '/') + 1);
+			$url = str_replace('/', '-', $category) . "-$r[value]-index.html";
+			$sections .= "\n\t\t<a href=\"$url\">$r[value]</a><br/>";
+		}
+		$sections .= "\n\t<!-- TemplateEndEditable -->";
+	}
+
+	// set
+	$sections .= "\n</div>";
+	$len = strlen('<!-- TemplateBeginRepeat name="Sections" -->');
+	$pos1 = strpos($template, '<!-- TemplateBeginRepeat name="Sections" -->') + $len;
+	$pos2 = strpos($template, '<!-- TemplateEndRepeat -->', $pos1);
+	$template = substr($template, 0, $pos1) . "$sections\n" . substr($template, $pos2);
+
+	// save
+	$filename = 'doc/' . str_replace('/', '-', $category) . "-index.html";
+	echo $filename, "\n";
+	file_put_contents($filename, $template);
+}
+
+
 $db = new SQLite3("docdb.sqlite3");
 $q = $db->query("select * from files");
 while($r = $q->fetchArray()) {
@@ -336,5 +413,23 @@ EOF;
 	echo $filename, "\n";
 	file_put_contents($filename, $template);
 }
+
+
+// module pages
+$qnav = $db->query("select distinct value from tags where name='category' order by value");
+$module_pages = array();
+while($rnav = $qnav->fetchArray())
+	$module_pages[] = $rnav['value'];
+	
+// create the missing module pages
+foreach($module_pages as $page) {
+	$parts = explode("/", $page);
+	for($i = 1; $i < count($parts); ++$i)
+		$module_pages[] = implode("/", array_slice($parts, 0, $i));
+}
+$module_pages = array_unique($module_pages);
+
+foreach($module_pages as $module_page)
+	writeModulePage($module_page);
 
 ?>
