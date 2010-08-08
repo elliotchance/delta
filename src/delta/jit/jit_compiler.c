@@ -16,6 +16,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {	
 	int i, j, loop_id = 0, end = 0, function_id = -1;
 	struct DeltaInstruction *instructions = NULL;
+	int total_ram = 100;
 	
 	// try to find the function
 	for(i = 0; i < c->total_functions; ++i) {

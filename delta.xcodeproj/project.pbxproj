@@ -81,7 +81,6 @@
 		8B0CA46211EE839800FA9821 /* log1p.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA11E11EE81DC00FA9821 /* log1p.c */; };
 		8B0CA46311EE839800FA9821 /* max.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA11F11EE81DC00FA9821 /* max.c */; };
 		8B0CA46411EE839800FA9821 /* min.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA12011EE81DC00FA9821 /* min.c */; };
-		8B0CA46511EE839800FA9821 /* module.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA12111EE81DC00FA9821 /* module.c */; };
 		8B0CA46811EE839800FA9821 /* mt_getrandmax.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA12411EE81DC00FA9821 /* mt_getrandmax.c */; };
 		8B0CA46911EE839800FA9821 /* mt_rand.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA12511EE81DC00FA9821 /* mt_rand.c */; };
 		8B0CA46A11EE839800FA9821 /* mt_srand.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA12611EE81DC00FA9821 /* mt_srand.c */; };
@@ -336,7 +335,6 @@
 		8B0CA11E11EE81DC00FA9821 /* log1p.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log1p.c; sourceTree = "<group>"; };
 		8B0CA11F11EE81DC00FA9821 /* max.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = max.c; sourceTree = "<group>"; };
 		8B0CA12011EE81DC00FA9821 /* min.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = min.c; sourceTree = "<group>"; };
-		8B0CA12111EE81DC00FA9821 /* module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = module.c; sourceTree = "<group>"; };
 		8B0CA12311EE81DC00FA9821 /* mt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt.h; sourceTree = "<group>"; };
 		8B0CA12411EE81DC00FA9821 /* mt_getrandmax.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mt_getrandmax.c; sourceTree = "<group>"; };
 		8B0CA12511EE81DC00FA9821 /* mt_rand.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mt_rand.c; sourceTree = "<group>"; };
@@ -1117,7 +1115,6 @@
 				8B0CA11E11EE81DC00FA9821 /* log1p.c */,
 				8B0CA11F11EE81DC00FA9821 /* max.c */,
 				8B0CA12011EE81DC00FA9821 /* min.c */,
-				8B0CA12111EE81DC00FA9821 /* module.c */,
 				8B0CA12311EE81DC00FA9821 /* mt.h */,
 				8B0CA12411EE81DC00FA9821 /* mt_getrandmax.c */,
 				8B0CA12511EE81DC00FA9821 /* mt_rand.c */,
@@ -2482,7 +2479,6 @@
 				8B0CA46211EE839800FA9821 /* log1p.c in Sources */,
 				8B0CA46311EE839800FA9821 /* max.c in Sources */,
 				8B0CA46411EE839800FA9821 /* min.c in Sources */,
-				8B0CA46511EE839800FA9821 /* module.c in Sources */,
 				8B0CA46811EE839800FA9821 /* mt_getrandmax.c in Sources */,
 				8B0CA46911EE839800FA9821 /* mt_rand.c in Sources */,
 				8B0CA46A11EE839800FA9821 /* mt_srand.c in Sources */,

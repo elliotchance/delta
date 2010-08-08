@@ -416,6 +416,24 @@
 
 #define DELTA_END_MODULE_FUNCTIONS \
 	*count = stack_i; \
+return f
+
+
+#define DELTA_PREPARE_MODULE_DEFINES(_total) \
+	int stack_i = 0; \
+	*count = _total; \
+	struct DeltaDefine *f = (struct DeltaDefine*) \
+		calloc(_total, sizeof(struct DeltaDefine));
+
+
+#define DELTA_PUSH_DEFINE(_name, _value) \
+	f[stack_i].name = #_name; \
+	f[stack_i].value = _value; \
+	++stack_i;
+
+
+#define DELTA_END_MODULE_DEFINES \
+	*count = stack_i; \
 	return f
 
 
@@ -431,6 +449,9 @@
 
 
 #define DELTA_MAIN_FUNCTION "main"
+
+
+#define DELTA_MAX_ARGS 1024
 
 
 #endif

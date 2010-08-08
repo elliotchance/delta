@@ -10,14 +10,7 @@
 #include "delta/structs.h"
 
 
-#define DELTA_MAX_ARGS 1024
-
-
 extern struct DeltaVM *active_vm;
-
-
-// TODO: this needs to be automatically worked out at JIT time
-#define total_ram 100
 
 
 struct DeltaVM* delta_vm_init();

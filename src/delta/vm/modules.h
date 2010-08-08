@@ -10,13 +10,20 @@
 
 
 typedef struct DeltaModuleFunction* (*delta_module_ptr)(int*);
+typedef struct DeltaDefine* (*delta_module_defines_ptr)(int*);
 typedef void (*delta_module_function)(struct DeltaInstruction *d);
 typedef void (*delta_module_function_vm)(struct DeltaVM *vm);
+
+
+extern struct DeltaINI *delta_ini;
 
 
 void                  delta_load_modules(struct DeltaVM *vm);
 delta_module_function delta_get_module_function(void *module, char *name);
 int                   delta_load_module(struct DeltaVM *vm, char *path);
+void                  delta_load_ini();
+void                  delta_load_defines(struct DeltaCompiler *c);
+int                   delta_load_module_defines(struct DeltaCompiler *c, char *path);
 
 
 #endif

@@ -25,6 +25,13 @@ struct DeltaArrayValue
 };
 
 
+struct DeltaINI
+{
+	int module_count;
+	char **module_paths;
+};
+
+
 struct DeltaDefine
 {
 	char *name;
