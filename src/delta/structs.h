@@ -39,6 +39,15 @@ struct DeltaDefine
 };
 
 
+struct DeltaFunctionAlias
+{
+	char *original;
+	char *alias;
+	int min_args;
+	int max_args;
+};
+
+
 struct DeltaArray
 {
 	int elements;

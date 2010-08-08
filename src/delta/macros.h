@@ -428,7 +428,7 @@
 
 #define DELTA_END_MODULE_FUNCTIONS \
 	*count = stack_i; \
-return f
+	return f
 
 
 #define DELTA_PREPARE_MODULE_DEFINES(_total) \
@@ -458,6 +458,26 @@ return f
 	(__dest)->value.array = (__src)->value.array; \
 	(__dest)->value.resource = (__src)->value.resource; \
 }
+
+
+#define DELTA_PREPARE_MODULE_FUNCTION_ALIASES(_total) \
+	int stack_i = 0; \
+	*count = _total; \
+	struct DeltaFunctionAlias *f = (struct DeltaFunctionAlias*) \
+		calloc(_total, sizeof(struct DeltaFunctionAlias));
+
+
+#define DELTA_PUSH_FUNCTION_ALIAS(_alias, _min, _max, _real) \
+	f[stack_i].alias = #_alias; \
+	f[stack_i].original = #_real; \
+	f[stack_i].min_args = _min; \
+	f[stack_i].max_args = _max; \
+	++stack_i;
+
+
+#define DELTA_END_MODULE_FUNCTION_ALIASES \
+	*count = stack_i; \
+	return f
 
 
 #define DELTA_MAIN_FUNCTION "main"

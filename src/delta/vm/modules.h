@@ -11,6 +11,7 @@
 
 typedef struct DeltaModuleFunction* (*delta_module_ptr)(int*);
 typedef struct DeltaDefine* (*delta_module_defines_ptr)(int*);
+typedef struct DeltaFunctionAlias* (*delta_module_aliases_ptr)(int*);
 typedef void (*delta_module_function)(struct DeltaInstruction *d);
 typedef void (*delta_module_function_vm)(struct DeltaVM *vm);
 

@@ -155,3 +155,13 @@ struct DeltaDefine* module_defines(int *count)
 	
 	DELTA_END_MODULE_DEFINES;
 }
+
+
+/*struct DeltaFunctionAlias* module_aliases(int *count)
+{
+	DELTA_PREPARE_MODULE_FUNCTION_ALIASES(10);
+	
+	DELTA_PUSH_FUNCTION_ALIAS(blabla, 1, 1, abs);
+	
+	DELTA_END_MODULE_FUNCTION_ALIASES;
+}*/
