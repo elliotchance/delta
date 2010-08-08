@@ -180,6 +180,23 @@ inline char* delta_cast_new_string(struct DeltaVariable* v, int *size)
 }
 
 
+inline char delta_cast_char(struct DeltaVariable* v)
+{
+	int release;
+	struct DeltaVariable* new_v = delta_cast_string(v, &release);
+	
+	if(new_v->size == 0)
+		return '\0';
+	
+	// read the first character from the string
+	char ch = new_v->value.ptr[0];
+	
+	// free if needed
+	DELTA_RELEASE(release, new_v);
+	return ch;
+}
+
+
 inline int delta_cast_boolean(struct DeltaVariable *v)
 {
 	if(v->type == DELTA_TYPE_BOOLEAN)

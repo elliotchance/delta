@@ -184,6 +184,20 @@
 
 
 /**
+ * @brief Return single character as a STRING.
+ */
+#define DELTA_RETURN_CHAR(return_value) \
+{ \
+	DELTA_DEST->type = DELTA_TYPE_STRING; \
+	DELTA_DEST->value.ptr = (char*) malloc(2); \
+	DELTA_DEST->value.ptr[0] = (char) (return_value); \
+	DELTA_DEST->value.ptr[1] = '\0'; \
+	DELTA_DEST->size = 1; \
+	return; \
+}
+
+
+/**
  * @brief Return binary-safe STRING.
  *
  * You only really need to use this if there is a chance your string will constain binary
