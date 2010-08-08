@@ -117,6 +117,9 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(strpos, 2, 2);
 	DELTA_PUSH_FUNCTION(ord, 1, 1);
 	DELTA_PUSH_FUNCTION(chr, 1, 1);
+	DELTA_PUSH_FUNCTION(ltrim, 1, 1);
+	DELTA_PUSH_FUNCTION(rtrim, 1, 1);
+	DELTA_PUSH_FUNCTION(trim, 1, 1);
 	
 	// variables
 	DELTA_PUSH_FUNCTION(is_array, 1, 1);
