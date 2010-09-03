@@ -53,7 +53,8 @@ void main_run()
 int main()
 {
 	delta_load_ini();
-	if(delta_needs_compile("test.delta", "test.dc"))
+	// FIXME: turn delta_needs_compile() on when ready
+	//if(delta_needs_compile("test.delta", "test.dc"))
 		main_compile();
 	main_run();
 }

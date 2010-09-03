@@ -22,7 +22,7 @@ struct DeltaInstruction new_DeltaInstruction1(char *name, DeltaByteCode bc, int 
 	d.func = name;
 	d.bc = bc;
 	d.args = 1;
-	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg = (int*) calloc(d.args, sizeof(int));
 	d.arg[0] = destination;
 	
 	return d;
@@ -36,7 +36,7 @@ struct DeltaInstruction new_DeltaInstruction2(char *name, DeltaByteCode bc, int 
 	d.func = name;
 	d.bc = bc;
 	d.args = 2;
-	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg = (int*) calloc(d.args, sizeof(int));
 	d.arg[0] = destination;
 	d.arg[1] = source1;
 	
@@ -51,7 +51,7 @@ struct DeltaInstruction new_DeltaInstruction3(char *name, DeltaByteCode bc, int 
 	d.func = name;
 	d.bc = bc;
 	d.args = 3;
-	d.arg = (int*) malloc(d.args * sizeof(int));
+	d.arg = (int*) calloc(d.args, sizeof(int));
 	d.arg[0] = destination;
 	d.arg[1] = source1;
 	d.arg[2] = source2;
