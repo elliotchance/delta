@@ -77,6 +77,7 @@
 #define BYTECODE_LOP 0x86 // loop
 
 #define BYTECODE_RTN 0x90 // return
+#define BYTECODE_ARG 0x91 // copy a function argument to a local location
 
 
 #endif

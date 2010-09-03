@@ -17,7 +17,6 @@
 #include <sys/stat.h>
 
 
-#define DELTA_SHOW_BYTECODE 1
 #define DELTA_MAX_NESTED_FUNCTIONS 16
 #define DELTA_MAX_FUNCTION_ARGS 16
 #define DELTA_INF 1e2000
@@ -65,6 +64,24 @@ void delta_die(const char* msg)
 
 int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line, int length)
 {
+	printf("line = '%s'\n", line);
+	
+	if(!strncmp(delta_trim(line), "return", 6)) {
+		int pos = delta_strpos(line, "r") + 6;
+		int var_id1 = delta_compile_line_part(c, function_id, line + pos, length - pos);
+#if DELTA_SHOW_BYTECODE
+		printf("{%d} BYTECODE_SET ( %d, %d )\n", function_id, RETURN_REGISTER, var_id1);
+#endif
+		DeltaFunction_push(c, function_id, new_DeltaInstruction2(NULL, BYTECODE_SET, RETURN_REGISTER, var_id1));
+		
+#if DELTA_SHOW_BYTECODE
+		printf("{%d} BYTECODE_RTN ( )\n", function_id);
+#endif
+		DeltaFunction_push(c, function_id, new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		
+		return var_id1;
+	}
+	
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
 	int i, j, k, total_tokens = 0;
 	
@@ -143,22 +160,6 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 		return var_id1;
 	}
 	
-	if(!strcmp(tokens[0], "return")) {
-		if(total_tokens == 1) {
-			// TODO: return 0
-#if DELTA_SHOW_BYTECODE
-			printf("{%d} BYTECODE_RTN (%d)\n", function_id, 0);
-#endif
-			DeltaFunction_push(c, function_id, new_DeltaInstruction1(NULL, BYTECODE_RTN, 0));
-		} else {
-			int var_id1 = delta_get_variable_id(c, function_id, tokens[1]);
-#if DELTA_SHOW_BYTECODE
-			printf("{%d} BYTECODE_RTN (%d)\n", function_id, var_id1);
-#endif
-			DeltaFunction_push(c, function_id, new_DeltaInstruction1(NULL, BYTECODE_RTN, var_id1));
-		}
-	}
-	
 	// convert to bytecode
 	i = 0;
 	while(total_tokens > 2) {
@@ -230,9 +231,9 @@ int delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line
 		   !strcmp(tokens[highest_op_pos], "&&") ||
 		   !strcmp(tokens[highest_op_pos], "||")) {
 			// resolve the address for the left and right
-			int var_dest = ++var_temp;
 			int var_id1 = delta_get_variable_id(c, function_id, tokens[highest_op_pos - 1]);
 			int var_id2 = delta_get_variable_id(c, function_id, tokens[highest_op_pos + 1]);
+			int var_dest = ++var_temp;
 			
 			if(!strcmp(tokens[highest_op_pos], "+")) {
 				DELTA_ADD_OPERATOR_BYTECODE(ADD);
@@ -714,6 +715,14 @@ int delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifi
 		printf("{%d} BYTECODE_PAT ( %d ) <- while\n", function_id, label_id);
 		DeltaFunction_push(c, function_id, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
+	}
+	
+	// make sure there is always a return at the end of the block
+	if(!strcmp(identifier, "")) {
+#if DELTA_SHOW_BYTECODE
+		printf("{%d} BYTECODE_RTN ( )\n", function_id);
+#endif
+		DeltaFunction_push(c, function_id, new_DeltaInstruction0(NULL, BYTECODE_RTN));
 	}
 	
 	// clean up

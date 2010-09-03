@@ -324,20 +324,11 @@ DELTA_INS(NUL)
 
 
 /**
- * @brief Return statement.
- */
-DELTA_INS(RTN)
-{
-	// currently does nothing
-}
-
-
-/**
  * @brief Copy a variable from one location to another.
  */
 DELTA_INS(SET)
 {
-	DELTA_COPY_VARIABLE(DELTA_DEST, d->varg[1]);
+	DELTA_COPY_VARIABLE(d->varg[0], d->varg[1]);
 }
 
 
@@ -499,4 +490,23 @@ DELTA_INS(ZOB)
 	DELTA_DEST->type = DELTA_TYPE_OBJECT;
 	// noty sure what else to put here or how one would ever cast a variable to an object, but this
 	// is here for bytecode completeness.
+}
+
+
+/**
+ * @brief Prepare the calling of a function.
+ */
+DELTA_INS(CAL)
+{
+	current_function_args = d->args;
+	current_function_arg = d->varg;
+	
+	// TODO: heres where it would append the stack trace
+}
+
+
+DELTA_INS(ARG)
+{
+	// FIXME: make sure d->arg[1] is not larger then current_function_args
+	DELTA_COPY_VARIABLE(DELTA_DEST, current_function_arg[d->arg[1]]);
 }

@@ -9,6 +9,10 @@
 #include "delta/structs.h"
 
 
+#define RETURN_REGISTER -1
+#define DELTA_SHOW_BYTECODE 1
+
+
 extern int var_temp;
 extern int *arg_count;
 extern int **arg_ptr;

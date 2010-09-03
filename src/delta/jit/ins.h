@@ -12,7 +12,9 @@
 DELTA_INS(ADD); // +
 DELTA_INS(AG1); // Get first dimention array
 DELTA_INS(AND); // Boolean AND
+DELTA_INS(ARG); // copy a function arg to a local location
 DELTA_INS(AS1); // Assign first dimention array
+DELTA_INS(CAL); // Call a function
 DELTA_INS(CEQ); // ==
 DELTA_INS(CGE); // >=
 DELTA_INS(CGT); // >
@@ -35,7 +37,6 @@ DELTA_INS(NMD); // fastmath %
 DELTA_INS(NMU); // fastmath *
 DELTA_INS(NSB); // fastmath -
 DELTA_INS(ORR); // Boolean OR
-DELTA_INS(RTN); // return
 DELTA_INS(SAP); // .
 DELTA_INS(SET); // =
 DELTA_INS(SUB); // -

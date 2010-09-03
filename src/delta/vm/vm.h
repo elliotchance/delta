@@ -11,6 +11,8 @@
 
 
 extern struct DeltaVM *active_vm;
+static int current_function_args = 0;
+static struct DeltaVariable **current_function_arg = NULL;
 
 
 struct DeltaVM* delta_vm_init();

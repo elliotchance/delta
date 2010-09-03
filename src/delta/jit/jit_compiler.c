@@ -13,10 +13,10 @@
 
 
 stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
-{	
+{
 	int i, j, loop_id = 0, end = 0, function_id = -1;
 	struct DeltaInstruction *instructions = NULL;
-	int total_ram = 100;
+	int total_ram = 100, total_static_ram = 10;
 	
 	// try to find the function
 	for(i = 0; i < c->total_functions; ++i) {
@@ -58,6 +58,15 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 		calloc(total_ram, sizeof(struct DeltaVariable*));
 	for(i = 0; i < total_ram; ++i)
 		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
+	
+	// static RAM for interfunction communications
+	static struct DeltaVariable **static_ram = NULL;
+	if(static_ram == NULL) {
+		static_ram = (struct DeltaVariable**)
+			calloc(total_static_ram, sizeof(struct DeltaVariable*));
+		for(i = 0; i < total_static_ram; ++i)
+			static_ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
+	}
 	
 	// TODO: this will have to be changed for multithreaded apps, for now we'll just add the ram to
 	// the function
@@ -102,12 +111,24 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			//printf("*** JMP %d\n", instructions[i].arg[0]);
 			jit_movi_i(JIT_R0, 1);
 			loop[instructions[i].arg[0]] = jit_beqi_i(jit_forward(), JIT_R0, 1);
-		} else {
-			// link argument addresses
+		}
+		else if(instructions[i].bc == BYTECODE_RTN) {
+			jit_ret();
+		}
+		else {
+			// link argument addresses to virtual RAM locations
 			instructions[i].varg = (struct DeltaVariable**)
 				calloc(instructions[i].args, sizeof(struct DeltaVariable*));
-			for(j = 0; j < instructions[i].args; ++j)
-				instructions[i].varg[j] = ram[instructions[i].arg[j]];
+			
+			for(j = 0; j < instructions[i].args; ++j) {
+				if(instructions[i].arg[j] < 0)
+					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
+				else {
+					// FIXME: its still a mystry why arg[j] becomes a big number
+					if(instructions[i].arg[j] < 10000)
+						instructions[i].varg[j] = ram[instructions[i].arg[j]];
+				}
+			}
 			
 			// link function call
 			jit_movi_p(JIT_V0, &instructions[i]);
@@ -119,6 +140,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				stack_function linked = NULL;
 				int fargs = (instructions[i].args - 1) / 2;
 				
+				// built-in functions
 				for(j = 0; j < c->total_delta_functions; ++j) {
 					if(!stricmp(c->delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= c->delta_functions[j]->min_args &&
@@ -126,6 +148,16 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 						linked = c->delta_functions[j]->function_ptr;
 						break;
 					}
+				}
+				
+				// before the actual compiled function can be called we need to call a joining
+				// function that takes care of things like stack backtrace and preparing function
+				// arguments
+				if(linked == NULL) {
+					jit_finish(ins_CAL);
+					jit_movi_p(JIT_V0, &instructions[i]);
+					jit_prepare(1);
+					jit_pusharg_p(JIT_V0);
 				}
 				
 				// if the function could not be found, then maybe its a user function
@@ -154,6 +186,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 					 if(0) { }
 				else if(instructions[i].bc == BYTECODE_ADD) jit_finish(ins_ADD);
 				else if(instructions[i].bc == BYTECODE_AG1) jit_finish(ins_AG1);
+				else if(instructions[i].bc == BYTECODE_ARG) jit_finish(ins_ARG);
 				else if(instructions[i].bc == BYTECODE_AS1) jit_finish(ins_AS1);
 				else if(instructions[i].bc == BYTECODE_CEQ) jit_finish(ins_CEQ);
 				else if(instructions[i].bc == BYTECODE_CGE) jit_finish(ins_CGE);
@@ -179,7 +212,6 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				else if(instructions[i].bc == BYTECODE_NLE) jit_finish(ins_NLE);
 				else if(instructions[i].bc == BYTECODE_NLT) jit_finish(ins_NLT);
 				else if(instructions[i].bc == BYTECODE_NNE) jit_finish(ins_NNE);
-				else if(instructions[i].bc == BYTECODE_RTN) jit_finish(ins_RTN);
 				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
 				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
 				else if(instructions[i].bc == BYTECODE_SAP) jit_finish(ins_SAP);

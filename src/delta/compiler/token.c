@@ -60,6 +60,25 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 	if(name == NULL)
 		return -1;
 	
+	// argument by ID
+	if(name[0] == '$') {
+		int temp = -1;
+		sscanf(name, "$%d", &temp);
+		int var_dest = ++var_temp;
+		
+		// compensate for the fact the real position of the argument value is higher
+		temp = (temp + 1) * 2;
+		
+		// add an instruction to copy out the argument
+#if DELTA_SHOW_BYTECODE
+		printf("{%d} BYTECODE_ARG ( %d %d )\n", function_id, var_dest, temp);
+#endif
+		DeltaFunction_push(c, function_id, new_DeltaInstruction2(NULL, BYTECODE_ARG, var_dest,
+																 temp));
+		
+		return var_dest;
+	}
+	
 	// strip off array element
 	char *element = NULL;
 	int pos = delta_strpos(name, "[");
@@ -162,9 +181,10 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		}
 		if(!isalnum(line[*offset]) && line[*offset] != '_' &&
 		   line[*offset] != '+' && line[*offset] != '-' && line[*offset] != '.' &&
-		   line[*offset] != 'e')
+		   line[*offset] != 'e' && line[*offset] != '$')
 			break;
 	}
+	printf("'%s'\n", delta_copy_substring(line, orig, *offset));
 	
 	if(found >= 0) {
 		char *function_name = (char*) malloc(found + 1);
@@ -194,13 +214,25 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		if(found > 0) {
 			int var_dest = ++var_temp;
 			
+#if DELTA_SHOW_BYTECODE
 			printf("{%d} BYTECODE_CAL %s(", function_id, function_name);
+#endif
 			int _k;
 			arg_ptr[arg_depth][0] = var_dest;
 			for(_k = 0; _k < arg_count[arg_depth]; ++_k)
 				printf(" %d", arg_ptr[arg_depth][_k]);
 			printf(" )\n");
 			DeltaFunction_push(c, function_id, new_DeltaInstructionN(function_name, BYTECODE_CAL));
+			
+			// move the return register back into the parent function
+			// FIXME: !
+			if(!strcmp(function_name, "add")) {
+#if DELTA_SHOW_BYTECODE
+				printf("{%d} BYTECODE_SET ( %d, %d )\n", function_id, var_dest, RETURN_REGISTER);
+#endif
+				DeltaFunction_push(c, function_id,
+								   new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, RETURN_REGISTER));
+			}
 			
 			r = (char*) malloc(8);
 			sprintf(r, "#%d", var_dest);
