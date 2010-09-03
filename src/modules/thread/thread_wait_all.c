@@ -4,6 +4,7 @@
 
 #include "delta/delta.h"
 #include "module.h"
+#include <assert.h>
 
 
 /**
@@ -16,6 +17,8 @@ DELTA_FUNCTION(thread_wait_all)
 	
 #ifdef DELTA_PLATFORM_MAC
 	
+	assert(!"thread_wait_all() is not working at the moment");
+	
 	// join all threads
 	/*int i;
 	for(i = 0; i < total_threads; ++i) {
@@ -23,7 +26,7 @@ DELTA_FUNCTION(thread_wait_all)
 		pthread_join(threads[i], NULL);
 	}*/
 	
-	sleep(3);
+	//sleep(3);
 	
 #else
 	

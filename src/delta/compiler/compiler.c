@@ -15,6 +15,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 
 #define DELTA_MAX_NESTED_FUNCTIONS 16
@@ -439,7 +440,7 @@ int delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifi
 	// prepare
 	char* line = (char*) malloc(1024);
 	int i, line_pos = 0, ii = 0;
-	char **split_semi; // this is used for 'for' statements
+	char **split_semi = NULL; // this is used for 'for' statements
 	
 	// compile identifier
 	delta_skip_spaces(identifier, &ii);
@@ -703,6 +704,8 @@ int delta_compile_block(struct DeltaCompiler *c, int function_id, char *identifi
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "for")) {
+		assert(split_semi != NULL);
+		
 		// the only thing different between the end of a while loop and a for loop is that we add
 		// in the incrementor for for statements
 		delta_compile_line_part(c, function_id, split_semi[2], strlen(split_semi[2]));

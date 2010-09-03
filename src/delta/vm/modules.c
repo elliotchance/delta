@@ -35,7 +35,7 @@ delta_module_function delta_get_module_function(void *module, char *name)
 
 int delta_load_module_defines(struct DeltaCompiler *c, char *path)
 {
-	const char *error;
+	const char *error = NULL;
 	int count;
 	
 	// load dynamically loaded library

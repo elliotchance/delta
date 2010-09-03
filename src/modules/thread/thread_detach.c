@@ -30,7 +30,7 @@ DELTA_FUNCTION(thread_detach)
 	}
 	
 	// run the function on a detached thread
-	pthread_create(&threads[total_threads], NULL, func, NULL);
+	pthread_create(&threads[total_threads], NULL, (void*) func, NULL);
 	++total_threads;
 	
 #else

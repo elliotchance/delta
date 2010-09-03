@@ -89,15 +89,9 @@ char* delta_extract_argument_key(char *arg)
 	}
 	
 	// a key was found
-	if(found >= 0) {
+	if(found >= 0)
 		// chop the key off
-		char *r = delta_copy_substring(arg, 0, found);
-		
-		// TODO: memory leak
-		arg = delta_copy_substring(arg, found + 2, len);
-		
-		return r;
-	}
+		return delta_copy_substring(arg, 0, found);
 	
 	// no key was found
 	return NULL;

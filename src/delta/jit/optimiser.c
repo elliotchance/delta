@@ -119,10 +119,10 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, i
 		int is_numerical = 1;
 		
 		for(i = at; i < end; ++i) {
-			int found = 0;
+			//int found = 0;
 			for(k = 0; k < ins[i].args; ++k) {
 				if(ins[i].arg[k] == c->functions[function_id].vars[j].ram_location) {
-					found = 1;
+					//found = 1;
 					break;
 				}
 			}

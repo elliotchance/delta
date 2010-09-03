@@ -22,7 +22,7 @@ DELTA_FUNCTION(sqlite3_exec)
 	
 	char *sql = delta_cast_new_string(DELTA_ARG1, NULL);
 	sqlite3 *db = (sqlite3*) DELTA_ARG0->value.resource.ptr;
-	sqlite3_stmt *stmt;
+	sqlite3_stmt *stmt = NULL;
 	
 	int result = sqlite3_exec(db, sql, NULL, NULL, NULL);
 	
