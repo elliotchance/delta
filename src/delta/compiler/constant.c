@@ -8,10 +8,13 @@
 #include "delta/macros.h"
 #include "delta/vm/vm.h"
 #include <string.h>
+#include <assert.h>
 
 
 int delta_push_string_constant(struct DeltaCompiler *c, int function_id, char *token, int escape)
 {
+	assert(function_id >= 0);
+	
 	int total = c->functions[function_id].total_constants;
 	struct DeltaVariable* v = &c->functions[function_id].constants[total];
 	

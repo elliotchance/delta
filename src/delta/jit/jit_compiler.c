@@ -232,6 +232,9 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			}
 		}
 	}
+	
+	// this is never reached as delta functions will always have a BYTECODE_RTN at the end, but I
+	// will keep this here anyway because if it doesn't occur it causes very bad memory issues.
 	jit_ret();
 	
 	// all done

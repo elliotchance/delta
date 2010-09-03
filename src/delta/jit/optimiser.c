@@ -72,20 +72,75 @@ int delta_translate_safe_bytecode(int bc)
 }
 
 
-void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, int end)
+void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id)
 {
-	int i, dest = 0, j, k;
-	
+	int i, j, end = c->functions[function_id].total_ins;
 	struct DeltaInstruction* ins = c->functions[function_id].ins;
-	printf("\nBefore:\n");
-	for(i = at; i < end; ++i) {
+	
+	/*printf("\nBefore:\n");
+	for(i = 0; i < end; ++i) {
 		printf("  id = %d, bc = %d |", i, ins[i].bc);
 		for(j = 0; j < ins[i].args; ++j)
 			printf(" %d", ins[i].arg[j]);
 		printf("\n");
-	}
+	}*/
 	
-	// Phase 1: Any unwanted bytecodes are marked as BYTECODE_NUL
+	delta_optimiser_addresses(c, function_id, 0, c->functions[function_id].total_ins);
+	//delta_optimiser_bytecodes(c, function_id, 0, c->functions[function_id].total_ins);
+	//delta_optimiser_fastmath(c, function_id, 0, c->functions[function_id].total_ins);
+	
+	/*printf("\nAfter:\n");
+	for(i = 0; i < end; ++i) {
+		printf("  id = %d, bc = %d |", i, ins[i].bc);
+		for(j = 0; j < ins[i].args; ++j)
+			printf(" %d", ins[i].arg[j]);
+		printf("\n");
+	}*/
+	
+	//exit(0);
+}
+
+
+/**
+ * @brief Reduce address locations.
+ */
+void delta_optimiser_addresses(struct DeltaCompiler *c, int function_id, int at, int end)
+{
+	int i, j, lowest = 1000000;
+	struct DeltaInstruction* ins = c->functions[function_id].ins;
+	
+	// find the lowest non-static address or constant
+	for(i = at; i < end; ++i) {
+		for(j = 0; j < ins[i].args; ++j) {
+			if(ins[i].arg[j] >= 0 && ins[i].arg[j] < lowest)
+				lowest = ins[i].arg[j];
+		}
+	}
+	for(i = 0; i < c->functions[function_id].total_constants; ++i)
+		if(c->functions[function_id].constants[i].ram_location >= 0 &&
+		   c->functions[function_id].constants[i].ram_location < lowest)
+			lowest = c->functions[function_id].constants[i].ram_location;
+	
+	// now shift the addresses of the non-static RAM and constants
+	for(i = at; i < end; ++i) {
+		for(j = 0; j < ins[i].args; ++j) {
+			if(ins[i].arg[j] >= 0)
+				ins[i].arg[j] -= lowest;
+		}
+	}
+	for(i = 0; i < c->functions[function_id].total_constants; ++i)
+		c->functions[function_id].constants[i].ram_location -= lowest;
+}
+
+
+/**
+ * @brief Any unwanted bytecodes are marked as BYTECODE_NUL.
+ */
+void delta_optimiser_bytecodes(struct DeltaCompiler *c, int function_id, int at, int end)
+{
+	int i, j;
+	struct DeltaInstruction* ins = c->functions[function_id].ins;
+	
 	for(i = at; i < end; ++i) {
 		if(ins[i].bc == BYTECODE_ADD && ins[i + 1].bc == BYTECODE_SET) {
 			// if these instructions are using a certain pattern of addresses then the bytecodes
@@ -111,6 +166,13 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, i
 			}
 		}
 	}
+}
+
+
+void delta_optimiser_fastmath(struct DeltaCompiler *c, int function_id, int at, int end)
+{
+	int i, dest = 0, j, k;
+	struct DeltaInstruction* ins = c->functions[function_id].ins;
 	
 	// Phase 2: Try to determine safe types for variables
 	printf("\nPhase 2:\n");
@@ -148,7 +210,7 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, i
 			// misc
 			if(ins[i].bc == BYTECODE_CAL || ins[i].bc == BYTECODE_NUL)
 				numerical = 1;
-				
+			
 			is_numerical = is_numerical && numerical;
 		}
 		
@@ -208,14 +270,4 @@ void delta_optimise_bytecode(struct DeltaCompiler *c, int function_id, int at, i
 				printf(" UNSAFE\n");
 		}
 	}
-	
-	printf("\nAfter:\n");
-	for(i = at; i < end; ++i) {
-		printf("  id = %d, bc = %d |", i, ins[i].bc);
-		for(j = 0; j < ins[i].args; ++j)
-			printf(" %d", ins[i].arg[j]);
-		printf("\n");
-	}
-	
-	//exit(0);
 }

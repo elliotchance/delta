@@ -13,19 +13,19 @@
 
 
 #define DELTA_ADD_BYTECODE(__BYTECODE) \
-	printf("{%d} BYTECODE_%s (", function_id, #__BYTECODE); \
+	printf("{%d} BYTECODE_%s (", c->total_functions, #__BYTECODE); \
 	int _k; \
 	arg_ptr[arg_depth][0] = var_dest; \
 	for(_k = 0; _k < arg_count[arg_depth]; ++_k) { \
 		printf(" %d", arg_ptr[arg_depth][_k]); \
 	} \
 	printf(" )\n"); \
-	DeltaFunction_push(c, function_id, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
+	DeltaFunction_push(c, c->total_functions, new_DeltaInstructionN(BYTECODE_##__BYTECODE));
 
 
 #define DELTA_ADD_OPERATOR_BYTECODE(__BYTECODE) \
-	printf("{%d} BYTECODE_%s (%d, %d, %d)\n", function_id, #__BYTECODE, var_dest, var_id1, var_id2); \
-	DeltaFunction_push(c, function_id, new_DeltaInstruction3( \
+	printf("{%d} BYTECODE_%s (%d, %d, %d)\n", c->total_functions, #__BYTECODE, var_dest, var_id1, var_id2); \
+	DeltaFunction_push(c, c->total_functions, new_DeltaInstruction3( \
 		NULL, BYTECODE_##__BYTECODE, var_dest, var_id1, var_id2));
 
 
@@ -484,6 +484,12 @@
 
 
 #define DELTA_MAX_ARGS 1024
+
+
+#define DELTA_CONCAT_OPERATOR "@"
+
+
+#define DELTA_OBJECT_OPERATOR "."
 
 
 #endif

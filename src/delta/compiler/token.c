@@ -10,6 +10,7 @@
 #include "strings.h"
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
 
 
 char* delta_read_inv_token(char* line, int* offset)
@@ -45,6 +46,8 @@ int delta_is_keyword(char* word)
 
 int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 {
+	assert(function_id >= 0);
+	
 	int i;
 	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
 		if(!strcmp(c->functions[function_id].vars[i].name, varname))
@@ -109,7 +112,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 	// value out into a temp place
 	if(location >= 0 && element != NULL) {
 		int var_dest = var_temp++;
-		int var_dimention = delta_compile_line_part(c, function_id, element, strlen(element));
+		int var_dimention = delta_compile_line_part(c, element, strlen(element));
 		
 #if DELTA_SHOW_BYTECODE
 		printf("{%d} BYTECODE_AG1 ( %d %d %d )\n", function_id, var_dest, location, var_dimention);
@@ -184,7 +187,6 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		   line[*offset] != 'e' && line[*offset] != '$')
 			break;
 	}
-	printf("'%s'\n", delta_copy_substring(line, orig, *offset));
 	
 	if(found >= 0) {
 		char *function_name = (char*) malloc(found + 1);
@@ -208,7 +210,7 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		delta_compile_line(c, function_id, r, strlen(r));
+		delta_compile_line(c, r, strlen(r));
 		
 		// if there was a function, apply it now
 		if(found > 0) {

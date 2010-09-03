@@ -23,13 +23,11 @@ extern int subexpression_depth;
 
 int                   delta_push_label(struct DeltaCompiler *c, char *name);
 int                   delta_compile_file(struct DeltaCompiler *c, const char* input_file);
-int                   delta_compile_block(struct DeltaCompiler *c, int function_id,
-										  char *identifier, char *block, int start, int end);
-int                   delta_compile_line(struct DeltaCompiler *c, int function_id, char* line,
-										 int length);
+int                   delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block,
+										  int start, int end);
+int                   delta_compile_line(struct DeltaCompiler *c, char* line, int length);
 void                  delta_die(const char* msg);
-int                   delta_compile_line_part(struct DeltaCompiler *c, int function_id, char* line,
-											  int length);
+int                   delta_compile_line_part(struct DeltaCompiler *c, char* line, int length);
 void                  delta_function_reset();
 struct DeltaCompiler* delta_compiler_init();
 int                   delta_needs_compile(char *file1, char *file2);
