@@ -12,7 +12,7 @@
 #include "delta/compiler/strings.h"
 
 
-stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
+delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {
 	int i, j, loop_id = 0, end = 0, function_id = -1;
 	struct DeltaInstruction *instructions = NULL;
@@ -51,7 +51,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 	// prepare for JIT
 	jit_insn **loop = (jit_insn**) calloc(16, sizeof(jit_insn*));
 	jit_insn *codeBuffer = (jit_insn*) calloc(1000, sizeof(jit_insn));
-	stack_function f = (stack_function) (jit_set_ip(codeBuffer).vptr);
+	delta_jit_function f = (delta_jit_function) (jit_set_ip(codeBuffer).vptr);
 	
 	// create a new RAM
 	struct DeltaVariable **ram = (struct DeltaVariable**)
@@ -137,7 +137,7 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			
 			// link the function by its name
 			if(instructions[i].bc == BYTECODE_CAL) {
-				stack_function linked = NULL;
+				delta_jit_function linked = NULL;
 				int fargs = (instructions[i].args - 1) / 2;
 				
 				// built-in functions
@@ -199,6 +199,13 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				else if(instructions[i].bc == BYTECODE_INC) jit_finish(ins_INC);
 				else if(instructions[i].bc == BYTECODE_MOD) jit_finish(ins_MOD);
 				else if(instructions[i].bc == BYTECODE_MUL) jit_finish(ins_MUL);
+				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
+				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
+				else if(instructions[i].bc == BYTECODE_SAP) jit_finish(ins_SAP);
+				else if(instructions[i].bc == BYTECODE_AND) jit_finish(ins_AND);
+				else if(instructions[i].bc == BYTECODE_ORR) jit_finish(ins_ORR);
+				else if(instructions[i].bc == BYTECODE_NOT) jit_finish(ins_NOT);
+				
 				else if(instructions[i].bc == BYTECODE_NAD) jit_finish(ins_NAD);
 				else if(instructions[i].bc == BYTECODE_NSB) jit_finish(ins_NSB);
 				else if(instructions[i].bc == BYTECODE_NMU) jit_finish(ins_NMU);
@@ -212,12 +219,6 @@ stack_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				else if(instructions[i].bc == BYTECODE_NLE) jit_finish(ins_NLE);
 				else if(instructions[i].bc == BYTECODE_NLT) jit_finish(ins_NLT);
 				else if(instructions[i].bc == BYTECODE_NNE) jit_finish(ins_NNE);
-				else if(instructions[i].bc == BYTECODE_SET) jit_finish(ins_SET);
-				else if(instructions[i].bc == BYTECODE_SUB) jit_finish(ins_SUB);
-				else if(instructions[i].bc == BYTECODE_SAP) jit_finish(ins_SAP);
-				else if(instructions[i].bc == BYTECODE_AND) jit_finish(ins_AND);
-				else if(instructions[i].bc == BYTECODE_ORR) jit_finish(ins_ORR);
-				else if(instructions[i].bc == BYTECODE_NOT) jit_finish(ins_NOT);
 				
 				else if(instructions[i].bc == BYTECODE_ZNL) jit_finish(ins_ZNL);
 				else if(instructions[i].bc == BYTECODE_ZBO) jit_finish(ins_ZBO);

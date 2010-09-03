@@ -115,7 +115,20 @@ struct DeltaInstruction
 };
 
 
-typedef void (*stack_function)(struct DeltaInstruction*);
+typedef void (*delta_jit_function)(struct DeltaInstruction*);
+
+
+typedef struct {
+	delta_jit_function func;
+	struct DeltaInstruction ins;
+} delta_virtual_instruction;
+
+
+typedef struct {
+	int alloc_ins;
+	int total_ins;
+	delta_virtual_instruction *ins;
+} delta_virtual_function;
 
 
 struct DeltaUncompiledFunction
@@ -129,10 +142,12 @@ struct DeltaCompiledFunction
 {
 	char *name;
 	
-	int alloc_ins, total_ins;
+	int alloc_ins;
+	int total_ins;
 	struct DeltaInstruction *ins;
 	
-	stack_function jit_ptr;
+	delta_jit_function jit_ptr;
+	delta_virtual_function *virtual_ptr;
 	
 	int alloc_vars, total_vars;
 	struct DeltaVariable *vars;
@@ -150,7 +165,7 @@ struct DeltaCompiledFunction
 struct DeltaFunction
 {
 	char* name;
-	stack_function function_ptr;
+	delta_jit_function function_ptr;
 	int min_args;
 	int max_args;
 };
@@ -164,12 +179,15 @@ struct DeltaCompiler
 	struct DeltaDefine *delta_defines;
 	int alloc_delta_defines;
 	int total_delta_defines;
+	
+	int option_virtual_vm;
 };
 
 
 struct DeltaVM
 {
-	int alloc_functions, total_functions;
+	int alloc_functions;
+	int total_functions;
 	struct DeltaCompiledFunction *functions;
 	
 	struct DeltaFunction **delta_functions;

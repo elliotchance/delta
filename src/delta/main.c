@@ -14,12 +14,16 @@
 #include "delta/vm/vm.h"
 #include "delta/compiler/compiler.h"
 #include "delta/jit/jit_compiler.h"
+#include "delta/jit/virtual_compiler.h"
 #include "delta/vm/modules.h"
 
 
 #ifndef CLOCKS_PER_SEC
 #define CLOCKS_PER_SEC 1000000
 #endif
+
+
+#define VIRTUAL_COMPILE 1
 
 
 void main_compile()
@@ -38,11 +42,19 @@ void main_run()
 	struct DeltaVM *vm = delta_load_file("test.dc");
 	delta_set_vm(vm);
 	delta_load_modules(vm);
-	stack_function delta_entry = delta_compile_jit(vm, DELTA_MAIN_FUNCTION);
+#ifndef VIRTUAL_COMPILE
+	delta_jit_function delta_entry = delta_compile_jit(vm, DELTA_MAIN_FUNCTION);
+#else
+	delta_virtual_function *delta_entry = delta_compile_virtual(vm, DELTA_MAIN_FUNCTION);
+#endif
 	
 	long start = clock() - 1;
 	printf("\n\n==> BEGIN, hit enter to proceed\n");
+#ifdef VIRTUAL_COMPILE
+	delta_run_virtual(delta_entry);
+#else
 	delta_entry(NULL);
+#endif
 	printf("==> END\n\n");
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	

@@ -9,7 +9,7 @@
 #include "delta/structs.h"
 
 
-stack_function delta_compile_jit(struct DeltaVM *c, char *function_name);
+delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name);
 
 
 #endif

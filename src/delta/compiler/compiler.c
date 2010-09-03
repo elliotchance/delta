@@ -781,6 +781,12 @@ int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 }
 
 
+void delta_compiler_defaults(struct DeltaCompiler* c)
+{
+	c->option_virtual_vm = 0;
+}
+
+
 struct DeltaCompiler* delta_compiler_init()
 {	
 	struct DeltaCompiler *c = new_DeltaCompiler();
@@ -791,6 +797,9 @@ struct DeltaCompiler* delta_compiler_init()
 	c->total_delta_defines = 0;
 	c->delta_defines = (struct DeltaDefine*)
 		calloc(c->alloc_delta_defines, sizeof(struct DeltaDefine));
+	
+	// set defaults
+	delta_compiler_defaults(c);
 	
 	return c;
 }

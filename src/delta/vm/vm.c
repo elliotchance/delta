@@ -57,16 +57,16 @@ void delta_vm_print_ram(struct DeltaVM *vm)
 	
 	for(i = 0; i < vm->total_functions; ++i) {
 		printf("{RAM} Function '%s'\n", vm->functions[i].name);
-		if(vm->functions[i].jit_ptr == NULL)
-			printf("Not compiled\n");
-		else {
+		//if(vm->functions[i].jit_ptr == NULL)
+		//	printf("Not compiled\n");
+		//else {
 			for(j = 0; j < vm->functions[i].total_vars; ++j) {
 				printf("ram[%d](%d, %d) = ", j, vm->functions[i].ram[j]->type,
 					   vm->functions[i].ram[j]->size);
 				delta_vm_print_variable(vm->functions[i].ram[j]);
 				printf("\n");
 			}
-		}
+		//}
 	}
 }
 
@@ -181,7 +181,7 @@ int delta_vm_function_exists()
 }
 
 
-stack_function delta_vm_get_function(struct DeltaVM *vm, char *function)
+delta_jit_function delta_vm_get_function(struct DeltaVM *vm, char *function)
 {
 	if(vm == NULL)
 		return NULL;

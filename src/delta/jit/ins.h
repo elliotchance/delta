@@ -37,6 +37,7 @@ DELTA_INS(NMD); // fastmath %
 DELTA_INS(NMU); // fastmath *
 DELTA_INS(NSB); // fastmath -
 DELTA_INS(ORR); // Boolean OR
+DELTA_INS(RTN); // return
 DELTA_INS(SAP); // .
 DELTA_INS(SET); // =
 DELTA_INS(SUB); // -

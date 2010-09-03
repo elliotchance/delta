@@ -245,6 +245,7 @@
 		8B8B0FA111F4620D00B67657 /* new.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B0F9F11F4620D00B67657 /* new.c */; };
 		8B8B10F011F53AEE00B67657 /* array.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B0F9011F460ED00B67657 /* array.c */; };
 		8B8B10F111F53AEE00B67657 /* new.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B0F9F11F4620D00B67657 /* new.c */; };
+		8BAFB0611230752200390025 /* virtual_compiler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BAFB0601230752200390025 /* virtual_compiler.c */; };
 		8BB0D795120CC6F500A3CDF2 /* strtoupper.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D794120CC6F500A3CDF2 /* strtoupper.c */; };
 		8BB0D7B6120CC88600A3CDF2 /* strtolower.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D7B5120CC88600A3CDF2 /* strtolower.c */; };
 		8BB0D89C120D262E00A3CDF2 /* array_key_exists.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0D89B120D262E00A3CDF2 /* array_key_exists.c */; };
@@ -872,6 +873,8 @@
 		8B8B0F9011F460ED00B67657 /* array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array.c; sourceTree = "<group>"; };
 		8B8B0F9E11F4620D00B67657 /* new.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = new.h; sourceTree = "<group>"; };
 		8B8B0F9F11F4620D00B67657 /* new.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = new.c; sourceTree = "<group>"; };
+		8BAFB05F1230752200390025 /* virtual_compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = virtual_compiler.h; sourceTree = "<group>"; };
+		8BAFB0601230752200390025 /* virtual_compiler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = virtual_compiler.c; sourceTree = "<group>"; };
 		8BB0D794120CC6F500A3CDF2 /* strtoupper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strtoupper.c; sourceTree = "<group>"; };
 		8BB0D7B5120CC88600A3CDF2 /* strtolower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strtolower.c; sourceTree = "<group>"; };
 		8BB0D89B120D262E00A3CDF2 /* array_key_exists.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_key_exists.c; sourceTree = "<group>"; };
@@ -1932,6 +1935,8 @@
 				8B0CA49D11EE844000FA9821 /* lightning.h */,
 				8B0CA49E11EE844000FA9821 /* optimiser.c */,
 				8B0CA49F11EE844000FA9821 /* optimiser.h */,
+				8BAFB0601230752200390025 /* virtual_compiler.c */,
+				8BAFB05F1230752200390025 /* virtual_compiler.h */,
 			);
 			path = jit;
 			sourceTree = "<group>";
@@ -2733,6 +2738,7 @@
 				8B0CA4C211EE844000FA9821 /* vm.c in Sources */,
 				8B8B046C11F182AB00B67657 /* load.c in Sources */,
 				8BC75F2812040F38004A21EB /* DeltaVM.c in Sources */,
+				8BAFB0611230752200390025 /* virtual_compiler.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

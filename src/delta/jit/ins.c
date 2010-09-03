@@ -510,3 +510,9 @@ DELTA_INS(ARG)
 	// FIXME: make sure d->arg[1] is not larger then current_function_args
 	DELTA_COPY_VARIABLE(DELTA_DEST, current_function_arg[d->arg[1]]);
 }
+
+
+DELTA_INS(RTN)
+{
+	// do nothing
+}

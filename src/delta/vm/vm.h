@@ -25,7 +25,7 @@ int             delta_vm_push_runtime_error(char *msg, int error_type);
 void            delta_release_variable(struct DeltaVariable *v);
 struct DeltaVM* delta_get_vm();
 void            delta_set_vm(struct DeltaVM *vm);
-stack_function  delta_vm_get_function(struct DeltaVM *vm, char *function);
+delta_jit_function  delta_vm_get_function(struct DeltaVM *vm, char *function);
 
 
 #endif

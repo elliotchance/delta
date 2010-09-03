@@ -14,4 +14,4 @@ extern struct DeltaVM *DELTA_VM;
 
 struct DeltaModuleFunction* module_functions(int *count);
 void                        module_set_vm(struct DeltaVM *vm);
-void                        thread_detach(stack_function func);
+void                        thread_detach(delta_jit_function func);

@@ -23,7 +23,7 @@ DELTA_FUNCTION(thread_detach)
 	}
 	
 	// make sure the function to be detached exists
-	stack_function func = delta_vm_get_function(DELTA_VM, "func");
+	delta_jit_function func = delta_vm_get_function(DELTA_VM, "func");
 	if(func == NULL) {
 		DELTA_TRIGGER_ERROR("thread_detach() can't link function.", DELTA_ERROR_ERROR);
 		DELTA_RETURN_NULL;
