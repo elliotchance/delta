@@ -18,6 +18,5 @@ DELTA_FUNCTION(println)
 		printf("\n");
 	}
 	
-	printf("null to %d (%d)\n", d->arg[0], d->varg[0]);
 	DELTA_RETURN_NULL;
 }
