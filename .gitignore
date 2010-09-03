@@ -3,6 +3,8 @@
 build/*
 *.xcodeproj/*.pbxuser
 *.xcodeproj/*.mode1v3
+*.xcodeproj/xcuserdata/*
+*.xcodeproj/project.xcworkspace/*
 cloc.pl
 sloc.sh
 doc*
