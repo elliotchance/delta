@@ -5,7 +5,8 @@
 #include "compiler.h"
 #include "bytecode.h"
 #include "delta/vm/vm.h"
-#include "delta/compiler/strings.h"
+#include "strings.h"
+#include "errors.h"
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
 #include "delta/structs/DeltaCompiler.h"
@@ -13,9 +14,11 @@
 #include "constant.h"
 #include "delta/macros.h"
 #include "delta/jit/optimiser.h"
+#include "delta/compiler/bytecode_writer.h"
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <assert.h>
 
 
@@ -30,6 +33,7 @@ int **arg_ptr = NULL;
 int arg_depth = 0;
 int label_id = 0;
 int subexpression_depth = 0;
+int line_number = 1;
 static char *class_name = NULL;
 
 
@@ -58,7 +62,7 @@ int delta_push_label(struct DeltaCompiler *c, char *name)
 
 void delta_die(const char* msg)
 {
-	perror(msg);
+	printf("%s", msg);
 	exit(1);
 }
 
@@ -68,15 +72,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 	if(!strncmp(delta_trim(line), "return", 6)) {
 		int pos = delta_strpos(line, "r") + 6;
 		int var_id1 = delta_compile_line_part(c, line + pos, length - pos);
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_SET ( %d, %d )\n", c->total_functions, RETURN_REGISTER, var_id1);
-#endif
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction2(NULL, BYTECODE_SET, RETURN_REGISTER, var_id1));
 		
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_RTN ( )\n", c->total_functions);
-#endif
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		DELTA_WRITE_BYTECODE(BYTECODE_SET, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_SET, RETURN_REGISTER, var_id1));
+		DELTA_WRITE_BYTECODE(BYTECODE_RTN, "", c->total_functions,
+							 new_DeltaInstruction0(NULL, BYTECODE_RTN));
 		
 		return var_id1;
 	}
@@ -125,12 +125,17 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			}
 		}
 		else if(!delta_is_keyword(token) && !delta_is_declared(c, c->total_functions, token)) {
+			// make sure the variable name is valid
+			if(tolower(token[0]) != token[0])
+				delta_error_push(c, line_number,
+								 "Variables names must start with a non-capital letter.");
+				
 			int total_vars = c->functions[c->total_functions].total_vars;
 			c->functions[c->total_functions].vars[total_vars].type = DELTA_TYPE_NUMBER;
 			c->functions[c->total_functions].vars[total_vars].name = (char*) malloc(strlen(token) + 1);
 			strcpy(c->functions[c->total_functions].vars[total_vars].name, token);
-			c->functions[c->total_functions].vars[total_vars].ram_location = var_temp++;
-			++c->functions[c->total_functions].total_vars;
+			c->functions[c->total_functions].vars[total_vars].ram_location = ++var_temp;
+			++c->functions[c->total_functions].total_vars; 
 		}
 		
 		// skip any spaces before inverse token (aka operator)
@@ -189,13 +194,9 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				char *line2 = "15";
 				int var_dimention = delta_compile_line_part(c, line2, 2);
 				
-#if DELTA_SHOW_BYTECODE
-				printf("{%d} BYTECODE_AS1 ( %d %d %d )\n", c->total_functions, var_dest, var_dimention,
-					   var_id1);
-#endif
-				DeltaFunction_push(c, c->total_functions,
-								   new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
-														 var_dimention, var_id1));
+				DELTA_WRITE_BYTECODE(BYTECODE_AS1, "", c->total_functions,
+									 new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
+														   var_dimention, var_id1));
 			} else {
 				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
 				if(var_dest < 0) {
@@ -204,11 +205,8 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 					exit(1);
 				}
 				
-#if DELTA_SHOW_BYTECODE
-				printf("{%d} BYTECODE_SET (%d, %d)\n", c->total_functions, var_dest, var_id1);
-#endif
-				DeltaFunction_push(c, c->total_functions,
-								   new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
+				DELTA_WRITE_BYTECODE(BYTECODE_SET, "", c->total_functions,
+									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
 			}
 			result_register = var_dest;
 		}
@@ -234,51 +232,37 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
 			int var_dest = ++var_temp;
 			
-			if(!strcmp(tokens[highest_op_pos], "+")) {
-				DELTA_ADD_OPERATOR_BYTECODE(ADD);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "-")) {
-				DELTA_ADD_OPERATOR_BYTECODE(SUB);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "*")) {
-				DELTA_ADD_OPERATOR_BYTECODE(MUL);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "/")) {
-				DELTA_ADD_OPERATOR_BYTECODE(DIV);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "%")) {
-				DELTA_ADD_OPERATOR_BYTECODE(MOD);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "<")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CLT);
-			}
-			else if(!strcmp(tokens[highest_op_pos], ">")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CGT);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "<=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CLE);
-			}
-			else if(!strcmp(tokens[highest_op_pos], ">=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CGE);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "==")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CEQ);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "!=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CNE);
-			}
-			else if(!strcmp(tokens[highest_op_pos], DELTA_CONCAT_OPERATOR)) {
-				DELTA_ADD_OPERATOR_BYTECODE(SAP);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "<>")) {
-				DELTA_ADD_OPERATOR_BYTECODE(CNE);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "&&")) {
-				DELTA_ADD_OPERATOR_BYTECODE(AND);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "||")) {
-				DELTA_ADD_OPERATOR_BYTECODE(ORR);
-			}
+			if(!strcmp(tokens[highest_op_pos], "+"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_ADD)
+			else if(!strcmp(tokens[highest_op_pos], "-"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_SUB)
+			else if(!strcmp(tokens[highest_op_pos], "*"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_MUL)
+			else if(!strcmp(tokens[highest_op_pos], "/"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_DIV)
+			else if(!strcmp(tokens[highest_op_pos], "%"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_MOD)
+			else if(!strcmp(tokens[highest_op_pos], "<"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CLT)
+			else if(!strcmp(tokens[highest_op_pos], ">"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CGT)
+			else if(!strcmp(tokens[highest_op_pos], "<="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CLE)
+			else if(!strcmp(tokens[highest_op_pos], ">="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CGE)
+			else if(!strcmp(tokens[highest_op_pos], "=="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CEQ)
+			else if(!strcmp(tokens[highest_op_pos], "!="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CNE)
+			else if(!strcmp(tokens[highest_op_pos], DELTA_CONCAT_OPERATOR))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_SAP)
+			else if(!strcmp(tokens[highest_op_pos], "<>"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_CNE)
+			else if(!strcmp(tokens[highest_op_pos], "&&"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_AND)
+			else if(!strcmp(tokens[highest_op_pos], "||"))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_ORR)
+			
 			result_register = var_dest;
 		}
 		
@@ -301,27 +285,21 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				exit(1);
 			}
 			
-			if(!strcmp(tokens[highest_op_pos], "+=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(ADD);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "-=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(SUB);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "*=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(MUL);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "/=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(DIV);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "%=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(MOD);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "&&=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(AND);
-			}
-			else if(!strcmp(tokens[highest_op_pos], "||=")) {
-				DELTA_ADD_OPERATOR_BYTECODE(ORR);
-			}
+			if(!strcmp(tokens[highest_op_pos], "+="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_ADD)
+			else if(!strcmp(tokens[highest_op_pos], "-="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_SUB)
+			else if(!strcmp(tokens[highest_op_pos], "*="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_MUL)
+			else if(!strcmp(tokens[highest_op_pos], "/="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_DIV)
+			else if(!strcmp(tokens[highest_op_pos], "%="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_MOD)
+			else if(!strcmp(tokens[highest_op_pos], "&&="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_AND)
+			else if(!strcmp(tokens[highest_op_pos], "||="))
+				DELTA_ADD_OPERATOR_BYTECODE(BYTECODE_ORR)
+				
 			result_register = var_dest;
 		}
 		
@@ -466,21 +444,15 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		// evaluate expression
 		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
-		// convert the expression to a save BOOLEAN
+		// convert the expression to a safe BOOLEAN
 		++var_temp;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_ZBO (%d, %d)\n", c->total_functions, var_temp, expr_eval);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		DELTA_WRITE_BYTECODE(BYTECODE_ZBO, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
 		
 		// perform if statement
 		++label_id;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_IFS (%d, %d)\n", c->total_functions, label_id, expr_eval);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, var_temp));
+		DELTA_WRITE_BYTECODE(BYTECODE_IFS, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_IFS, label_id, var_temp));
 	}
 	else if(!strcmp(short_identifier, "while")) {
 		// if statement, get the conditional expression
@@ -490,29 +462,21 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
 		// loop label
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_LBL ( %d )\n", c->total_functions, label_id);
-#endif
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
+		DELTA_WRITE_BYTECODE(BYTECODE_LBL, "", c->total_functions,
+							 new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
 		
 		// evaluate expression
 		int expr_eval = delta_compile_line_part(c, expr, expr_end - expr_at);
 		
 		// convert the expression to a save BOOLEAN
 		++var_temp;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_ZBO (%d, %d)\n", c->total_functions, var_temp, expr_eval);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		DELTA_WRITE_BYTECODE(BYTECODE_ZBO, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
 		
 		// perform if statement
 		++label_id;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_LOP (%d, %d)\n", c->total_functions, label_id, var_temp);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
+		DELTA_WRITE_BYTECODE(BYTECODE_LOP, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
 	}
 	else if(!strcmp(short_identifier, "for")) {
 		// for statements work basically the same way as while statements
@@ -531,29 +495,21 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		delta_compile_line_part(c, split_semi[0], strlen(split_semi[0]));
 		
 		// loop label
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_LBL ( %d )\n", c->total_functions, label_id);
-#endif
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
+		DELTA_WRITE_BYTECODE(BYTECODE_LBL, "", c->total_functions,
+							 new_DeltaInstruction1(NULL, BYTECODE_LBL, label_id));
 		
 		// evaluate expression
 		int expr_eval = delta_compile_line_part(c, split_semi[1], strlen(split_semi[1]));
 		
 		// convert the expression to a save BOOLEAN
 		++var_temp;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_ZBO (%d, %d)\n", c->total_functions, var_temp, expr_eval);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
+		DELTA_WRITE_BYTECODE(BYTECODE_ZBO, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_ZBO, var_temp, expr_eval));
 		
 		// perform if statement
 		++label_id;
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_LOP (%d, %d)\n", c->total_functions, label_id, var_temp);
-#endif
-		DeltaFunction_push(c, c->total_functions,
-						   new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
+		DELTA_WRITE_BYTECODE(BYTECODE_LOP, "", c->total_functions,
+							 new_DeltaInstruction2(NULL, BYTECODE_LOP, label_id, var_temp));
 	}
 	else if(!strcmp(short_identifier, "function")) {
 		// when we encounter a function we save the pointer of the block and compile it later
@@ -569,14 +525,21 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		++c->total_functions;
 		c->functions[c->total_functions].name = identifier;
 		c->functions[c->total_functions].jit_ptr = NULL;
+		
+		delta_write_bytecode_function(c, identifier);
 	}
 	else if(!strcmp(short_identifier, "class")) {
 		if(class_name != NULL)
 			free(class_name);
 		
-		// FIXME: !
 		identifier = delta_trim(identifier + delta_strpos(identifier, "class") + 5);
 		class_name = delta_copy_string(identifier);
+		
+		// the class name must be valid
+		if(toupper(class_name[0]) != class_name[0])
+			delta_error_push(c, line_number, "Class names must start with a capital letter.");
+		
+		delta_write_bytecode_class(c, class_name);
 	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);
@@ -587,11 +550,17 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	int br1 = 0; // ()
 	int br2 = 0; // []
 	for(i = at; i < end; ++i) {
+		// line numbers
+		if(block[i] == '\n')
+			++line_number;
+		
 		// single line comment
 		if(block[i] == '/' && block[i + 1] == '/') {
 			for(; i < end; ++i) {
-				if(block[i] == '\n')
+				if(block[i] == '\n') {
+					++line_number;
 					break;
+				}
 			}
 			++i;
 			continue;
@@ -733,6 +702,8 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "class")) {
+		delta_write_bytecode_end_class(c, class_name);
+		
 		if(class_name != NULL)
 			free(class_name);
 		class_name = NULL;
@@ -741,10 +712,10 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		c->functions[c->total_functions].total_vars = var_temp;
 		
 		// make sure there is always a return at the end of the function
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_RTN ( )\n", c->total_functions);
-#endif
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_RTN, "Always add a return", c->total_functions,
+									 new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		
+		delta_write_bytecode_end_function(c, "");
 	}
 	
 	// clean up
@@ -810,6 +781,7 @@ struct DeltaCompiler* delta_compiler_init()
 		calloc(c->alloc_delta_defines, sizeof(struct DeltaDefine));
 	
 	// set defaults
+	c->errors = 0;
 	delta_compiler_defaults(c);
 	
 	return c;

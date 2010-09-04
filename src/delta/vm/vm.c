@@ -57,16 +57,16 @@ void delta_vm_print_ram(struct DeltaVM *vm)
 	
 	for(i = 0; i < vm->total_functions; ++i) {
 		printf("{RAM} Function '%s'\n", vm->functions[i].name);
-		//if(vm->functions[i].jit_ptr == NULL)
-		//	printf("Not compiled\n");
-		//else {
+		if(vm->functions[i].jit_ptr == NULL)
+			printf("Not compiled\n");
+		else {
 			for(j = 0; j < vm->functions[i].total_vars; ++j) {
 				printf("ram[%d](%d, %d) = ", j, vm->functions[i].ram[j]->type,
 					   vm->functions[i].ram[j]->size);
 				delta_vm_print_variable(vm->functions[i].ram[j]);
 				printf("\n");
 			}
-		//}
+		}
 	}
 }
 
@@ -114,6 +114,11 @@ int delta_vm_prepare(struct DeltaVM *vm, int function_id, struct DeltaVariable *
 }
 
 
+/**
+ * @brief Throw a runtime error.
+ *
+ * @see DELTA_TRIGGER_ERRROR()
+ */
 int delta_vm_push_runtime_error(char *msg, int error_type)
 {
 	// first make sure the error_type is valid
@@ -148,6 +153,11 @@ int delta_vm_push_runtime_error(char *msg, int error_type)
 }
 
 
+/**
+ * @brief Release all the resources of a delta variable.
+ * 
+ * It is safe to pass a NULL pointer to this function.
+ */
 void delta_release_variable(struct DeltaVariable *v)
 {
 	if(v == NULL)
@@ -163,24 +173,65 @@ void delta_release_variable(struct DeltaVariable *v)
 }
 
 
+/**
+ * @brief Get the active virtual machine.
+ *
+ * @see delta_set_vm()
+ */
 struct DeltaVM* delta_get_vm()
 {
 	return active_vm;
 }
 
 
+/**
+ * @brief Set the active virtual machine.
+ *
+ * This is used as a communication mechanism for modules that need to interact with the VM that is
+ * controlling the executing script.
+ *
+ * @see delta_get_vm()
+ */
 void delta_set_vm(struct DeltaVM *vm)
 {
 	active_vm = vm;
 }
 
 
-int delta_vm_function_exists()
+/**
+ * @brief Check if a function exists.
+ *
+ * This will only search the currently loaded modules. If the function is found to exist but is not
+ * JIT compiled it will remain uncompiled.
+ *
+ * @return DELTA_YES or DELTA_NO.
+ */
+int delta_vm_function_exists(struct DeltaVM *vm, char *function)
 {
-	return DELTA_YES;
+	if(vm == NULL)
+		return DELTA_NO;
+	
+	int i;
+	for(i = 0; i < vm->total_functions; ++i) {
+		if(!strcmp(vm->functions[i].name, function))
+			return DELTA_YES;
+	}
+	
+	// function was not found
+	return DELTA_NO;
 }
 
 
+/**
+ * @brief Get the JIT handle of a function.
+ *
+ * This will only search the currently loaded modules.
+ * @note This will only work with preloaded functions.
+ *
+ * @return If the function does not exist it will return NULL. If it does exist but is not JIT
+ *         compiled it will be compiled before returning - so as long as this function does not
+ *         return NULL you will be able to immediatly use the JIT handle.
+ */
 delta_jit_function delta_vm_get_function(struct DeltaVM *vm, char *function)
 {
 	if(vm == NULL)

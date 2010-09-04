@@ -180,6 +180,8 @@ struct DeltaCompiler
 	int alloc_delta_defines;
 	int total_delta_defines;
 	
+	int errors;
+	
 	int option_virtual_vm;
 };
 

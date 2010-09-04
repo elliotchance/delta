@@ -10,7 +10,6 @@
 
 
 #define RETURN_REGISTER -1
-#define DELTA_SHOW_BYTECODE 1
 
 
 extern int var_temp;
@@ -19,6 +18,7 @@ extern int **arg_ptr;
 extern int arg_depth;
 extern int label_id;
 extern int subexpression_depth;
+extern int line_number;
 
 
 int                   delta_push_label(struct DeltaCompiler *c, char *name);

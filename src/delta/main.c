@@ -28,12 +28,14 @@
 
 void main_compile()
 {
-	printf(">>>> Compiling\n");
 	struct DeltaCompiler *c = delta_compiler_init();
 	delta_load_defines(c);
 	delta_compile_file(c, "test.delta");
 	delta_save_file(c, "test.dc", "test.delta");
-	printf(">>>> Compiling Done\n");
+	
+	// stop on errors
+	if(c->errors)
+		delta_die("Stopping compilation due to errors.\n");
 }
 
 
@@ -58,7 +60,7 @@ void main_run()
 	printf("==> END\n\n");
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	
-	//delta_vm_print_ram(vm);
+	delta_vm_print_ram(vm);
 }
 
 

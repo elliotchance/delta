@@ -8,6 +8,8 @@
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
 #include "strings.h"
+#include "delta/macros.h"
+#include "delta/compiler/bytecode_writer.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -73,11 +75,8 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 		temp = (temp + 1) * 2;
 		
 		// add an instruction to copy out the argument
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_ARG ( %d %d )\n", function_id, var_dest, temp);
-#endif
-		DeltaFunction_push(c, function_id, new_DeltaInstruction2(NULL, BYTECODE_ARG, var_dest,
-																 temp));
+		DELTA_WRITE_BYTECODE(BYTECODE_ARG, "", function_id,
+							 new_DeltaInstruction2(NULL, BYTECODE_ARG, var_dest, temp));
 		
 		return var_dest;
 	}
@@ -114,11 +113,9 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 		int var_dest = var_temp++;
 		int var_dimention = delta_compile_line_part(c, element, strlen(element));
 		
-#if DELTA_SHOW_BYTECODE
-		printf("{%d} BYTECODE_AG1 ( %d %d %d )\n", function_id, var_dest, location, var_dimention);
-#endif
-		DeltaFunction_push(c, function_id, new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest,
-																 location, var_dimention));
+		DELTA_WRITE_BYTECODE(BYTECODE_AG1, "", function_id,
+							 new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
+												   var_dimention));
 		return var_dest;
 	}
 	
@@ -215,25 +212,20 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		// if there was a function, apply it now
 		if(found > 0) {
 			int var_dest = ++var_temp;
-			
-#if DELTA_SHOW_BYTECODE
-			printf("{%d} BYTECODE_CAL %s(", function_id, function_name);
-#endif
-			int _k;
+			//int _k;
 			arg_ptr[arg_depth][0] = var_dest;
-			for(_k = 0; _k < arg_count[arg_depth]; ++_k)
-				printf(" %d", arg_ptr[arg_depth][_k]);
-			printf(" )\n");
-			DeltaFunction_push(c, function_id, new_DeltaInstructionN(function_name, BYTECODE_CAL));
+			//for(_k = 0; _k < arg_count[arg_depth]; ++_k)
+			//	printf(" %d", arg_ptr[arg_depth][_k]);
+			//printf(" )\n");
+			DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
+								 new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
 			// move the return register back into the parent function
 			// FIXME: !
-			if(!strcmp(function_name, "add")) {
-#if DELTA_SHOW_BYTECODE
-				printf("{%d} BYTECODE_SET ( %d, %d )\n", function_id, var_dest, RETURN_REGISTER);
-#endif
-				DeltaFunction_push(c, function_id,
-								   new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, RETURN_REGISTER));
+			if(!strcmp(function_name, "Object.add")) {
+				DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
+									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
+														   RETURN_REGISTER));
 			}
 			
 			r = (char*) malloc(8);

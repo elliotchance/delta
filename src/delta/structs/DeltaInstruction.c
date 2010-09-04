@@ -11,6 +11,8 @@ struct DeltaInstruction new_DeltaInstruction0(char *name, DeltaByteCode bc)
 	struct DeltaInstruction d;
 	d.func = name;
 	d.bc = bc;
+	d.args = 0;
+	d.arg = NULL;
 	
 	return d;
 }

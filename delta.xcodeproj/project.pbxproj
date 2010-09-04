@@ -214,6 +214,8 @@
 		8B0CA54111EE855C00FA9821 /* mapmutl2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA1AC11EE81DC00FA9821 /* mapmutl2.c */; };
 		8B0CA54411EE856A00FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
 		8B0CA54711EE857300FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
+		8B857DB512324527001F3BAC /* errors.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857DB412324527001F3BAC /* errors.c */; };
+		8B857F3112328301001F3BAC /* bytecode_writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857F3012328301001F3BAC /* bytecode_writer.c */; };
 		8B8B046C11F182AB00B67657 /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B046B11F182AB00B67657 /* load.c */; };
 		8B8B049E11F1857500B67657 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B049011F184F900B67657 /* sqlite3.c */; };
 		8B8B049F11F1857D00B67657 /* sqlite3_open.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B049411F184F900B67657 /* sqlite3_open.c */; };
@@ -769,6 +771,10 @@
 		8B0CA4B111EE844000FA9821 /* modules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modules.h; sourceTree = "<group>"; };
 		8B0CA4B211EE844000FA9821 /* vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm.c; sourceTree = "<group>"; };
 		8B0CA4B311EE844000FA9821 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
+		8B857DB312324527001F3BAC /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
+		8B857DB412324527001F3BAC /* errors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errors.c; sourceTree = "<group>"; };
+		8B857F2F12328301001F3BAC /* bytecode_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bytecode_writer.h; sourceTree = "<group>"; };
+		8B857F3012328301001F3BAC /* bytecode_writer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bytecode_writer.c; sourceTree = "<group>"; };
 		8B8B046A11F182AB00B67657 /* load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = load.h; sourceTree = "<group>"; };
 		8B8B046B11F182AB00B67657 /* load.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = load.c; sourceTree = "<group>"; };
 		8B8B048B11F184F900B67657 /* module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = module.c; sourceTree = "<group>"; };
@@ -1916,10 +1922,14 @@
 			isa = PBXGroup;
 			children = (
 				8B0CA48E11EE844000FA9821 /* bytecode.h */,
+				8B857F3012328301001F3BAC /* bytecode_writer.c */,
+				8B857F2F12328301001F3BAC /* bytecode_writer.h */,
 				8B0CA48F11EE844000FA9821 /* compiler.c */,
 				8B0CA49011EE844000FA9821 /* compiler.h */,
 				8B0CA49111EE844000FA9821 /* constant.c */,
 				8B0CA49211EE844000FA9821 /* constant.h */,
+				8B857DB412324527001F3BAC /* errors.c */,
+				8B857DB312324527001F3BAC /* errors.h */,
 				8B0CA49311EE844000FA9821 /* strings.c */,
 				8B0CA49411EE844000FA9821 /* strings.h */,
 				8B0CA49511EE844000FA9821 /* token.c */,
@@ -2743,6 +2753,8 @@
 				8B8B046C11F182AB00B67657 /* load.c in Sources */,
 				8BC75F2812040F38004A21EB /* DeltaVM.c in Sources */,
 				8BAFB0611230752200390025 /* virtual_compiler.c in Sources */,
+				8B857DB512324527001F3BAC /* errors.c in Sources */,
+				8B857F3112328301001F3BAC /* bytecode_writer.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
