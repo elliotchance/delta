@@ -16,6 +16,9 @@
 #include "delta/jit/jit_compiler.h"
 #include "delta/jit/virtual_compiler.h"
 #include "delta/vm/modules.h"
+#include "delta/structs/DeltaCompiler.h"
+#include "delta/structs/DeltaVM.h"
+#include "delta/structs/DeltaFunction.h"
 
 
 #ifndef CLOCKS_PER_SEC
@@ -36,6 +39,8 @@ void main_compile()
 	// stop on errors
 	if(c->errors)
 		delta_die("Stopping compilation due to errors.\n");
+	
+	free_DeltaCompiler(c);
 }
 
 
@@ -51,7 +56,7 @@ void main_run()
 #endif
 	
 	long start = clock() - 1;
-	printf("\n\n==> BEGIN, hit enter to proceed\n");
+	printf("\n\n==> BEGIN\n");
 #ifdef VIRTUAL_COMPILE
 	delta_run_virtual(delta_entry);
 #else
@@ -61,6 +66,7 @@ void main_run()
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	
 	delta_vm_print_ram(vm);
+	free_DeltaVM(vm);
 }
 
 

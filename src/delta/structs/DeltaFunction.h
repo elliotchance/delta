@@ -10,3 +10,4 @@ struct DeltaFunction* new_DeltaFunction(char *name,
 										int min_args, int max_args);
 void                  DeltaFunction_push(struct DeltaCompiler* c, int function_id,
 										 struct DeltaInstruction ins);
+void                  free_DeltaFunction(struct DeltaFunction *f);

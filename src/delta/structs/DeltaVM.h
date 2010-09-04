@@ -7,3 +7,4 @@
 
 
 struct DeltaVM* new_DeltaVM();
+void   free_DeltaVM(struct DeltaVM *vm);

@@ -40,3 +40,17 @@ struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 	
 	return c;
 }
+
+void free_DeltaCompiler(struct DeltaCompiler *c)
+{
+	int i;
+	for(i = 0; i < c->alloc_functions; ++i) {
+		free(c->functions[i].ins);
+		free(c->functions[i].vars);
+		free(c->functions[i].labels);
+		free(c->functions[i].constants);
+	}
+	
+	free(c->functions);
+	free(c);
+}

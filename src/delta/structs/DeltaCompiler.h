@@ -6,3 +6,4 @@
 
 
 struct DeltaCompiler* new_DeltaCompiler();
+void                  free_DeltaCompiler(struct DeltaCompiler* c);

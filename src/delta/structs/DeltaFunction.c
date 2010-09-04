@@ -24,3 +24,12 @@ void DeltaFunction_push(struct DeltaCompiler* c, int function_id, struct DeltaIn
 {
 	c->functions[function_id].ins[c->functions[function_id].total_ins++] = ins;
 }
+
+
+void free_DeltaFunction(struct DeltaFunction *f)
+{
+	/*int i;
+	for(i = 0; i < f->alloc_ins; ++i)
+		free_DeltaInstruction(f->ins[i]);*/
+	free(f);
+}
