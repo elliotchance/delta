@@ -212,21 +212,14 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		// if there was a function, apply it now
 		if(found > 0) {
 			int var_dest = ++var_temp;
-			//int _k;
 			arg_ptr[arg_depth][0] = var_dest;
-			//for(_k = 0; _k < arg_count[arg_depth]; ++_k)
-			//	printf(" %d", arg_ptr[arg_depth][_k]);
-			//printf(" )\n");
 			DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
 								 new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
 			// move the return register back into the parent function
-			// FIXME: !
-			if(!strcmp(function_name, "Object.add")) {
-				DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
-									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
-														   RETURN_REGISTER));
-			}
+			DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
+								 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
+													   RETURN_REGISTER));
 			
 			r = (char*) malloc(8);
 			sprintf(r, "#%d", var_dest);
