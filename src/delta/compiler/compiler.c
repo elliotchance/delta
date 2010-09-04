@@ -526,7 +526,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		c->functions[c->total_functions].name = identifier;
 		c->functions[c->total_functions].jit_ptr = NULL;
 		
-		delta_write_bytecode_function(c, identifier);
+		delta_bytecode_writer_function(c, identifier);
 	}
 	else if(!strcmp(short_identifier, "class")) {
 		if(class_name != NULL)
@@ -539,7 +539,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		if(toupper(class_name[0]) != class_name[0])
 			delta_error_push(c, line_number, "Class names must start with a capital letter.");
 		
-		delta_write_bytecode_class(c, class_name);
+		delta_bytecode_writer_class(c, class_name);
 	}
 	else {
 		printf("Unknown block identifier '%s'", short_identifier);
@@ -702,7 +702,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "class")) {
-		delta_write_bytecode_end_class(c, class_name);
+		delta_bytecode_writer_end_class(c, class_name);
 		
 		if(class_name != NULL)
 			free(class_name);
@@ -715,7 +715,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_RTN, "Always add a return", c->total_functions,
 									 new_DeltaInstruction0(NULL, BYTECODE_RTN));
 		
-		delta_write_bytecode_end_function(c, "");
+		delta_bytecode_writer_end_function(c, "");
 	}
 	
 	// clean up

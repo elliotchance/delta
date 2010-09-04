@@ -15,7 +15,7 @@
 #define DELTA_ADD_BYTECODE(__BYTECODE) \
 { \
 	struct DeltaInstruction _dI = new_DeltaInstructionN(__BYTECODE);\
-	delta_write_bytecode_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
+	delta_bytecode_writer_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
 		c->total_functions); \
 	arg_ptr[arg_depth][0] = var_dest; \
 	DeltaFunction_push(c, c->total_functions, _dI); \
@@ -26,7 +26,7 @@
 { \
 	struct DeltaInstruction _dI = \
 		new_DeltaInstruction3(NULL, __BYTECODE, var_dest, var_id1, var_id2); \
-	delta_write_bytecode_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
+	delta_bytecode_writer_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
 		c->total_functions); \
 	DeltaFunction_push(c, c->total_functions, _dI); \
 }
@@ -34,14 +34,14 @@
 
 #define DELTA_WRITE_BYTECODE(__bytecode, __msg, __id, __ins) \
 { \
-	delta_write_bytecode_line(c, __bytecode, #__bytecode, line_number, __msg, __ins, __id); \
+	delta_bytecode_writer_line(c, __bytecode, #__bytecode, line_number, __msg, __ins, __id); \
 	DeltaFunction_push(c, __id, __ins); \
 }
 
 
 #define DELTA_WRITE_UNLINED_BYTECODE(__bytecode, __msg, __id, __ins) \
 { \
-	delta_write_bytecode_line(c, __bytecode, #__bytecode, 0, __msg, __ins, __id); \
+	delta_bytecode_writer_line(c, __bytecode, #__bytecode, 0, __msg, __ins, __id); \
 	DeltaFunction_push(c, __id, __ins); \
 }
 

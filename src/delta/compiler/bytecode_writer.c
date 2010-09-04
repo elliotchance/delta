@@ -10,7 +10,8 @@
 
 static FILE *bytecode_writer = NULL;
 static int bytecode_writer_indent = -1;
-void delta_write_bytecode_init(struct DeltaCompiler *c)
+
+void delta_bytecode_writer_init(struct DeltaCompiler *c)
 {
 	if(bytecode_writer == NULL) {
 		bytecode_writer = fopen("test.bytecode.txt", "w");
@@ -19,9 +20,9 @@ void delta_write_bytecode_init(struct DeltaCompiler *c)
 }
 
 
-void delta_write_bytecode_indent(struct DeltaCompiler *c, int indent)
+void delta_bytecode_writer_indent(struct DeltaCompiler *c, int indent)
 {
-	delta_write_bytecode_init(c);
+	delta_bytecode_writer_init(c);
 	int i;
 	for(i = 0; i < indent; ++i)
 		fprintf(bytecode_writer, "  ");
@@ -65,12 +66,12 @@ void delta_bytecode_writer_address(struct DeltaCompiler *c, int function_id, int
 }
 
 
-void delta_write_bytecode_line(struct DeltaCompiler *c, DeltaByteCode bc, char *bc_name,
+void delta_bytecode_writer_line(struct DeltaCompiler *c, DeltaByteCode bc, char *bc_name,
 							   int line_num, char *msg, struct DeltaInstruction ins,
 							   int function_id)
 {
-	delta_write_bytecode_init(c);
-	delta_write_bytecode_indent(c, bytecode_writer_indent + 1);
+	delta_bytecode_writer_init(c);
+	delta_bytecode_writer_indent(c, bytecode_writer_indent + 1);
 	if(line_num > 0) {
 		if(strlen(msg) == 0)
 			fprintf(bytecode_writer, "%s (0x%x) # Line %d\n", bc_name, (int) bc, line_num);
@@ -82,7 +83,7 @@ void delta_write_bytecode_line(struct DeltaCompiler *c, DeltaByteCode bc, char *
 	
 	// arguments
 	if(ins.args > 0) {
-		delta_write_bytecode_indent(c, bytecode_writer_indent + 2);
+		delta_bytecode_writer_indent(c, bytecode_writer_indent + 2);
 		fprintf(bytecode_writer, "(");
 		int i;
 		for(i = 1; i < ins.args; ++i) {
@@ -108,40 +109,40 @@ void delta_write_bytecode_line(struct DeltaCompiler *c, DeltaByteCode bc, char *
 }
 
 
-void delta_write_bytecode_function(struct DeltaCompiler *c, char *function_name)
+void delta_bytecode_writer_function(struct DeltaCompiler *c, char *function_name)
 {
 	++bytecode_writer_indent;
-	delta_write_bytecode_init(c);
-	delta_write_bytecode_indent(c, bytecode_writer_indent);
+	delta_bytecode_writer_init(c);
+	delta_bytecode_writer_indent(c, bytecode_writer_indent);
 	fprintf(bytecode_writer, "- Function %s\n", function_name);
 	fflush(bytecode_writer);
 }
 
 
-void delta_write_bytecode_end_function(struct DeltaCompiler *c, char *function_name)
+void delta_bytecode_writer_end_function(struct DeltaCompiler *c, char *function_name)
 {
-	delta_write_bytecode_init(c);
-	delta_write_bytecode_indent(c, bytecode_writer_indent);
+	delta_bytecode_writer_init(c);
+	delta_bytecode_writer_indent(c, bytecode_writer_indent);
 	fprintf(bytecode_writer, "- End Function %s\n", function_name);
 	fflush(bytecode_writer);
 	--bytecode_writer_indent;
 }
 
 
-void delta_write_bytecode_class(struct DeltaCompiler *c, char *the_class_name)
+void delta_bytecode_writer_class(struct DeltaCompiler *c, char *the_class_name)
 {
 	++bytecode_writer_indent;
-	delta_write_bytecode_init(c);
-	delta_write_bytecode_indent(c, bytecode_writer_indent);
+	delta_bytecode_writer_init(c);
+	delta_bytecode_writer_indent(c, bytecode_writer_indent);
 	fprintf(bytecode_writer, "- Class %s\n", the_class_name);
 	fflush(bytecode_writer);
 }
 
 
-void delta_write_bytecode_end_class(struct DeltaCompiler *c, char *the_class_name)
+void delta_bytecode_writer_end_class(struct DeltaCompiler *c, char *the_class_name)
 {
-	delta_write_bytecode_init(c);
-	delta_write_bytecode_indent(c, bytecode_writer_indent);
+	delta_bytecode_writer_init(c);
+	delta_bytecode_writer_indent(c, bytecode_writer_indent);
 	fprintf(bytecode_writer, "- End Class %s\n", the_class_name);
 	fflush(bytecode_writer);
 	--bytecode_writer_indent;
