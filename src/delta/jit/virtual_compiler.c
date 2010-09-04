@@ -19,7 +19,7 @@
 }
 
 
-delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function_name)
+struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function_name)
 {
 	int i, j, loop_id = 0, end = 0, function_id = -1;
 	struct DeltaInstruction *instructions = NULL;
@@ -42,18 +42,18 @@ delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function
 	
 	// because functions cannot be recursivly compiled, JIT_V0 etc would be overriden we first
 	// take a quick look through the instructions and compile any required functions first
-	/*for(i = 0; i < end; ++i) {
+	for(i = 0; i < end; ++i) {
 		if(instructions[i].bc == BYTECODE_CAL) {
 			// check if it is a user function
 			for(j = 0; j < vm->total_functions; ++j) {
 				if(!strcmp(vm->functions[j].name, instructions[i].func)) {
 					// FIXME: dont compile yourself
-					vm->functions[j].jit_ptr = delta_compile_jit(c, instructions[i].func);
+					vm->functions[j].virtual_ptr = delta_compile_virtual(vm, instructions[i].func);
 					break;
 				}
 			}
 		}
-	}*/
+	}
 	
 	// create a new RAM
 	struct DeltaVariable **ram = (struct DeltaVariable**)
@@ -75,7 +75,8 @@ delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function
 	vm->functions[function_id].ram = ram;
 	
 	// prepare
-	delta_virtual_function *r = (delta_virtual_function*) malloc(sizeof(delta_virtual_function));
+	struct delta_virtual_function *r =
+		(struct delta_virtual_function*) malloc(sizeof(struct delta_virtual_function));
 	r->alloc_ins = 100;
 	r->total_ins = 0;
 	r->ins = (delta_virtual_instruction*) calloc(r->alloc_ins, sizeof(delta_virtual_instruction));
@@ -137,7 +138,7 @@ delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function
 				// function that takes care of things like stack backtrace and preparing function
 				// arguments
 				if(linked == NULL) {
-					assert(!"User functions not supported with virtual compiler");
+					//assert(!"User functions not supported with virtual compiler");
 					//jit_finish(ins_CAL);
 				}
 				
@@ -145,7 +146,8 @@ delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function
 				if(linked == NULL) {
 					for(j = 0; j < vm->total_functions; ++j) {
 						if(!stricmp(vm->functions[j].name, instructions[i].func)) {
-							linked = vm->functions[j].jit_ptr;
+							linked = ins_UFN;
+							instructions[i].virtual_ptr = vm->functions[j].virtual_ptr;
 							break;
 						}
 					}
@@ -223,7 +225,7 @@ delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *function
 }
 
 
-void delta_run_virtual(delta_virtual_function *f)
+void delta_run_virtual(struct delta_virtual_function *f)
 {
 	int i;
 	

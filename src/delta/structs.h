@@ -104,6 +104,7 @@ struct DeltaLabel
 	jit_insn *begin;
 };
 
+struct delta_virtual_function;
 
 struct DeltaInstruction
 {
@@ -112,6 +113,7 @@ struct DeltaInstruction
 	int args;
 	int *arg;
 	struct DeltaVariable **varg;
+	struct delta_virtual_function *virtual_ptr;
 };
 
 
@@ -124,11 +126,11 @@ typedef struct {
 } delta_virtual_instruction;
 
 
-typedef struct {
+struct delta_virtual_function {
 	int alloc_ins;
 	int total_ins;
 	delta_virtual_instruction *ins;
-} delta_virtual_function;
+};
 
 
 struct DeltaUncompiledFunction
@@ -147,7 +149,7 @@ struct DeltaCompiledFunction
 	struct DeltaInstruction *ins;
 	
 	delta_jit_function jit_ptr;
-	delta_virtual_function *virtual_ptr;
+	struct delta_virtual_function *virtual_ptr;
 	
 	int alloc_vars, total_vars;
 	struct DeltaVariable *vars;

@@ -8,6 +8,7 @@
 #include "delta/vm/cast.h"
 #include "delta/vm/array.h"
 #include "delta/vm/new.h"
+#include "delta/jit/virtual_compiler.h"
 #include <math.h>
 #include <string.h>
 
@@ -515,4 +516,10 @@ DELTA_INS(ARG)
 DELTA_INS(RTN)
 {
 	// do nothing
+}
+
+
+DELTA_INS(UFN)
+{
+	delta_run_virtual(d->virtual_ptr);
 }

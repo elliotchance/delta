@@ -47,6 +47,7 @@ DELTA_INS(NGT); // fastmath >
 DELTA_INS(NLE); // fastmath <=
 DELTA_INS(NLT); // fastmath <
 DELTA_INS(NNE); // fastmath !=
+DELTA_INS(UFN); // Launch user function (virtual compiler)
 DELTA_INS(ZAR); // cast to ARRAY
 DELTA_INS(ZBO); // cast to BOOLEAN
 DELTA_INS(ZNL); // cast to NULL
