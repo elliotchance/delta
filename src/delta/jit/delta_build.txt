@@ -1,3 +1,4 @@
 delta *.c
 delta_core jit_compiler.c
 delta_core ins.c
+delta_core virtual_compiler.c

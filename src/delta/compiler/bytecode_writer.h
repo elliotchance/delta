@@ -2,7 +2,7 @@
  *  Delta programming language
  */
 
-#include "structs.h"
+#include "delta/structs.h"
 
 
 void delta_bytecode_writer_line(struct DeltaCompiler *c, DeltaByteCode bc, char *bc_name,
