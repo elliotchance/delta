@@ -96,7 +96,9 @@ int delta_load_module(struct DeltaVM *vm, char *path)
 		if(f != NULL)
 			delta_vm_push_function(vm, new_DeltaFunction(functions[i].name, f,
 														 functions[i].min_args,
-														 functions[i].max_args));
+														 functions[i].max_args,
+														 functions[i].is_static,
+														 functions[i].permission));
 	}
 	
 	// get the module alias functions
@@ -112,7 +114,9 @@ int delta_load_module(struct DeltaVM *vm, char *path)
 			if(f != NULL)
 				delta_vm_push_function(vm, new_DeltaFunction(alias_functions[i].alias, f,
 															 alias_functions[i].min_args,
-															 alias_functions[i].max_args));
+															 alias_functions[i].max_args,
+															 alias_functions[i].is_static,
+															 alias_functions[i].permission));
 		}
 	}
 	

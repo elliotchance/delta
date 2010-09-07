@@ -3,11 +3,12 @@
  */
 
 #include "DeltaFunction.h"
+#include "delta/macros.h"
 
 
 struct DeltaFunction* new_DeltaFunction(char *name,
 										void (*function_ptr)(struct DeltaInstruction *d),
-										int min_args, int max_args)
+										int min_args, int max_args, int is_static, int permission)
 {
 	struct DeltaFunction *f = (struct DeltaFunction*) malloc(sizeof(struct DeltaFunction));
 	
@@ -15,6 +16,8 @@ struct DeltaFunction* new_DeltaFunction(char *name,
 	f->function_ptr = function_ptr;
 	f->min_args = min_args;
 	f->max_args = max_args;
+	f->is_static = is_static;
+	f->permission = permission;
 	
 	return f;
 }

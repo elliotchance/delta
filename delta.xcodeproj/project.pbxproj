@@ -214,6 +214,7 @@
 		8B0CA54111EE855C00FA9821 /* mapmutl2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA1AC11EE81DC00FA9821 /* mapmutl2.c */; };
 		8B0CA54411EE856A00FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
 		8B0CA54711EE857300FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
+		8B27643312360D8300098B8D /* virtual_compiler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BAFB0601230752200390025 /* virtual_compiler.c */; };
 		8B857DB512324527001F3BAC /* errors.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857DB412324527001F3BAC /* errors.c */; };
 		8B857F3112328301001F3BAC /* bytecode_writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857F3012328301001F3BAC /* bytecode_writer.c */; };
 		8B8B046C11F182AB00B67657 /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B046B11F182AB00B67657 /* load.c */; };
@@ -2457,6 +2458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B27643312360D8300098B8D /* virtual_compiler.c in Sources */,
 				8BC7626912045994004A21EB /* ins.c in Sources */,
 				8BC7626612045981004A21EB /* jit_compiler.c in Sources */,
 				8BC760441204363E004A21EB /* DeltaVM.c in Sources */,

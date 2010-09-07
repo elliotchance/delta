@@ -440,6 +440,8 @@
 	f[stack_i].name = #_name; \
 	f[stack_i].min_args = _min; \
 	f[stack_i].max_args = _max; \
+	f[stack_i].is_static = DELTA_YES; \
+	f[stack_i].permission = DELTA_PUBLIC; \
 	++stack_i;
 
 
@@ -489,6 +491,8 @@
 	f[stack_i].original = #_real; \
 	f[stack_i].min_args = _min; \
 	f[stack_i].max_args = _max; \
+	f[stack_i].is_static = DELTA_YES; \
+	f[stack_i].permission = DELTA_PUBLIC; \
 	++stack_i;
 
 
@@ -507,6 +511,15 @@
 
 
 #define DELTA_OBJECT_OPERATOR "."
+
+
+#define DELTA_PRIVATE 0
+
+
+#define DELTA_PROTECTED 1
+
+
+#define DELTA_PUBLIC 2
 
 
 #endif

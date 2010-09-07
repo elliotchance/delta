@@ -45,6 +45,8 @@ struct DeltaFunctionAlias
 	char *alias;
 	int min_args;
 	int max_args;
+	int is_static;
+	int permission;
 };
 
 
@@ -170,6 +172,8 @@ struct DeltaFunction
 	delta_jit_function function_ptr;
 	int min_args;
 	int max_args;
+	int is_static;
+	int permission;
 };
 
 
@@ -205,6 +209,8 @@ struct DeltaModuleFunction
 	char* name;
 	int min_args;
 	int max_args;
+	int is_static;
+	int permission;
 };
 
 

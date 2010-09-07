@@ -414,19 +414,52 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 {
 	// prepare
 	char* line = (char*) malloc(1024);
-	int i, line_pos = 0, ii = 0, function_id = c->total_functions;
+	int i, line_pos = 0, function_id = c->total_functions, identifier_len = 0;
 	char **split_semi = NULL; // this is used for 'for' statements
+	char *short_identifier = "";
+	int full_break = 0;
 	
-	// compile identifier
-	delta_skip_spaces(identifier, &ii);
-	int identifier_len;
-	for(identifier_len = 0; identifier_len < strlen(identifier); ++identifier_len) {
-		if(!isalnum(identifier[identifier_len + ii]))
+	// qualifiers
+	int isAbstract = 0, isStatic = 0, permissionLevel = DELTA_PUBLIC;
+	
+	// read identifier words
+	for(i = 0; i < strlen(identifier); ) {
+		delta_skip_spaces(identifier, &i);
+		int ii = i;
+		for(; i < strlen(identifier); ++i) {
+			if(!isalnum(identifier[i])) {
+				//if(short_identifier != NULL)
+				//	free(short_identifier);
+				short_identifier = delta_copy_substring(identifier, ii, i);
+				identifier_len = ii - i;
+				
+				if(!strcmp(short_identifier, "abstract"))
+					isAbstract = 1;
+				else if(!strcmp(short_identifier, "class"))
+					full_break = 1;
+				else if(!strcmp(short_identifier, "function"))
+					full_break = 1;
+				else if(!strcmp(short_identifier, "public"))
+					permissionLevel = DELTA_PUBLIC;
+				else if(!strcmp(short_identifier, "protected"))
+					permissionLevel = DELTA_PROTECTED;
+				else if(!strcmp(short_identifier, "private"))
+					permissionLevel = DELTA_PRIVATE;
+				else if(!strcmp(short_identifier, "static"))
+					isStatic = 1;
+				else {
+					char msg[256];
+					sprintf(msg, "Unknown qualifier '%s'", short_identifier);
+					delta_error_push(c, line_number, msg);
+				}
+				
+				break;
+			}
+		}
+		
+		if(full_break)
 			break;
 	}
-	
-	char *short_identifier = (char*) malloc(identifier_len + 1);
-	strncpy(short_identifier, identifier + ii, identifier_len);
 	
 	if(identifier_len == 0) {
 		// do nothing
