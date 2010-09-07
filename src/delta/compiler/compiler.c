@@ -558,6 +558,8 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		++c->total_functions;
 		c->functions[c->total_functions].name = identifier;
 		c->functions[c->total_functions].jit_ptr = NULL;
+		c->functions[c->total_functions].is_static = isStatic;
+		c->functions[c->total_functions].permission = permissionLevel;
 		
 		delta_bytecode_writer_function(c, identifier);
 	}

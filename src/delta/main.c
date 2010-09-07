@@ -26,7 +26,7 @@
 #endif
 
 
-#define VIRTUAL_COMPILE 1
+//#define VIRTUAL_COMPILE 1
 
 
 void main_compile()

@@ -64,8 +64,7 @@ int delta_load_module_defines(struct DeltaCompiler *c, char *path)
 int delta_load_module(struct DeltaVM *vm, char *path)
 {
 	const char *error;
-	int function_count, count;
-	int i, j;
+	int function_count, count, i, j;
 	
 	// load dynamically loaded library
 	void *module = dlopen(path, RTLD_LAZY);

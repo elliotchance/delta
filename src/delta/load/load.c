@@ -61,6 +61,8 @@ struct DeltaVM* delta_load_file(const char* in_file)
 	for(i = 0; i < vm->total_functions; ++i) {
 		vm->functions[i].name = delta_read_string(f);
 		//printf("  %s", vm->functions[i].name);
+		vm->functions[i].is_static = delta_read_int(f);
+		vm->functions[i].permission = delta_read_int(f);
 		
 		// instructions
 		vm->functions[i].alloc_ins = vm->functions[i].total_ins = delta_read_int(f);

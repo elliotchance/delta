@@ -7,9 +7,38 @@
 #include "delta/compiler/bytecode.h"
 #include "delta/jit/ins.h"
 #include "delta/vm/vm.h"
-#include <string.h>
-#include <assert.h>
 #include "delta/compiler/strings.h"
+#include <ctype.h>
+#include <assert.h>
+#include <string.h>
+
+
+void delta_check_permission(struct DeltaVM *vm, int i, int j, struct DeltaInstruction *instructions)
+{
+	// check permission access
+	if(vm->functions[j].permission != DELTA_PUBLIC) {
+		printf("Delta VM Runtime Error: You cannot call private/protected %s().",
+			   instructions[i].func);
+		exit(1);
+	}
+}
+
+
+void delta_check_static(struct DeltaVM *vm, int i, int j, struct DeltaInstruction *instructions)
+{
+	// check static
+	if(delta_strpos(instructions[i].func, ".") >= 0) {
+		if(toupper(instructions[i].func[0]) == instructions[i].func[0]) {
+			// we are calling a method with a class name, so the function
+			// must be static
+			if(!vm->functions[j].is_static) {
+				printf("Delta VM Runtime Error: You cannot call non-static %s() as if it were static.",
+					   instructions[i].func);
+				exit(1);
+			}
+		}
+	}
+}
 
 
 delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
@@ -124,7 +153,7 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				if(instructions[i].arg[j] < 0)
 					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
 				else {
-					// FIXME: its still a mystry why arg[j] becomes a big number
+					// FIXME: its still a mystery why arg[j] becomes a big number
 					if(instructions[i].arg[j] < 10000)
 						instructions[i].varg[j] = ram[instructions[i].arg[j]];
 				}
@@ -145,6 +174,7 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 					if(!stricmp(c->delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= c->delta_functions[j]->min_args &&
 					   fargs <= c->delta_functions[j]->max_args) {
+						delta_check_static(c, i, j, instructions);
 						linked = c->delta_functions[j]->function_ptr;
 						break;
 					}
@@ -164,6 +194,8 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				if(linked == NULL) {
 					for(j = 0; j < c->total_functions; ++j) {
 						if(!stricmp(c->functions[j].name, instructions[i].func)) {
+							delta_check_permission(c, i, j, instructions);
+							delta_check_static(c, i, j, instructions);
 							linked = c->functions[j].jit_ptr;
 							break;
 						}

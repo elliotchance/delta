@@ -145,6 +145,8 @@ struct DeltaUncompiledFunction
 struct DeltaCompiledFunction
 {
 	char *name;
+	int is_static;
+	int permission;
 	
 	int alloc_ins;
 	int total_ins;

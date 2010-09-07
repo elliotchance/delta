@@ -58,6 +58,8 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file, char* orig)
 	// write functions to output file
 	for(i = 0; i < c->total_functions; ++i) {
 		delta_write_string(f, c->functions[i].name);
+		delta_write_int(f, c->functions[i].is_static);
+		delta_write_int(f, c->functions[i].permission);
 		
 		// instructions
 		delta_write_int(f, c->functions[i].total_ins);

@@ -9,6 +9,7 @@
 #include "delta/compiler/strings.h"
 #include <assert.h>
 #include <string.h>
+#include <ctype.h>
 
 
 #define ADD_VIRTUAL_BYTECODE(_func) \
@@ -129,6 +130,7 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 					if(!stricmp(vm->delta_functions[j]->name, instructions[i].func) &&
 					   fargs >= vm->delta_functions[j]->min_args &&
 					   fargs <= vm->delta_functions[j]->max_args) {
+						delta_check_static(vm, i, j, instructions);
 						linked = vm->delta_functions[j]->function_ptr;
 						break;
 					}
@@ -146,6 +148,8 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 				if(linked == NULL) {
 					for(j = 0; j < vm->total_functions; ++j) {
 						if(!stricmp(vm->functions[j].name, instructions[i].func)) {
+							delta_check_permission(vm, i, j, instructions);
+							delta_check_static(vm, i, j, instructions);
 							linked = ins_UFN;
 							instructions[i].virtual_ptr = vm->functions[j].virtual_ptr;
 							break;
