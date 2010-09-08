@@ -25,6 +25,8 @@ int                   delta_load_module(struct DeltaVM *vm, char *path);
 void                  delta_load_ini();
 void                  delta_load_defines(struct DeltaCompiler *c);
 int                   delta_load_module_defines(struct DeltaCompiler *c, char *path);
+void                  delta_load_compiler_modules(struct DeltaCompiler *c);
+int                   delta_load_compiler_module(struct DeltaCompiler *c, char *path);
 
 
 #endif

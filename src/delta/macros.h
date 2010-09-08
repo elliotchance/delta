@@ -269,6 +269,14 @@
 }
 
 
+#define DELTA_RETURN_OBJECT(__object) \
+{ \
+	DELTA_DEST->type = DELTA_TYPE_OBJECT; \
+	DELTA_DEST->value.ptr = __object; \
+	return; \
+}
+
+
 /**
  * @brief Returns the number of arguments sent to the function.
  */

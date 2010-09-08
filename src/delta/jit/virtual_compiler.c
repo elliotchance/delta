@@ -6,6 +6,7 @@
 #include "delta/compiler/bytecode.h"
 #include "delta/vm/vm.h"
 #include "delta/jit/ins.h"
+#include "delta/jit/jit_compiler.h"
 #include "delta/compiler/strings.h"
 #include <assert.h>
 #include <string.h>

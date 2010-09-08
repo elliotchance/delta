@@ -12,3 +12,4 @@ int   delta_is_keyword(char* word);
 int   delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname);
 int   delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name);
 int   delta_get_operator_order(char* op);
+int   delta_is_user_function(struct DeltaCompiler *c, char *name);

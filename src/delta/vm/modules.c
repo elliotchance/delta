@@ -124,6 +124,61 @@ int delta_load_module(struct DeltaVM *vm, char *path)
 	return DELTA_SUCCESS;
 }
 
+int delta_load_compiler_module(struct DeltaCompiler *c, char *path)
+{
+	const char *error;
+	int function_count, count, i, j;
+	
+	// load dynamically loaded library
+	void *module = dlopen(path, RTLD_LAZY);
+	if(!module) {
+		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
+		return DELTA_FAILURE;
+	}
+	
+	// pass the active VM
+	delta_module_function_vm send_vm = dlsym(module, "module_set_vm");
+	if(send_vm != NULL) {
+		(*send_vm)(delta_get_vm());
+	}
+	
+	// get the module functions
+	dlerror();
+	delta_module_ptr module_functions = dlsym(module, "module_functions");
+	if((error = dlerror())) {
+		fprintf(stderr, "Couldn't find module_functions: %s\n", error);
+		return DELTA_FAILURE;
+	}
+	
+	struct DeltaModuleFunction *functions = (*module_functions)(&function_count);
+	for(i = 0; i < function_count; ++i)
+		c->delta_functions[c->total_delta_functions++] = functions[i];
+	
+	// get the module alias functions
+	/*dlerror();
+	delta_module_aliases_ptr module_alias_functions = dlsym(module, "module_aliases");
+	if(module_alias_functions != NULL) {
+		struct DeltaFunctionAlias *alias_functions = (*module_alias_functions)(&count);
+		
+		for(i = 0; i < count; ++i) {
+			delta_module_function f = delta_get_module_function(module,
+																alias_functions[i].original);
+
+
+			if(f != NULL)
+				delta_vm_push_function(vm, new_DeltaFunction(alias_functions[i].alias, f,
+															 alias_functions[i].min_args,
+															 alias_functions[i].max_args,
+															 alias_functions[i].is_static,
+															 alias_functions[i].permission));
+		}
+	}*/
+	
+	// do not close
+	// dlclose(module);
+	return DELTA_SUCCESS;
+}
+
 
 void delta_load_ini()
 {
@@ -171,4 +226,18 @@ void delta_load_defines(struct DeltaCompiler *c)
 	int i;
 	for(i = 0; i < delta_ini->module_count; ++i)
 		delta_load_module_defines(c, delta_ini->module_paths[i]);
+}
+
+
+void delta_load_compiler_modules(struct DeltaCompiler *c)
+{
+	assert(delta_ini != NULL);
+	c->alloc_delta_functions = 200;
+	c->total_delta_functions = 0;
+	c->delta_functions = (struct DeltaModuleFunction*)
+		calloc(c->alloc_delta_functions, sizeof(struct DeltaModuleFunction));
+	
+	int i;
+	for(i = 0; i < delta_ini->module_count; ++i)
+		delta_load_compiler_module(c, delta_ini->module_paths[i]);
 }

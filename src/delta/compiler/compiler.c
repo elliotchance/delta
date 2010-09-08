@@ -37,6 +37,12 @@ int line_number = 1;
 static char *class_name = NULL;
 
 
+int delta_is_constructor(char *name) {
+	int len = (strlen(name) - 1) / 2;
+	return !strncmp(name, name + len + 1, len);
+}
+
+
 void delta_function_reset()
 {
 	var_temp = 0;
@@ -414,7 +420,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 {
 	// prepare
 	char* line = (char*) malloc(1024);
-	int i, line_pos = 0, function_id = c->total_functions, identifier_len = 0;
+	int i, line_pos = 0, function_id = c->total_functions, identifier_len = 0, this_function_id = 0;
 	char **split_semi = NULL; // this is used for 'for' statements
 	char *short_identifier = "";
 	int full_break = 0;
@@ -555,11 +561,15 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 			identifier = buf;
 		}
 		
-		++c->total_functions;
+		this_function_id = ++c->total_functions;
 		c->functions[c->total_functions].name = identifier;
 		c->functions[c->total_functions].jit_ptr = NULL;
 		c->functions[c->total_functions].is_static = isStatic;
 		c->functions[c->total_functions].permission = permissionLevel;
+		
+		// constructors are always static
+		if(delta_is_constructor(identifier))
+			c->functions[c->total_functions].is_static = DELTA_TRUE;
 		
 		delta_bytecode_writer_function(c, identifier);
 	}
@@ -744,12 +754,23 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		class_name = NULL;
 	}
 	else if(!strcmp(short_identifier, "function")) {
-		c->functions[c->total_functions].total_vars = var_temp;
+		// if this is a constructor we need to return the new Object
+		if(delta_is_constructor(c->functions[this_function_id].name)) {
+			int c1 = delta_push_string_constant(c, this_function_id, "0", 0);
+			int c2 = delta_push_string_constant(c, this_function_id, "MyObject", 0);
+			DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_CAL, "Create the object", this_function_id,
+										 new_DeltaInstruction3("new", BYTECODE_CAL, RETURN_REGISTER,
+															   c1, c2));
+			DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_RTN, "Return this object", this_function_id,
+										 new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		}
+		else {
+			// make sure there is always a return at the end of the function
+			DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_RTN, "Always add a return", this_function_id,
+										 new_DeltaInstruction0(NULL, BYTECODE_RTN));
+		}
 		
-		// make sure there is always a return at the end of the function
-		DELTA_WRITE_UNLINED_BYTECODE(BYTECODE_RTN, "Always add a return", c->total_functions,
-									 new_DeltaInstruction0(NULL, BYTECODE_RTN));
-		
+		c->functions[this_function_id].total_vars = var_temp;
 		delta_bytecode_writer_end_function(c, "");
 	}
 	

@@ -215,6 +215,7 @@
 		8B0CA54411EE856A00FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
 		8B0CA54711EE857300FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
 		8B27643312360D8300098B8D /* virtual_compiler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BAFB0601230752200390025 /* virtual_compiler.c */; };
+		8B2766C812368C6900098B8D /* new.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B2766C712368C6900098B8D /* new.c */; };
 		8B857DB512324527001F3BAC /* errors.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857DB412324527001F3BAC /* errors.c */; };
 		8B857F3112328301001F3BAC /* bytecode_writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857F3012328301001F3BAC /* bytecode_writer.c */; };
 		8B8B046C11F182AB00B67657 /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B8B046B11F182AB00B67657 /* load.c */; };
@@ -772,6 +773,7 @@
 		8B0CA4B111EE844000FA9821 /* modules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modules.h; sourceTree = "<group>"; };
 		8B0CA4B211EE844000FA9821 /* vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm.c; sourceTree = "<group>"; };
 		8B0CA4B311EE844000FA9821 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
+		8B2766C712368C6900098B8D /* new.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = new.c; sourceTree = "<group>"; };
 		8B857DB312324527001F3BAC /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
 		8B857DB412324527001F3BAC /* errors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errors.c; sourceTree = "<group>"; };
 		8B857F2F12328301001F3BAC /* bytecode_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bytecode_writer.h; sourceTree = "<group>"; };
@@ -1161,6 +1163,7 @@
 			isa = PBXGroup;
 			children = (
 				8B0CA13511EE81DC00FA9821 /* exit.c */,
+				8B2766C712368C6900098B8D /* new.c */,
 				8BAFB15E12308A2200390025 /* pack.c */,
 			);
 			path = misc;
@@ -2566,6 +2569,7 @@
 				8BB0DAE2120ED39800A3CDF2 /* rtrim.c in Sources */,
 				8BB0DAFB120ED4A600A3CDF2 /* trim.c in Sources */,
 				8BAFB15F12308A2200390025 /* pack.c in Sources */,
+				8B2766C812368C6900098B8D /* new.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

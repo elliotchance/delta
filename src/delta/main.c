@@ -33,6 +33,7 @@ void main_compile()
 {
 	struct DeltaCompiler *c = delta_compiler_init();
 	delta_load_defines(c);
+	delta_load_compiler_modules(c);
 	delta_compile_file(c, "test.delta");
 	delta_save_file(c, "test.dc", "test.delta");
 	

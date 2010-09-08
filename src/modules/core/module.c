@@ -101,6 +101,7 @@ struct DeltaModuleFunction* module_functions(int *count)
 	
 	// misc
 	DELTA_PUSH_FUNCTION(exit, 1, 1);
+	DELTA_PUSH_FUNCTION(new, 1, 1);
 	DELTA_PUSH_FUNCTION(pack, 1, DELTA_MAX_ARGS);
 	
 	// string

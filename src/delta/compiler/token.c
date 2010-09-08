@@ -49,6 +49,7 @@ int delta_is_keyword(char* word)
 int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 {
 	assert(function_id >= 0);
+	//assert(function_id < c->total_functions);
 	
 	int i;
 	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
@@ -161,14 +162,33 @@ int delta_get_operator_order(char* op)
 }
 
 
+int delta_is_user_function(struct DeltaCompiler *c, char *name)
+{
+	int i;
+	for(i = 0; i < c->total_delta_functions; ++i) {
+		if(!strcmp(c->delta_functions[i].name, name))
+			return 0;
+	}
+	
+	return 1;
+}
+
+
 char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
 	
 	// look for () with function
 	int found = -1;
+	int isNew = 0;
 	for(; *offset < len; ++*offset) {
-		if(line[*offset] == '[') {
+		if(isspace(line[*offset]) && !strncmp(line + *offset - 3, "new", 3)) {
+			// found the new operator, need to create an Object
+			isNew = 1;
+			orig += 4;
+			continue;
+		}
+		else if(line[*offset] == '[') {
 			for(; *offset < len; ++*offset) {
 				if(line[*offset] == ']')
 					break;
@@ -186,8 +206,19 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 	}
 	
 	if(found >= 0) {
-		char *function_name = (char*) malloc(found + 1);
-		strncpy(function_name, line + orig, found);
+		char *function_name = NULL;
+		if(isNew) {
+			function_name = (char*) malloc(found + found + 2);
+			strncpy(function_name, line + orig, found);
+			strncpy(function_name + found, ".", 1);
+			strncpy(function_name + found + 1, line + orig, found);
+		}
+		else {
+			function_name = (char*) malloc(found + 1);
+			strncpy(function_name, line + orig, found);
+		}
+		
+		printf("'%s'\n", function_name);
 		orig += found;
 		
 		// count the length of the subexpression
@@ -216,10 +247,12 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 			DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
 								 new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
-			// move the return register back into the parent function
-			DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
-								 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
-													   RETURN_REGISTER));
+			// move the return register back into the parent function only if it is a user function
+			if(delta_is_user_function(c, function_name)) {
+				DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
+									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
+														   RETURN_REGISTER));
+			}
 			
 			r = (char*) malloc(8);
 			sprintf(r, "#%d", var_dest);

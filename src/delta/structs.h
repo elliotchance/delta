@@ -181,12 +181,21 @@ struct DeltaFunction
 
 struct DeltaCompiler
 {
-	int alloc_functions, total_functions;
+	int alloc_functions;
+	int total_functions;
 	struct DeltaCompiledFunction *functions;
 	
-	struct DeltaDefine *delta_defines;
+	int alloc_delta_functions;
+	int total_delta_functions;
+	struct DeltaModuleFunction *delta_functions;
+	
+	int alloc_delta_alias_functions;
+	int total_delta_alias_functions;
+	struct DeltaFunctionAlias *delta_alias_functions;
+	
 	int alloc_delta_defines;
 	int total_delta_defines;
+	struct DeltaDefine *delta_defines;
 	
 	int errors;
 	
