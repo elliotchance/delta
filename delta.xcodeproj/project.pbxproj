@@ -214,6 +214,9 @@
 		8B0CA54111EE855C00FA9821 /* mapmutl2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA1AC11EE81DC00FA9821 /* mapmutl2.c */; };
 		8B0CA54411EE856A00FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
 		8B0CA54711EE857300FA9821 /* libdelta_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B0CA3EE11EE822C00FA9821 /* libdelta_core.dylib */; };
+		8B1F77D212377A55007C0912 /* compile_line_part.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1F77D112377A55007C0912 /* compile_line_part.c */; };
+		8B1F78221237860D007C0912 /* compile_line.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1F78211237860D007C0912 /* compile_line.c */; };
+		8B1F783112378780007C0912 /* compile_block.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1F783012378780007C0912 /* compile_block.c */; };
 		8B27643312360D8300098B8D /* virtual_compiler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BAFB0601230752200390025 /* virtual_compiler.c */; };
 		8B2766C812368C6900098B8D /* new.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B2766C712368C6900098B8D /* new.c */; };
 		8B857DB512324527001F3BAC /* errors.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B857DB412324527001F3BAC /* errors.c */; };
@@ -773,6 +776,12 @@
 		8B0CA4B111EE844000FA9821 /* modules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modules.h; sourceTree = "<group>"; };
 		8B0CA4B211EE844000FA9821 /* vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm.c; sourceTree = "<group>"; };
 		8B0CA4B311EE844000FA9821 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
+		8B1F77D012377A55007C0912 /* compile_line_part.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compile_line_part.h; sourceTree = "<group>"; };
+		8B1F77D112377A55007C0912 /* compile_line_part.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compile_line_part.c; sourceTree = "<group>"; };
+		8B1F78201237860D007C0912 /* compile_line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compile_line.h; sourceTree = "<group>"; };
+		8B1F78211237860D007C0912 /* compile_line.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compile_line.c; sourceTree = "<group>"; };
+		8B1F782F12378780007C0912 /* compile_block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compile_block.h; sourceTree = "<group>"; };
+		8B1F783012378780007C0912 /* compile_block.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compile_block.c; sourceTree = "<group>"; };
 		8B2766C712368C6900098B8D /* new.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = new.c; sourceTree = "<group>"; };
 		8B857DB312324527001F3BAC /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
 		8B857DB412324527001F3BAC /* errors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errors.c; sourceTree = "<group>"; };
@@ -1928,6 +1937,12 @@
 				8B0CA48E11EE844000FA9821 /* bytecode.h */,
 				8B857F3012328301001F3BAC /* bytecode_writer.c */,
 				8B857F2F12328301001F3BAC /* bytecode_writer.h */,
+				8B1F783012378780007C0912 /* compile_block.c */,
+				8B1F782F12378780007C0912 /* compile_block.h */,
+				8B1F78211237860D007C0912 /* compile_line.c */,
+				8B1F78201237860D007C0912 /* compile_line.h */,
+				8B1F77D112377A55007C0912 /* compile_line_part.c */,
+				8B1F77D012377A55007C0912 /* compile_line_part.h */,
 				8B0CA48F11EE844000FA9821 /* compiler.c */,
 				8B0CA49011EE844000FA9821 /* compiler.h */,
 				8B0CA49111EE844000FA9821 /* constant.c */,
@@ -2761,6 +2776,9 @@
 				8BAFB0611230752200390025 /* virtual_compiler.c in Sources */,
 				8B857DB512324527001F3BAC /* errors.c in Sources */,
 				8B857F3112328301001F3BAC /* bytecode_writer.c in Sources */,
+				8B1F77D212377A55007C0912 /* compile_line_part.c in Sources */,
+				8B1F78221237860D007C0912 /* compile_line.c in Sources */,
+				8B1F783112378780007C0912 /* compile_block.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

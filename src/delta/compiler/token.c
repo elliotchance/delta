@@ -10,6 +10,7 @@
 #include "strings.h"
 #include "delta/macros.h"
 #include "delta/compiler/bytecode_writer.h"
+#include "delta/compiler/compile_line_part.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
