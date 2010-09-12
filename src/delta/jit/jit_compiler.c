@@ -154,7 +154,7 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
 				else {
 					// FIXME: its still a mystery why arg[j] becomes a big number
-					if(instructions[i].arg[j] < 10000)
+					//if(instructions[i].arg[j] < 10000)
 						instructions[i].varg[j] = ram[instructions[i].arg[j]];
 				}
 			}

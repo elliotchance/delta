@@ -43,7 +43,11 @@ void delta_skip_spaces(char* line, int* offset)
 
 int delta_is_keyword(char* word)
 {
-	return !strcmp(word, "return");
+	if(!strcmp(word, "new"))
+		return 1;
+	if(!strcmp(word, "return"))
+		return 1;
+	return 0;
 }
 
 
@@ -112,7 +116,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 	// if the variable is found and we need to only access one element we have to copy the array
 	// value out into a temp place
 	if(location >= 0 && element != NULL) {
-		int var_dest = var_temp++;
+		int var_dest = ++var_temp;
 		int var_dimention = delta_compile_line_part(c, element, strlen(element));
 		
 		DELTA_WRITE_BYTECODE(BYTECODE_AG1, "", function_id,

@@ -14,6 +14,7 @@
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
 #include <ctype.h>
+#include <assert.h>
 
 
 int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
@@ -28,6 +29,26 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 							 new_DeltaInstruction0(NULL, BYTECODE_RTN));
 		
 		return var_id1;
+	}
+	
+	if(!strncmp(delta_trim(line), "var", 3)) {
+		// declare the variable
+		line = delta_trim(line);
+		line = delta_copy_substring(line, 4, strlen(line));
+		
+		// make sure the variable name is valid
+		if(tolower(line[0]) != line[0])
+			delta_error_push(c, line_number,
+							 "Variables names must start with a non-capital letter.");
+		
+		int total_vars = c->functions[c->total_functions].total_vars;
+		c->functions[c->total_functions].vars[total_vars].type = DELTA_TYPE_NUMBER;
+		c->functions[c->total_functions].vars[total_vars].name = (char*) malloc(strlen(line) + 1);
+		strcpy(c->functions[c->total_functions].vars[total_vars].name, line);
+		c->functions[c->total_functions].vars[total_vars].ram_location = ++var_temp;
+		++c->functions[c->total_functions].total_vars;
+		
+		return -1;
 	}
 	
 	char *token, **tokens = (char**) malloc(64 * sizeof(char*));
@@ -74,17 +95,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			}
 		}
 		else if(!delta_is_keyword(token) && !delta_is_declared(c, c->total_functions, token)) {
-			// make sure the variable name is valid
-			if(tolower(token[0]) != token[0])
-				delta_error_push(c, line_number,
-								 "Variables names must start with a non-capital letter.");
-			
-			int total_vars = c->functions[c->total_functions].total_vars;
-			c->functions[c->total_functions].vars[total_vars].type = DELTA_TYPE_NUMBER;
-			c->functions[c->total_functions].vars[total_vars].name = (char*) malloc(strlen(token) + 1);
-			strcpy(c->functions[c->total_functions].vars[total_vars].name, token);
-			c->functions[c->total_functions].vars[total_vars].ram_location = ++var_temp;
-			++c->functions[c->total_functions].total_vars; 
+			if(token[0] != '#') {
+				char buf[256];
+				sprintf(buf, "Variable %s is not declared.", token);
+				delta_error_push(c, line_number, buf);
+			}
 		}
 		
 		// skip any spaces before inverse token (aka operator)
@@ -110,6 +125,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		if(delta_is_declared(c, c->total_functions, tokens[0]))
 			var_id1 = delta_get_variable_id(c, c->total_functions, tokens[0]);
 		
+		assert(var_id1 >= 0);
 		return var_id1;
 	}
 	
@@ -130,9 +146,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			// resolve the address for the left and right
 			int var_dest;
 			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			assert(var_id1 >= 0);
 			
 			if(delta_strpos(tokens[highest_op_pos - 1], "[") > 0) {
 				var_dest = delta_get_variable_id(c, c->total_functions, "a");
+				assert(var_dest >= 0);
 				if(var_dest < 0) {
 					fprintf(stderr, "Cannot resolve or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
@@ -148,6 +166,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 														   var_dimention, var_id1));
 			} else {
 				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+				assert(var_dest >= 0);
 				if(var_dest < 0) {
 					fprintf(stderr, "Cannot resolve or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
@@ -178,7 +197,9 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "||")) {
 			// resolve the address for the left and right
 			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+			assert(var_id1 >= 0);
 			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			assert(var_id2 >= 0);
 			int var_dest = ++var_temp;
 			
 			if(!strcmp(tokens[highest_op_pos], "+")) {
@@ -240,7 +261,9 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "||=")) {
 			// resolve the address for the left and right
 			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+			assert(var_id1 >= 0);
 			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			assert(var_id2 >= 0);
 			int var_dest = var_id1;
 			
 			// var_id1 must resolve

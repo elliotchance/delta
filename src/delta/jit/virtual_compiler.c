@@ -116,7 +116,7 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
 				else {
 					// FIXME: its still a mystry why arg[j] becomes a big number
-					if(instructions[i].arg[j] < 10000)
+					//if(instructions[i].arg[j] < 10000)
 						instructions[i].varg[j] = ram[instructions[i].arg[j]];
 				}
 			}
