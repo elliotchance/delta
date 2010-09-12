@@ -179,6 +179,13 @@ struct DeltaFunction
 };
 
 
+struct DeltaClass
+{
+	char *name;
+	int is_abstract;
+};
+
+
 struct DeltaCompiler
 {
 	int alloc_functions;
@@ -196,6 +203,10 @@ struct DeltaCompiler
 	int alloc_delta_defines;
 	int total_delta_defines;
 	struct DeltaDefine *delta_defines;
+	
+	int alloc_classes;
+	int total_classes;
+	struct DeltaClass *classes;
 	
 	int errors;
 	

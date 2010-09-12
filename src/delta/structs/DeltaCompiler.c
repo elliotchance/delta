@@ -15,6 +15,11 @@ struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 	c->functions = (struct DeltaCompiledFunction*)
 		calloc(c->alloc_functions, sizeof(struct DeltaCompiledFunction));
 	
+	c->alloc_classes = 100;
+	c->total_classes = 0;
+	c->classes = (struct DeltaClass*)
+		calloc(c->alloc_classes, sizeof(struct DeltaClass));
+	
 	int i;
 	for(i = 0; i < c->alloc_functions; ++i) {
 		c->functions[i].alloc_ins = 100;

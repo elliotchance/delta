@@ -13,6 +13,7 @@
 #include "compiler.h"
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
+#include "delta/compiler/compile_line_part.h"
 #include <ctype.h>
 #include <assert.h>
 
@@ -162,6 +163,11 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 			identifier = buf;
 		}
 		
+		// constructors in abstract classes are not allowed
+		if(delta_is_constructor(identifier) &&
+		   c->classes[delta_get_class_id(c, class_name)].is_abstract)
+			delta_error_push(c, line_number, "Abstract classes cannot have constructors.");
+		
 		this_function_id = ++c->total_functions;
 		c->functions[c->total_functions].name = identifier;
 		c->functions[c->total_functions].jit_ptr = NULL;
@@ -180,6 +186,9 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		
 		identifier = delta_trim(identifier + delta_strpos(identifier, "class") + 5);
 		class_name = delta_copy_string(identifier);
+		c->classes[c->total_classes].name = class_name;
+		c->classes[c->total_classes].is_abstract = isAbstract;
+		++c->total_classes;
 		
 		// the class name must be valid
 		if(toupper(class_name[0]) != class_name[0])

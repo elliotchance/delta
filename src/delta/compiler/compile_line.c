@@ -6,6 +6,7 @@
 #include "delta/compiler/compiler.h"
 #include "delta/compiler/strings.h"
 #include "delta/compiler/constant.h"
+#include "delta/compiler/compile_line_part.h"
 #include <string.h>
 
 

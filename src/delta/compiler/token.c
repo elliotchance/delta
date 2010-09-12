@@ -179,6 +179,18 @@ int delta_is_user_function(struct DeltaCompiler *c, char *name)
 }
 
 
+int delta_get_class_id(struct DeltaCompiler *c, char *the_class)
+{
+	int i;
+	for(i = 0; i < c->total_classes; ++i) {
+		if(!strcmp(the_class, c->classes[i].name))
+			return i;
+	}
+	
+	return -1;
+}
+
+
 char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int* offset)
 {
 	int orig = *offset, len = strlen(line);
