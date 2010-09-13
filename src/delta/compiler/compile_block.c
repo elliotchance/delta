@@ -47,6 +47,8 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 					full_break = 1;
 				else if(!strcmp(short_identifier, "function"))
 					full_break = 1;
+				else if(!strcmp(short_identifier, "var"))
+					full_break = 1;
 				else if(!strcmp(short_identifier, "public"))
 					permissionLevel = DELTA_PUBLIC;
 				else if(!strcmp(short_identifier, "protected"))
@@ -71,6 +73,11 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	
 	if(identifier_len == 0) {
 		// do nothing
+	}
+	else if(!strcmp(short_identifier, "var")) {
+		printf("member variable '%s'\n",
+			   delta_trim(identifier + delta_strpos(identifier, "var") + 3));
+		//exit(0);
 	}
 	else if(!strcmp(short_identifier, "else")) {
 		// do nothing

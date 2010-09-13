@@ -54,22 +54,27 @@ int delta_is_keyword(char* word)
 int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 {
 	assert(function_id >= 0);
-	//assert(function_id < c->total_functions);
+	int i, pos = delta_strpos(varname, "[");
 	
-	int i;
+	if(pos < 0)
+		pos = strlen(varname);
+	
 	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
-		if(!strcmp(c->functions[function_id].vars[i].name, varname))
+		if(!strncmp(c->functions[function_id].vars[i].name, varname, pos))
 			return 1;
 	}
+	
 	return 0;
 }
 
 
-int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
+int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name, char *next_op)
 {
 	// safety
 	if(name == NULL)
 		return -1;
+	if(next_op == NULL)
+		next_op = "";
 	
 	// argument by ID
 	if(name[0] == '$') {
@@ -94,9 +99,9 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 		int end = delta_strpos(name, "]");
 		element = (char*) malloc(end - pos);
 		strncpy(element, name + pos + 1, end - pos - 1);
-		name[pos] = 0;
 	}
-	//printf("looking for '%s' [%s]\n", name, element);
+	else
+		pos = strlen(name);
 	
 	// a register address
 	if(name[0] == '#') {
@@ -107,7 +112,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 	
 	int i, location = -1;
 	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
-		if(!strcmp(name, c->functions[function_id].vars[i].name)) {
+		if(!strncmp(name, c->functions[function_id].vars[i].name, pos)) {
 			location = c->functions[function_id].vars[i].ram_location;
 			break;
 		}
@@ -115,7 +120,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name)
 	
 	// if the variable is found and we need to only access one element we have to copy the array
 	// value out into a temp place
-	if(location >= 0 && element != NULL) {
+	if(location >= 0 && element != NULL && strcmp(next_op, "=")) {
 		int var_dest = ++var_temp;
 		int var_dimention = delta_compile_line_part(c, element, strlen(element));
 		

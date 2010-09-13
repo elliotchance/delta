@@ -13,6 +13,7 @@
 #include "delta/compiler/errors.h"
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
+#include "delta/compiler/compile_block.h"
 #include <ctype.h>
 #include <assert.h>
 
@@ -48,6 +49,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		c->functions[c->total_functions].vars[total_vars].ram_location = ++var_temp;
 		++c->functions[c->total_functions].total_vars;
 		
+		return -1;
+	}
+	
+	if(!strncmp(delta_trim(line), "public", 6)) {
+		delta_compile_block(c, line, "", 0, strlen(line));
 		return -1;
 	}
 	
@@ -123,7 +129,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		}
 		
 		if(delta_is_declared(c, c->total_functions, tokens[0]))
-			var_id1 = delta_get_variable_id(c, c->total_functions, tokens[0]);
+			var_id1 = delta_get_variable_id(c, c->total_functions, tokens[0], NULL);
 		
 		assert(var_id1 >= 0);
 		return var_id1;
@@ -145,27 +151,31 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
 			int var_dest;
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
 			
-			if(delta_strpos(tokens[highest_op_pos - 1], "[") > 0) {
-				var_dest = delta_get_variable_id(c, c->total_functions, "a");
-				assert(var_dest >= 0);
+			int pos = delta_strpos(tokens[highest_op_pos - 1], "[");
+			if(pos > 0) {
+				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+												 tokens[highest_op_pos]);
+				
 				if(var_dest < 0) {
 					fprintf(stderr, "Cannot resolve or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
 				
-				// TODO: fixme
-				char *line2 = "15";
-				int var_dimention = delta_compile_line_part(c, line2, 2);
+				char *line2 = delta_copy_substring(tokens[highest_op_pos - 1], pos + 1,
+												   strlen(tokens[highest_op_pos - 1]) - 1);
+				int var_dimention = delta_compile_line_part(c, line2, strlen(line2));
 				
 				DELTA_WRITE_BYTECODE(BYTECODE_AS1, "", c->total_functions,
 									 new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
 														   var_dimention, var_id1));
 			} else {
-				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+												 tokens[highest_op_pos]);
 				assert(var_dest >= 0);
 				if(var_dest < 0) {
 					fprintf(stderr, "Cannot resolve or write to '%s'\n",
@@ -196,9 +206,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "&&") ||
 		   !strcmp(tokens[highest_op_pos], "||")) {
 			// resolve the address for the left and right
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
-			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+												tokens[highest_op_pos]);
 			assert(var_id2 >= 0);
 			int var_dest = ++var_temp;
 			
@@ -260,9 +272,11 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "&&=") ||
 		   !strcmp(tokens[highest_op_pos], "||=")) {
 			// resolve the address for the left and right
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1]);
+			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
-			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1]);
+			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+												tokens[highest_op_pos]);
 			assert(var_id2 >= 0);
 			int var_dest = var_id1;
 			

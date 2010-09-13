@@ -4,6 +4,7 @@
 
 #include "array.h"
 #include "new.h"
+#include <assert.h>
 
 
 void delta_array_push_k_null(struct DeltaArray *array, char *key)
@@ -77,6 +78,7 @@ void delta_array_push(struct DeltaArray *array, struct DeltaArrayValue *element)
 		array->tail = element;
 	}
 	else {
+		assert(array->tail != NULL);
 		array->tail->next = element;
 		array->tail = element;
 	}

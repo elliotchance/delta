@@ -359,33 +359,8 @@ DELTA_INS(AS1)
 {
 	// FIXME: we must be an array
 	
-	int release_key;
-	struct DeltaVariable *v = delta_cast_string(d->varg[1], &release_key);
-	
-	// try and find the key
-	int i, found = 0;
-	struct DeltaArrayValue *element = DELTA_DEST->value.array.head;
-	for(i = 0; i < DELTA_DEST->value.array.elements; ++i, element = element->next) {
-		if(!strcmp(v->value.ptr, element->key)) {
-			element->value->type = DELTA_TYPE_NUMBER;
-			element->value->value.number = d->varg[2]->value.number;
-			found = 1;
-			break;
-		}
-	}
-	
-	// if the key doesn't exist then push the element
-	if(!found) {
-		struct DeltaArrayValue *next = (struct DeltaArrayValue*)
-			malloc(sizeof(struct DeltaArrayValue));
-		next->key = v->value.ptr;
-		next->value = d->varg[2];
-		DELTA_DEST->value.array.tail->next = next;
-		++DELTA_DEST->value.array.elements;
-	}
-	
-	// clean up
-	DELTA_RELEASE(release_key, v);
+	char *key = delta_cast_new_string(d->varg[1], NULL);
+	delta_array_push_kv(&DELTA_DEST->value.array, key, d->varg[2]);
 }
 
 
