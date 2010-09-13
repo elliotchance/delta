@@ -318,26 +318,31 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	if(!strcmp(short_identifier, "if")) {
 		// add the jump for else
 		//printf("BYTECODE_JMP ( %d )\n", label_id + 1);
-		//DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_JMP, label_id + 1));
+		//DeltaFunction_push(c, c->total_functions,
+		//	new_DeltaInstruction1(NULL, BYTECODE_JMP, label_id + 1));
 		
 		printf("{%d} BYTECODE_PAT ( %d ) <- if\n", c->total_functions, label_id);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "else")) {
 		// patch from if jump
 		printf("{%d} BYTECODE_PAT ( %d ) <- else\n", c->total_functions, label_id);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "while")) {
 		// jump back to the while expression for the next iteration
 		printf("{%d} BYTECODE_GTO ( %d )\n", c->total_functions, label_id - 1);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
 		
 		// patch the forward jump when the loops ends
 		printf("{%d} BYTECODE_PAT ( %d ) <- while\n", c->total_functions, label_id);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "for")) {
@@ -349,11 +354,13 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		
 		// jump back to the while expression for the next iteration
 		printf("{%d} BYTECODE_GTO ( %d )\n", c->total_functions, label_id - 1);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
 		
 		// patch the forward jump when the loops ends
 		printf("{%d} BYTECODE_PAT ( %d ) <- while\n", c->total_functions, label_id);
-		DeltaFunction_push(c, c->total_functions, new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		DeltaFunction_push(c, c->total_functions,
+						   new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "class")) {

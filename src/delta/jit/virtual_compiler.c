@@ -84,6 +84,14 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 	r->ins = (delta_virtual_instruction*) calloc(r->alloc_ins, sizeof(delta_virtual_instruction));
 	
 	for(i = 0; i < end; ++i) {
+#if 0
+		// show bytecode
+		printf("VC {%d} %d:", function_id, instructions[i].bc);
+		for(j = 0; j < instructions[i].args; ++j)
+			printf(" %d", instructions[i].arg[j]);
+		printf("\n");
+#endif
+		
 		// skip NUL bytecodes
 		if(instructions[i].bc == BYTECODE_NUL)
 			continue;
@@ -114,11 +122,8 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 			for(j = 0; j < instructions[i].args; ++j) {
 				if(instructions[i].arg[j] < 0)
 					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
-				else {
-					// FIXME: its still a mystry why arg[j] becomes a big number
-					//if(instructions[i].arg[j] < 10000)
-						instructions[i].varg[j] = ram[instructions[i].arg[j]];
-				}
+				else
+					instructions[i].varg[j] = ram[instructions[i].arg[j]];
 			}
 			
 			// link the function by its name
@@ -221,7 +226,7 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 		}
 	}
 	
-	vm->functions[i].virtual_ptr = r;
+	vm->functions[function_id].virtual_ptr = r;
 	
 	// prepare all the constant data
 	delta_vm_prepare(vm, function_id, ram);

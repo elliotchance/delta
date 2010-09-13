@@ -376,7 +376,8 @@ DELTA_INS(AS1)
 	
 	// if the key doesn't exist then push the element
 	if(!found) {
-		struct DeltaArrayValue *next = (struct DeltaArrayValue*) malloc(sizeof(struct DeltaArrayValue));
+		struct DeltaArrayValue *next = (struct DeltaArrayValue*)
+			malloc(sizeof(struct DeltaArrayValue));
 		next->key = v->value.ptr;
 		next->value = d->varg[2];
 		DELTA_DEST->value.array.tail->next = next;

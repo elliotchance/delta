@@ -17,7 +17,8 @@ static struct DeltaVariable **current_function_arg = NULL;
 
 struct DeltaVM*    delta_vm_init();
 void               delta_vm_print_ram(struct DeltaVM *vm);
-int                delta_vm_prepare(struct DeltaVM *vm, int function_id, struct DeltaVariable **ram);
+int                delta_vm_prepare(struct DeltaVM *vm, int function_id,
+									struct DeltaVariable **ram);
 void               delta_vm_print_variable(struct DeltaVariable *v);
 int                delta_vm_push_function(struct DeltaVM *vm, struct DeltaFunction* f);
 int                delta_vm_push_define(struct DeltaCompiler *c, char *name, char *value);

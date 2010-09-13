@@ -43,9 +43,21 @@ void delta_check_static(struct DeltaVM *vm, int i, int j, struct DeltaInstructio
 
 delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {
-	int i, j, loop_id = 0, end = 0, function_id = -1;
+	int i, j, loop_id = 0, end = 0, function_id = -1, k;
 	struct DeltaInstruction *instructions = NULL;
 	int total_ram = 100, total_static_ram = 10;
+	
+#if 0
+	for(i = 0; i < c->total_functions; ++i) {
+		for(j = 0; j < c->functions[i].total_ins; ++j) {
+			// show bytecode
+			printf("J1 {%d} %d:", i, c->functions[i].ins[j].bc);
+			for(k = 0; k < c->functions[i].ins[j].args; ++k)
+				printf(" %d", c->functions[i].ins[j].arg[k]);
+			printf("\n");
+		}
+	}
+#endif
 	
 	// try to find the function
 	for(i = 0; i < c->total_functions; ++i) {
@@ -106,6 +118,14 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 	
 	// compile instructions
 	for(i = 0; i < end; ++i) {
+#if 0
+		// show bytecode
+		printf("JC {%d} %d:", function_id, instructions[i].bc);
+		for(j = 0; j < instructions[i].args; ++j)
+			printf(" %d", instructions[i].arg[j]);
+		printf("\n");
+#endif
+		
 		// skip NUL bytecodes
 		if(instructions[i].bc == BYTECODE_NUL)
 			continue;
@@ -152,11 +172,8 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			for(j = 0; j < instructions[i].args; ++j) {
 				if(instructions[i].arg[j] < 0)
 					instructions[i].varg[j] = static_ram[-instructions[i].arg[j]];
-				else {
-					// FIXME: its still a mystery why arg[j] becomes a big number
-					//if(instructions[i].arg[j] < 10000)
-						instructions[i].varg[j] = ram[instructions[i].arg[j]];
-				}
+				else
+					instructions[i].varg[j] = ram[instructions[i].arg[j]];
 			}
 			
 			// link function call
@@ -271,7 +288,7 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 	
 	// all done
 	jit_flush_code(codeBuffer, jit_get_ip().ptr);
-	c->functions[i].jit_ptr = f;
+	c->functions[function_id].jit_ptr = f;
 	
 	// prepare all the constant data
 	delta_vm_prepare(c, function_id, ram);

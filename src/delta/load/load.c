@@ -76,14 +76,20 @@ struct DeltaVM* delta_load_file(const char* in_file)
 			vm->functions[i].ins[j].arg = (int*) calloc(vm->functions[i].ins[j].args, sizeof(int));
 			for(k = 0; k < vm->functions[i].ins[j].args; ++k)
 				vm->functions[i].ins[j].arg[k] = delta_read_int(f);
+			
+#if 0
+			// show bytecode
+			printf("LD {%d} %d:", i, vm->functions[i].ins[j].bc);
+			for(k = 0; k < vm->functions[i].ins[j].args; ++k)
+				printf(" %d", vm->functions[i].ins[j].arg[k]);
+			printf("\n");
+#endif
 		}
-		//printf(" -> %d ins\n", vm->functions[i].alloc_ins);
 		
 		// variables / RAM
 		vm->functions[i].alloc_vars = vm->functions[i].total_vars = delta_read_int(f);
 		vm->functions[i].vars = (struct DeltaVariable*)
 			calloc(vm->functions[i].alloc_vars, sizeof(struct DeltaVariable));
-		//printf("RAM = %d\n", vm->functions[i].alloc_vars);
 		
 		// labels
 		vm->functions[i].alloc_labels = vm->functions[i].total_labels = delta_read_int(f);

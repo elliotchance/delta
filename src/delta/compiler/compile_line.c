@@ -96,7 +96,7 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 		
 		--arg_depth;
 	}
-	arg_ptr[arg_depth][0] = var_temp++;
+	arg_ptr[arg_depth][0] = ++var_temp;
 	
 	return arg_ptr[arg_depth][0];
 }
