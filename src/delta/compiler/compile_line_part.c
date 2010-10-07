@@ -100,8 +100,23 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				sprintf(token, "#%d", delta_push_constant(c, c->total_functions, str, escape));
 			}
 		}
-		else if(!delta_is_keyword(token) && !delta_is_declared(c, c->total_functions, token)) {
-			if(token[0] != '#') {
+		else if(delta_is_keyword(token)) {
+			// fine
+		}
+		else if(token[0] == '#') {
+			// fine
+		}
+		else if(!delta_is_declared(c, c->total_functions, token)) {
+			// look for member variable
+			int pos = delta_strpos(token, ".");
+			if(pos >= 0) {
+				// turn the member variable name into a constant string
+				int var_dest = ++var_temp;
+				char *member_var = delta_copy_substring(token, pos + 1, strlen(token));
+				int var_arg0 = delta_push_string_constant(c, c->total_functions, member_var, 0);
+			}
+			else {
+				// cannot be found
 				char buf[256];
 				sprintf(buf, "Variable %s is not declared.", token);
 				delta_error_push(c, line_number, buf);
@@ -118,22 +133,8 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 	
 	if(total_tokens == 0)
 		return var_temp;
-	else if(total_tokens == 1) {
-		// because we cant risk a constant being modified we will copy any constants out into a new
-		// address
-		int var_id1 = var_temp;
-		
-		if(tokens[0][0] == '#') {
-			sscanf(tokens[0], "#%d", &var_temp);
-			return var_temp;
-		}
-		
-		if(delta_is_declared(c, c->total_functions, tokens[0]))
-			var_id1 = delta_get_variable_id(c, c->total_functions, tokens[0], NULL);
-		
-		assert(var_id1 >= 0);
-		return var_id1;
-	}
+	else if(total_tokens == 1)
+		return delta_get_variable_id(c, c->total_functions, tokens[0], NULL);
 	
 	// convert to bytecode
 	i = 0;
@@ -156,6 +157,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			assert(var_id1 >= 0);
 			
 			int pos = delta_strpos(tokens[highest_op_pos - 1], "[");
+			int pos2 = delta_strpos(tokens[highest_op_pos - 1], ".");
 			if(pos > 0) {
 				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
 												 tokens[highest_op_pos]);
@@ -173,7 +175,26 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				DELTA_WRITE_BYTECODE(BYTECODE_AS1, "", c->total_functions,
 									 new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
 														   var_dimention, var_id1));
-			} else {
+			}
+			else if(pos2 > 0) {
+				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+												 tokens[highest_op_pos]);
+				
+				if(var_dest < 0) {
+					fprintf(stderr, "Cannot resolve or write to '%s'\n",
+							tokens[highest_op_pos - 1]);
+					exit(1);
+				}
+				
+				char *line2 = delta_copy_substring(tokens[highest_op_pos - 1], pos2 + 1,
+												   strlen(tokens[highest_op_pos - 1]));
+				int var_dimention = delta_push_string_constant(c, c->total_functions, line2, 0);
+				
+				DELTA_WRITE_BYTECODE(BYTECODE_OST, "", c->total_functions,
+									 new_DeltaInstruction3(NULL, BYTECODE_OST, var_dest,
+														   var_dimention, var_id1));
+			}
+			else {
 				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
 												 tokens[highest_op_pos]);
 				assert(var_dest >= 0);

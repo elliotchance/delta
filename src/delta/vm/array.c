@@ -85,3 +85,17 @@ void delta_array_push(struct DeltaArray *array, struct DeltaArrayValue *element)
 	
 	++array->elements;
 }
+
+
+struct DeltaVariable* delta_array_get_value(struct DeltaArray *array, char *key)
+{
+	struct DeltaArrayValue *it = array->head;
+	int i;
+	
+	for(i = 0; i < array->elements; ++i, it = it->next) {
+		if(!strcmp(it->key, key))
+			return it->value;
+	}
+	
+	return NULL;
+}

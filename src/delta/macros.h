@@ -272,7 +272,7 @@
 #define DELTA_RETURN_OBJECT(__object) \
 { \
 	DELTA_DEST->type = DELTA_TYPE_OBJECT; \
-	DELTA_DEST->value.ptr = __object; \
+	DELTA_DEST->value.object.className = __object; \
 	return; \
 }
 
@@ -392,6 +392,12 @@
  * @brief Return an object.
  */
 #define DELTA_TYPE_OBJECT 6
+
+
+/**
+ * @brief Return an anonymous function.
+ */
+#define DELTA_TYPE_FUNCTION 7
 
 
 /**

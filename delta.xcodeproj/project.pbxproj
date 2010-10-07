@@ -278,6 +278,7 @@
 		8BC7635C12047A74004A21EB /* array_sum.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC7635B12047A74004A21EB /* array_sum.c */; };
 		8BC76A511205B4C1004A21EB /* array_keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC76A501205B4C1004A21EB /* array_keys.c */; };
 		8BC76A611205B655004A21EB /* array_values.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BC76A601205B655004A21EB /* array_values.c */; };
+		8BCF5D2C123E3D1100DD14E7 /* DeltaClass.c in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF5D2B123E3D1000DD14E7 /* DeltaClass.c */; };
 		8DD76FB00486AB0100D96B5E /* delta.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* delta.1 */; };
 /* End PBXBuildFile section */
 
@@ -921,6 +922,8 @@
 		8BC7635B12047A74004A21EB /* array_sum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_sum.c; sourceTree = "<group>"; };
 		8BC76A501205B4C1004A21EB /* array_keys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_keys.c; sourceTree = "<group>"; };
 		8BC76A601205B655004A21EB /* array_values.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_values.c; sourceTree = "<group>"; };
+		8BCF5D2A123E3D1000DD14E7 /* DeltaClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeltaClass.h; sourceTree = "<group>"; };
+		8BCF5D2B123E3D1000DD14E7 /* DeltaClass.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DeltaClass.c; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* delta */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = delta; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* delta.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = delta.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1987,6 +1990,8 @@
 		8B0CA4A511EE844000FA9821 /* structs */ = {
 			isa = PBXGroup;
 			children = (
+				8BCF5D2B123E3D1000DD14E7 /* DeltaClass.c */,
+				8BCF5D2A123E3D1000DD14E7 /* DeltaClass.h */,
 				8B0CA4A611EE844000FA9821 /* DeltaCompiler.c */,
 				8B0CA4A711EE844000FA9821 /* DeltaCompiler.h */,
 				8B0CA4A811EE844000FA9821 /* DeltaFunction.c */,
@@ -2779,6 +2784,7 @@
 				8B1F77D212377A55007C0912 /* compile_line_part.c in Sources */,
 				8B1F78221237860D007C0912 /* compile_line.c in Sources */,
 				8B1F783112378780007C0912 /* compile_block.c in Sources */,
+				8BCF5D2C123E3D1100DD14E7 /* DeltaClass.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

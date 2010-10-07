@@ -36,7 +36,9 @@ DELTA_INS(NUL); // no action
 DELTA_INS(NMD); // fastmath %
 DELTA_INS(NMU); // fastmath *
 DELTA_INS(NSB); // fastmath -
-DELTA_INS(ORR); // Boolean OR
+DELTA_INS(ORR); // boolean OR
+DELTA_INS(OGT); // get member variable of object
+DELTA_INS(OST); // set member variable of object
 DELTA_INS(RTN); // return
 DELTA_INS(SAP); // .
 DELTA_INS(SET); // =

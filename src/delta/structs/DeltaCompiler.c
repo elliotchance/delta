@@ -4,11 +4,13 @@
 
 #include "DeltaCompiler.h"
 #include "delta/macros.h"
+#include "delta/structs/DeltaClass.h"
 
 
 struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 {
 	struct DeltaCompiler *c = (struct DeltaCompiler*) malloc(sizeof(struct DeltaCompiler));
+	int i;
 	
 	c->alloc_functions = DELTA_MAX_FUNCTIONS;
 	c->total_functions = 0;
@@ -17,10 +19,11 @@ struct DeltaCompiler* new_DeltaCompiler(int total_objects)
 	
 	c->alloc_classes = 100;
 	c->total_classes = 0;
-	c->classes = (struct DeltaClass*)
-		calloc(c->alloc_classes, sizeof(struct DeltaClass));
+	c->classes = (struct DeltaClass**)
+		calloc(c->alloc_classes, sizeof(struct DeltaClass*));
+	for(i = 0; i < c->alloc_classes; ++i)
+		c->classes[i] = new_DeltaClass();
 	
-	int i;
 	for(i = 0; i < c->alloc_functions; ++i) {
 		c->functions[i].alloc_ins = 100;
 		c->functions[i].total_ins = 0;

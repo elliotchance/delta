@@ -172,7 +172,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		
 		// constructors in abstract classes are not allowed
 		if(delta_is_constructor(identifier) &&
-		   c->classes[delta_get_class_id(c, class_name)].is_abstract)
+		   c->classes[delta_get_class_id(c, class_name)]->is_abstract)
 			delta_error_push(c, line_number, "Abstract classes cannot have constructors.");
 		
 		this_function_id = ++c->total_functions;
@@ -193,8 +193,8 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		
 		identifier = delta_trim(identifier + delta_strpos(identifier, "class") + 5);
 		class_name = delta_copy_string(identifier);
-		c->classes[c->total_classes].name = class_name;
-		c->classes[c->total_classes].is_abstract = isAbstract;
+		c->classes[c->total_classes]->name = class_name;
+		c->classes[c->total_classes]->is_abstract = isAbstract;
 		++c->total_classes;
 		
 		// the class name must be valid

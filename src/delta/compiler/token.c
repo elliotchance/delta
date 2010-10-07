@@ -8,6 +8,7 @@
 #include "delta/structs/DeltaInstruction.h"
 #include "delta/structs/DeltaFunction.h"
 #include "strings.h"
+#include "constant.h"
 #include "delta/macros.h"
 #include "delta/compiler/bytecode_writer.h"
 #include "delta/compiler/compile_line_part.h"
@@ -75,6 +76,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name, 
 		return -1;
 	if(next_op == NULL)
 		next_op = "";
+	int pos;
 	
 	// argument by ID
 	if(name[0] == '$') {
@@ -92,17 +94,6 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name, 
 		return var_dest;
 	}
 	
-	// strip off array element
-	char *element = NULL;
-	int pos = delta_strpos(name, "[");
-	if(pos >= 0) {
-		int end = delta_strpos(name, "]");
-		element = (char*) malloc(end - pos);
-		strncpy(element, name + pos + 1, end - pos - 1);
-	}
-	else
-		pos = strlen(name);
-	
 	// a register address
 	if(name[0] == '#') {
 		int temp = -1;
@@ -110,28 +101,74 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name, 
 		return temp;
 	}
 	
-	int i, location = -1;
-	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
-		if(!strncmp(name, c->functions[function_id].vars[i].name, pos)) {
-			location = c->functions[function_id].vars[i].ram_location;
-			break;
+	{
+		// member variable
+		char *element = NULL;
+		pos = delta_strpos(name, ".");
+		if(pos >= 0) {
+			element = (char*) malloc(strlen(name) - pos);
+			strncpy(element, name + pos + 1, strlen(name) - pos - 1);
 		}
-	}
-	
-	// if the variable is found and we need to only access one element we have to copy the array
-	// value out into a temp place
-	if(location >= 0 && element != NULL && strcmp(next_op, "=")) {
-		int var_dest = ++var_temp;
-		int var_dimention = delta_compile_line_part(c, element, strlen(element));
+		else
+			pos = strlen(name);
 		
-		DELTA_WRITE_BYTECODE(BYTECODE_AG1, "", function_id,
-							 new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
-												   var_dimention));
-		return var_dest;
+		int i, location = -1;
+		for(i = 0; i < c->functions[function_id].total_vars; ++i) {
+			if(!strncmp(name, c->functions[function_id].vars[i].name, pos)) {
+				location = c->functions[function_id].vars[i].ram_location;
+				break;
+			}
+		}
+		
+		if(location >= 0 && element != NULL && strcmp(next_op, "=")) {
+			int var_dest = ++var_temp;
+			int var_dimention = delta_push_string_constant(c, function_id, element, 0);
+			
+			DELTA_WRITE_BYTECODE(BYTECODE_OGT, "", function_id,
+								 new_DeltaInstruction3(NULL, BYTECODE_OGT, var_dest, location,
+													   var_dimention));
+			return var_dest;
+		}
+		
+		// variable not found
+		return location;
 	}
 	
-	// variable not found
-	return location;
+	{
+		// strip off array element
+		char *element = NULL;
+		pos = delta_strpos(name, "[");
+		if(pos >= 0) {
+			int end = delta_strpos(name, "]");
+			element = (char*) malloc(end - pos);
+			strncpy(element, name + pos + 1, end - pos - 1);
+		}
+		else
+			pos = strlen(name);
+		
+		int i, location = -1;
+		for(i = 0; i < c->functions[function_id].total_vars; ++i) {
+			if(!strncmp(name, c->functions[function_id].vars[i].name, pos)) {
+				location = c->functions[function_id].vars[i].ram_location;
+				break;
+			}
+		}
+		
+		// if the variable is found and we need to only access one element we have to copy the array
+		// value out into a temp place
+		if(location >= 0 && element != NULL && strcmp(next_op, "=")) {
+			int var_dest = ++var_temp;
+			int var_dimention = delta_compile_line_part(c, element, strlen(element));
+			
+			DELTA_WRITE_BYTECODE(BYTECODE_AG1, "", function_id,
+								 new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
+													   var_dimention));
+			return var_dest;
+		}
+		
+		// variable not found
+		return location;
+	}
 }
 
 
@@ -188,7 +225,7 @@ int delta_get_class_id(struct DeltaCompiler *c, char *the_class)
 {
 	int i;
 	for(i = 0; i < c->total_classes; ++i) {
-		if(!strcmp(the_class, c->classes[i].name))
+		if(!strcmp(the_class, c->classes[i]->name))
 			return i;
 	}
 	

@@ -65,6 +65,13 @@ struct DeltaResource
 };
 
 
+struct DeltaObject
+{
+	char *className;
+	struct DeltaArray members;
+};
+
+
 struct DeltaVariable
 {
 	//! The name for this variable.
@@ -87,6 +94,9 @@ struct DeltaVariable
 		
 		//! Resource value
 		struct DeltaResource resource;
+		
+		//! Object value.
+		struct DeltaObject object;
 	} value;
 	
 	//! RAM location of this variable.
@@ -183,6 +193,9 @@ struct DeltaClass
 {
 	char *name;
 	int is_abstract;
+	int alloc_member_variables;
+	int total_member_variables;
+	struct DeltaVariable *member_variables;
 };
 
 
@@ -206,7 +219,7 @@ struct DeltaCompiler
 	
 	int alloc_classes;
 	int total_classes;
-	struct DeltaClass *classes;
+	struct DeltaClass **classes;
 	
 	int errors;
 	

@@ -21,6 +21,8 @@
 #define BYTECODE_ZAR 0x15 // cast to ARRAY
 #define BYTECODE_ZRS 0x16 // cast to RESOURCE
 #define BYTECODE_ZOB 0x17 // cast to OBJECT
+#define BYTECODE_OST 0x18 // set member variable of object
+#define BYTECODE_OGT 0x19 // get member variable of object
 
 #define BYTECODE_ADD 0x20 // +
 #define BYTECODE_SUB 0x21 // -

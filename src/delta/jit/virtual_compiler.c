@@ -221,6 +221,9 @@ struct delta_virtual_function* delta_compile_virtual(struct DeltaVM *vm, char *f
 				else if(instructions[i].bc == BYTECODE_ZRS) ADD_VIRTUAL_BYTECODE(ins_ZRS)
 				else if(instructions[i].bc == BYTECODE_ZOB) ADD_VIRTUAL_BYTECODE(ins_ZOB)
 					
+				else if(instructions[i].bc == BYTECODE_OST) ADD_VIRTUAL_BYTECODE(ins_OST)
+				else if(instructions[i].bc == BYTECODE_OGT) ADD_VIRTUAL_BYTECODE(ins_OGT)
+					
 				else if(instructions[i].bc == BYTECODE_RTN) ADD_VIRTUAL_BYTECODE(ins_RTN)
 			}
 		}

@@ -277,6 +277,9 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 				else if(instructions[i].bc == BYTECODE_ZRS) jit_finish(ins_ZRS);
 				else if(instructions[i].bc == BYTECODE_ZOB) jit_finish(ins_ZOB);
 				
+				else if(instructions[i].bc == BYTECODE_OST) jit_finish(ins_OST);
+				else if(instructions[i].bc == BYTECODE_OGT) jit_finish(ins_OGT);
+				
 				else                                        jit_finish(ins_NUL);
 			}
 		}

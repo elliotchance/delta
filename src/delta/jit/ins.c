@@ -499,3 +499,36 @@ DELTA_INS(UFN)
 {
 	delta_run_virtual(d->virtual_ptr);
 }
+
+
+DELTA_INS(OST)
+{
+	// first we much be an object
+	if(d->varg[0]->type != DELTA_TYPE_OBJECT) {
+		printf("Error: Expected object");
+		exit(1);
+	}
+	
+	// find member variable
+	char *member = delta_cast_new_string(d->varg[1], NULL);
+	//printf("Looking for %s in %s\n", member, d->varg[0]->value.object.className);
+	delta_array_push_kv(&d->varg[0]->value.object.members, member, d->varg[2]);
+	
+	// clean up
+	free(member);
+}
+
+
+DELTA_INS(OGT)
+{
+	// first we much be an object
+	if(d->varg[1]->type != DELTA_TYPE_OBJECT) {
+		printf("Error: Expected object");
+		exit(1);
+	}
+	
+	// find member variable
+	char *key = delta_cast_new_string(d->varg[2], NULL);
+	//printf("Looking for %s in %s\n", member, d->varg[1]->value.object.className);
+	DELTA_COPY_VARIABLE(DELTA_DEST, delta_array_get_value(&d->varg[1]->value.object.members, key));
+}
