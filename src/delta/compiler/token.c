@@ -303,18 +303,37 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		if(found > 0) {
 			int var_dest = ++var_temp;
 			arg_ptr[arg_depth][0] = var_dest;
-			DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
-								 new_DeltaInstructionN(function_name, BYTECODE_CAL));
 			
-			// move the return register back into the parent function only if it is a user function
-			if(delta_is_user_function(c, function_name)) {
-				DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
-									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
-														   RETURN_REGISTER));
+			// is it a MET?
+			int dotpos = delta_strpos(function_name, ".");
+			if(tolower(function_name[0]) == function_name[0] && dotpos >= 0) {
+				int var_id = delta_get_variable_id(c, function_id,
+												   delta_copy_substring(function_name, 0, dotpos),
+												   "");
+				
+				char *method_name = delta_copy_substring(function_name, dotpos + 1,
+														 strlen(function_name));
+				int method_name_c = delta_push_string_constant(c, function_id, method_name, 0);
+				
+				DELTA_WRITE_BYTECODE(BYTECODE_MET, function_name, function_id,
+									 new_DeltaInstruction3(NULL, BYTECODE_MET, var_dest, var_id,
+														   method_name_c));
 			}
-			
-			r = (char*) malloc(8);
-			sprintf(r, "#%d", var_dest);
+			else {
+				DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
+									 new_DeltaInstructionN(function_name, BYTECODE_CAL));
+				
+				// move the return register back into the parent function only if it is a user
+				// function
+				if(delta_is_user_function(c, function_name)) {
+					DELTA_WRITE_BYTECODE(BYTECODE_SET, function_name, function_id,
+										 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
+															   RETURN_REGISTER));
+				}
+				
+				r = (char*) malloc(8);
+				sprintf(r, "#%d", var_dest);
+			}
 		} else {
 			r = (char*) malloc(8);
 			// depth    offset

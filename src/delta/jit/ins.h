@@ -25,6 +25,7 @@ DELTA_INS(DEC); // --
 DELTA_INS(DIV); // /
 DELTA_INS(INC); // ++
 DELTA_INS(LBL); // begin label
+DELTA_INS(MET); // call a member method
 DELTA_INS(MOD); // %
 DELTA_INS(MUL); // *
 DELTA_INS(NAD); // fastmath +

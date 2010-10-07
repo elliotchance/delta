@@ -9,6 +9,7 @@
 #include "delta/vm/array.h"
 #include "delta/vm/new.h"
 #include "delta/jit/virtual_compiler.h"
+#include "delta/jit/jit_compiler.h"
 #include <math.h>
 #include <string.h>
 
@@ -503,7 +504,7 @@ DELTA_INS(UFN)
 
 DELTA_INS(OST)
 {
-	// first we much be an object
+	// first we must be an object
 	if(d->varg[0]->type != DELTA_TYPE_OBJECT) {
 		printf("Error: Expected object");
 		exit(1);
@@ -521,7 +522,7 @@ DELTA_INS(OST)
 
 DELTA_INS(OGT)
 {
-	// first we much be an object
+	// first we must be an object
 	if(d->varg[1]->type != DELTA_TYPE_OBJECT) {
 		printf("Error: Expected object");
 		exit(1);
@@ -529,6 +530,26 @@ DELTA_INS(OGT)
 	
 	// find member variable
 	char *key = delta_cast_new_string(d->varg[2], NULL);
-	//printf("Looking for %s in %s\n", member, d->varg[1]->value.object.className);
+	//printf("Looking for %s in %s\n", key, d->varg[1]->value.object.className);
 	DELTA_COPY_VARIABLE(DELTA_DEST, delta_array_get_value(&d->varg[1]->value.object.members, key));
+}
+
+
+DELTA_INS(MET)
+{
+	// first we must be an object
+	if(d->varg[1]->type != DELTA_TYPE_OBJECT) {
+		printf("Error: Expected object for MET");
+		exit(1);
+	}
+	
+	char *member = delta_cast_new_string(d->varg[2], NULL);
+	char *call = (char*) malloc(128);
+	sprintf(call, "%s.%s", d->varg[1]->value.object.className, member);
+	printf("Calling %s()\n", call);
+	
+	// get the delta vm and attempt to invoke the method
+	struct DeltaVM* vm = delta_get_vm();
+	delta_jit_function invoke = delta_compile_jit(vm, call);
+	invoke(NULL);
 }
