@@ -37,6 +37,7 @@ struct DeltaModuleFunction* module_functions(int *count)
 	
 	// date
 	DELTA_PUSH_FUNCTION(time, 0, 0);
+	DELTA_PUSH_FUNCTION(microtime, 0, 1);
 	
 	// error
 	DELTA_PUSH_FUNCTION(trigger_error, 2, 2);
