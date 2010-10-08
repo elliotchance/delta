@@ -55,6 +55,35 @@ int delta_push_number_constant(struct DeltaCompiler *c, int function_id, double 
 }
 
 
+int delta_push_boolean_constant(struct DeltaCompiler *c, int function_id, int value)
+{
+	int total = c->functions[function_id].total_constants;
+	struct DeltaVariable* v = &c->functions[function_id].constants[total];
+	
+	++var_temp;
+	v->type = DELTA_TYPE_BOOLEAN;
+	v->value.number = value;
+	v->ram_location = var_temp;
+	
+	++c->functions[function_id].total_constants;
+	return var_temp;
+}
+
+
+int delta_push_null_constant(struct DeltaCompiler *c, int function_id)
+{
+	int total = c->functions[function_id].total_constants;
+	struct DeltaVariable* v = &c->functions[function_id].constants[total];
+	
+	++var_temp;
+	v->type = DELTA_TYPE_NULL;
+	v->ram_location = var_temp;
+	
+	++c->functions[function_id].total_constants;
+	return var_temp;
+}
+
+
 char* delta_replace_constant(struct DeltaCompiler *c, char *token)
 {
 	int i;

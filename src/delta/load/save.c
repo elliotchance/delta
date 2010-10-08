@@ -32,6 +32,13 @@ int delta_write_int(FILE *fp, int value)
 }
 
 
+int delta_write_char(FILE *fp, char value)
+{
+	fwrite((const void*) &value, sizeof(value), 1, fp);
+	return 1;
+}
+
+
 int delta_write_double(FILE *fp, double value)
 {
 	fwrite((const void*) &value, sizeof(value), 1, fp);
@@ -87,6 +94,9 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file, char* orig)
 			delta_write_int(f, type);
 			if(type == DELTA_TYPE_NULL) {
 				// do nothing
+			}
+			else if(type == DELTA_TYPE_BOOLEAN) {
+				delta_write_char(f, (char) c->functions[i].constants[j].value.number);
 			}
 			else if(type == DELTA_TYPE_NUMBER) {
 				delta_write_double(f, c->functions[i].constants[j].value.number);

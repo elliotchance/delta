@@ -81,17 +81,12 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		
 		if(delta_is_number(token)) {
 			++var_temp;
-			int total_constants = c->functions[c->total_functions].total_constants;
-			c->functions[c->total_functions].constants[total_constants].type = DELTA_TYPE_NUMBER;
-			c->functions[c->total_functions].constants[total_constants].value.number = atof(token);
-			c->functions[c->total_functions].constants[total_constants].ram_location = var_temp;
-			sprintf(token, "#%d", var_temp);
-			++c->functions[c->total_functions].total_constants;
+			sprintf(token, "#%d", delta_push_number_constant(c, c->total_functions, atof(token)));
 		}
 		else if(delta_is_string(token)) {
 			if(delta_is_magic_string(token)) {
 				token = delta_translate_magic_string(token);
-				printf("token = '%s'\n", token);
+				//printf("token = '%s'\n", token);
 				int res_reg = delta_compile_line_part(c, token, strlen(token));
 				sprintf(token, "#%d", res_reg);
 			} else {
@@ -99,6 +94,18 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				char *str = delta_copy_substring(token, 1, strlen(token) - 1);
 				sprintf(token, "#%d", delta_push_constant(c, c->total_functions, str, escape));
 			}
+		}
+		else if(!stricmp(token, "true")) {
+			++var_temp;
+			sprintf(token, "#%d", delta_push_boolean_constant(c, c->total_functions, DELTA_TRUE));
+		}
+		else if(!stricmp(token, "false")) {
+			++var_temp;
+			sprintf(token, "#%d", delta_push_boolean_constant(c, c->total_functions, DELTA_FALSE));
+		}
+		else if(!stricmp(token, "null")) {
+			++var_temp;
+			sprintf(token, "#%d", delta_push_null_constant(c, c->total_functions));
 		}
 		else if(delta_is_keyword(token)) {
 			// fine

@@ -16,6 +16,7 @@ int delta_write_string(FILE *fp, char *str);
 int delta_write_int(FILE *fp, int value);
 int delta_write_bytecode(FILE *fp, DeltaByteCode bc);
 int delta_write_double(FILE *fp, double value);
+int delta_write_char(FILE *fp, char value);
 
 
 #endif

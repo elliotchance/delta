@@ -28,6 +28,14 @@ int delta_read_int(FILE *fp)
 }
 
 
+char delta_read_char(FILE *fp)
+{
+	char temp;
+	fread((void*) &temp, sizeof(temp), 1, fp);
+	return temp;
+}
+
+
 double delta_read_double(FILE *fp)
 {
 	double temp;
@@ -107,6 +115,9 @@ struct DeltaVM* delta_load_file(const char* in_file)
 			vm->functions[i].constants[j].type = type;
 			if(type == DELTA_TYPE_NULL) {
 				// do nothing
+			}
+			else if(type == DELTA_TYPE_BOOLEAN) {
+				vm->functions[i].constants[j].value.number = (double) delta_read_char(f);
 			}
 			else if(type == DELTA_TYPE_NUMBER) {
 				vm->functions[i].constants[j].value.number = delta_read_double(f);
