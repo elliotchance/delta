@@ -224,7 +224,6 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 					break;
 				}
 			}
-			++i;
 			continue;
 		}
 		
