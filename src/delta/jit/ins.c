@@ -537,19 +537,49 @@ DELTA_INS(OGT)
 
 DELTA_INS(MET)
 {
-	// first we must be an object
-	if(d->varg[1]->type != DELTA_TYPE_OBJECT) {
-		printf("Error: Expected object for MET");
-		exit(1);
-	}
-	
+	// prepare
 	char *member = delta_cast_new_string(d->varg[2], NULL);
-	char *call = (char*) malloc(128);
-	sprintf(call, "%s.%s", d->varg[1]->value.object.className, member);
-	printf("Calling %s()\n", call);
-	
-	// get the delta vm and attempt to invoke the method
 	struct DeltaVM* vm = delta_get_vm();
-	delta_jit_function invoke = delta_compile_jit(vm, call);
-	invoke(NULL);
+	
+	// if the variable is an object
+	if(d->varg[1]->type == DELTA_TYPE_OBJECT) {
+		char *call = (char*) malloc(128);
+		sprintf(call, "%s.%s", d->varg[1]->value.object.className, member);
+		
+		// attempt to invoke the method
+		delta_jit_function invoke = delta_compile_jit(vm, call);
+		invoke(NULL);
+	}
+	else {
+		//printf("Calling %s()\n", member);
+		
+		delta_jit_function invoke = delta_vm_get_function(vm, member);
+		if(invoke == NULL) {
+			// native methods
+			char *call = (char*) malloc(128);
+			sprintf(call, "native.%s", member);
+			//printf("Calling %s()\n", call);
+			invoke = delta_vm_get_function(vm, call);
+		}
+		
+		if(invoke == NULL) {
+			DELTA_TRIGGER_ERROR("Cannot link function in MET", DELTA_ERROR_ERROR);
+			exit(1);
+		}
+		
+		// simulate the arguments
+		struct DeltaInstruction dins;
+		dins.args = 3;
+		dins.arg = (int*) calloc(dins.args, sizeof(int));
+		dins.arg[0] = d->arg[0];
+		dins.arg[1] = 0;
+		dins.arg[2] = d->arg[1];
+		
+		dins.varg = (struct DeltaVariable**) calloc(dins.args, sizeof(struct DeltaVariable*));
+		dins.varg[0] = d->varg[0];
+		dins.varg[1] = NULL;
+		dins.varg[2] = d->varg[1];
+		
+		invoke(&dins);
+	}
 }

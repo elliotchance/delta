@@ -201,8 +201,7 @@ void delta_set_vm(struct DeltaVM *vm)
 /**
  * @brief Check if a function exists.
  *
- * This will only search the currently loaded modules. If the function is found to exist but is not
- * JIT compiled it will remain uncompiled.
+ * If the function is found to exist but is not JIT compiled it will remain uncompiled.
  *
  * @return DELTA_YES or DELTA_NO.
  */
@@ -212,8 +211,16 @@ int delta_vm_function_exists(struct DeltaVM *vm, char *function)
 		return DELTA_NO;
 	
 	int i;
+	
+	// first search the user functions
 	for(i = 0; i < vm->total_functions; ++i) {
 		if(!strcmp(vm->functions[i].name, function))
+			return DELTA_YES;
+	}
+	
+	// now search the modules
+	for(i = 0; i < vm->total_delta_functions; ++i) {
+		if(!strcmp(vm->delta_functions[i]->name, function))
 			return DELTA_YES;
 	}
 	
@@ -225,9 +232,6 @@ int delta_vm_function_exists(struct DeltaVM *vm, char *function)
 /**
  * @brief Get the JIT handle of a function.
  *
- * This will only search the currently loaded modules.
- * @note This will only work with preloaded functions.
- *
  * @return If the function does not exist it will return NULL. If it does exist but is not JIT
  *         compiled it will be compiled before returning - so as long as this function does not
  *         return NULL you will be able to immediatly use the JIT handle.
@@ -238,9 +242,17 @@ delta_jit_function delta_vm_get_function(struct DeltaVM *vm, char *function)
 		return NULL;
 	
 	int i;
+	
+	// first search the user functions
 	for(i = 0; i < vm->total_functions; ++i) {
 		if(!strcmp(vm->functions[i].name, function))
 			return delta_compile_jit(vm, function);
+	}
+	
+	// now search the modules
+	for(i = 0; i < vm->total_delta_functions; ++i) {
+		if(!strcmp(vm->delta_functions[i]->name, function))
+			return vm->delta_functions[i]->function_ptr;
 	}
 	
 	// function was not found

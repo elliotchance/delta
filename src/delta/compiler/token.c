@@ -315,9 +315,18 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 														 strlen(function_name));
 				int method_name_c = delta_push_string_constant(c, function_id, method_name, 0);
 				
-				DELTA_WRITE_BYTECODE(BYTECODE_MET, function_name, function_id,
-									 new_DeltaInstruction3(NULL, BYTECODE_MET, var_dest, var_id,
-														   method_name_c));
+				struct DeltaInstruction d;
+				d.func = NULL;
+				d.bc = BYTECODE_MET;
+				d.args = 2 + arg_count[arg_depth];
+				d.arg = (int*) calloc(d.args, sizeof(int));
+				d.arg[0] = var_dest;
+				d.arg[1] = var_id;
+				d.arg[2] = method_name_c;
+				for(int i = 1; i < arg_count[arg_depth]; ++i)
+					d.arg[2 + i] = arg_ptr[arg_depth][i - 1];
+				
+				DELTA_WRITE_BYTECODE(BYTECODE_MET, function_name, function_id, d);
 			}
 			else {
 				DELTA_WRITE_BYTECODE(BYTECODE_CAL, function_name, function_id,
@@ -330,10 +339,10 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 										 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest,
 															   RETURN_REGISTER));
 				}
-				
-				r = (char*) malloc(8);
-				sprintf(r, "#%d", var_dest);
 			}
+			
+			r = (char*) malloc(8);
+			sprintf(r, "#%d", var_dest);
 		} else {
 			r = (char*) malloc(8);
 			// depth    offset
