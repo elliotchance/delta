@@ -122,7 +122,6 @@ struct DeltaVM* delta_load_file(const char* in_file)
 				assert(!"Unsupported constant type");
 			
 			vm->functions[i].constants[j].ram_location = delta_read_int(f);
-			vm->functions[i].constants[j].size = delta_read_int(f);
 		}
 	}
 	

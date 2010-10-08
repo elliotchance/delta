@@ -100,7 +100,6 @@ int delta_save_file(struct DeltaCompiler *c, const char* out_file, char* orig)
 				assert(!"Unsupported constant type");
 			
 			delta_write_int(f, c->functions[i].constants[j].ram_location);
-			delta_write_int(f, c->functions[i].constants[j].size);
 		}
 	}
 	
