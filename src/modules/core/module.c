@@ -100,6 +100,7 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(srand, 1, 1);
 	DELTA_PUSH_FUNCTION(tan, 1, 1);
 	DELTA_PUSH_FUNCTION(tanh, 1, 1);
+	DELTA_PUSH_FUNCTION(round, 1, 2);
 	
 	// misc
 	DELTA_PUSH_FUNCTION(exit, 1, 1);
