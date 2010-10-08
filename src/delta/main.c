@@ -56,6 +56,9 @@ void main_run()
 	struct delta_virtual_function *delta_entry = delta_compile_virtual(vm, DELTA_MAIN_FUNCTION);
 #endif
 	
+	// seed the random generator before beginning
+	srand(time(NULL));
+	
 	long start = clock() - 1;
 	printf("\n\n==> BEGIN\n");
 #ifdef VIRTUAL_COMPILE
