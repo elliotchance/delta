@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B020FA1125EDAFD00CCC91A /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B020FA0125EDAFD00CCC91A /* split.c */; };
 		8B0CA3FF11EE825F00FA9821 /* module.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B0CA1D311EE81DC00FA9821 /* module.h */; };
 		8B0CA40011EE826500FA9821 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA1CF11EE81DC00FA9821 /* gzclose.c */; };
 		8B0CA40111EE826500FA9821 /* gzeof.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0CA1D011EE81DC00FA9821 /* gzeof.c */; };
@@ -296,6 +297,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B020FA0125EDAFD00CCC91A /* split.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = split.c; sourceTree = "<group>"; };
 		8B0CA0E611EE81DC00FA9821 /* array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array.c; sourceTree = "<group>"; };
 		8B0CA0E711EE81DC00FA9821 /* array_push.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array_push.c; sourceTree = "<group>"; };
 		8B0CA0E811EE81DC00FA9821 /* count.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = count.c; sourceTree = "<group>"; };
@@ -1065,6 +1067,7 @@
 				8BB0D8B5120D278D00A3CDF2 /* array_value_exists.c */,
 				8BC76A601205B655004A21EB /* array_values.c */,
 				8B0CA0E811EE81DC00FA9821 /* count.c */,
+				8B020FA0125EDAFD00CCC91A /* split.c */,
 			);
 			path = array;
 			sourceTree = "<group>";
@@ -2590,6 +2593,7 @@
 				8BB0DAFB120ED4A600A3CDF2 /* trim.c in Sources */,
 				8BAFB15F12308A2200390025 /* pack.c in Sources */,
 				8B2766C812368C6900098B8D /* new.c in Sources */,
+				8B020FA1125EDAFD00CCC91A /* split.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,6 +19,7 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(array_values, 1, 1);
 	DELTA_PUSH_FUNCTION(count, 1, 1);
 	DELTA_PUSH_FUNCTION(array_pop, 1, 1);
+	DELTA_PUSH_FUNCTION(split, 2, 2);
 	
 	// ctype
 	DELTA_PUSH_FUNCTION(ctype_alnum, 1, 1);
@@ -114,8 +115,8 @@ struct DeltaModuleFunction* module_functions(int *count)
 	DELTA_PUSH_FUNCTION(strlen, 1, 1);
 	DELTA_PUSH_FUNCTION(strtolower, 1, 1);
 	DELTA_PUSH_FUNCTION(strtoupper, 1, 1);
-	DELTA_PUSH_FUNCTION(substr, 2, 3);
 	
+	DELTA_PUSH_FUNCTION(substr, 2, 3);
 	DELTA_PUSH_FUNCTION(strpos, 2, 2);
 	DELTA_PUSH_FUNCTION(ord, 1, 1);
 	DELTA_PUSH_FUNCTION(chr, 1, 1);
@@ -162,11 +163,11 @@ struct DeltaDefine* module_defines(int *count)
 }
 
 
-/*struct DeltaFunctionAlias* module_aliases(int *count)
+struct DeltaFunctionAlias* module_aliases(int *count)
 {
 	DELTA_PREPARE_MODULE_FUNCTION_ALIASES(10);
 	
-	DELTA_PUSH_FUNCTION_ALIAS(blabla, 1, 1, abs);
+	DELTA_PUSH_FUNCTION_ALIAS(native.length, 1, 1, strlen);
 	
 	DELTA_END_MODULE_FUNCTION_ALIASES;
-}*/
+}
