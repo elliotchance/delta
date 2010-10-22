@@ -45,7 +45,7 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {
 	int i, j, loop_id = 0, end = 0, function_id = -1, k;
 	struct DeltaInstruction *instructions = NULL;
-	int total_ram = 100, total_static_ram = 10;
+	int total_ram = 0, total_static_ram = 0;
 	
 #if 0
 	for(i = 0; i < c->total_functions; ++i) {
@@ -69,6 +69,11 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			instructions = c->functions[i].ins;
 			end = c->functions[i].total_ins;
 			function_id = i;
+			
+			// calculate the required ram
+			total_ram = delta_calculate_total_ram(&c->functions[i]);
+			total_static_ram = delta_calculate_total_static_ram(&c->functions[i]);
+			
 			break;
 		}
 	}

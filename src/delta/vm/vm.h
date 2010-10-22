@@ -29,6 +29,8 @@ void               delta_set_vm(struct DeltaVM *vm);
 delta_jit_function delta_vm_get_function(struct DeltaVM *vm, char *function);
 int                delta_vm_function_exists(struct DeltaVM *vm, char *function);
 delta_jit_function delta_vm_get_module_function(struct DeltaVM* vm, char *function);
+int                delta_calculate_total_ram(struct DeltaCompiledFunction *f);
+int                delta_calculate_total_static_ram(struct DeltaCompiledFunction *f);
 
 
 #endif

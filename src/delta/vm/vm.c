@@ -106,8 +106,12 @@ int delta_vm_prepare(struct DeltaVM *vm, int function_id, struct DeltaVariable *
 	// load constants
 	int i;
 	for(i = 0; i < vm->functions[function_id].total_constants; ++i) {
-		DELTA_COPY_VARIABLE(ram[vm->functions[function_id].constants[i].ram_location],
-							(&vm->functions[function_id].constants[i]));
+		int ram_location = vm->functions[function_id].constants[i].ram_location;
+		struct DeltaVariable *arg1 = ram[ram_location];
+		struct DeltaVariable *arg2 = &vm->functions[function_id].constants[i];
+		assert(arg1 != NULL);
+		assert(arg2 != NULL);
+		DELTA_COPY_VARIABLE(arg1, arg2);
 	}
 	
 	return DELTA_SUCCESS;
@@ -257,4 +261,48 @@ delta_jit_function delta_vm_get_function(struct DeltaVM *vm, char *function)
 	
 	// function was not found
 	return NULL;
+}
+
+
+int delta_calculate_total_ram(struct DeltaCompiledFunction *f)
+{
+	assert(f != NULL);
+	int r = 0, i, j;
+	
+	for(i = 0; i < f->total_ins; ++i) {
+		for(j = 0; j < f->ins[i].args; ++j) {
+			if(f->ins[i].arg[j] > r)
+				r = f->ins[i].arg[j];
+		}
+	}
+	
+	for(i = 0; i < f->total_constants; ++i) {
+		if(f->constants[i].ram_location > r)
+			r = f->constants[i].ram_location;
+	}
+	
+	//printf("ram required = %d\n", r + 1);
+	return r + 1;
+}
+
+
+int delta_calculate_total_static_ram(struct DeltaCompiledFunction *f)
+{
+	assert(f != NULL);
+	int r = 0, i, j;
+	
+	for(i = 0; i < f->total_ins; ++i) {
+		for(j = 0; j < f->ins[i].args; ++j) {
+			if(f->ins[i].arg[j] < r)
+				r = f->ins[i].arg[j];
+		}
+	}
+	
+	for(i = 0; i < f->total_constants; ++i) {
+		if(f->constants[i].ram_location < r)
+			r = f->constants[i].ram_location;
+	}
+	
+	//printf("static ram required = %d\n", -r + 1);
+	return -r + 1;
 }
