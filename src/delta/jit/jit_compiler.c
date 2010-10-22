@@ -45,7 +45,6 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 {
 	int i, j, loop_id = 0, end = 0, function_id = -1, k;
 	struct DeltaInstruction *instructions = NULL;
-	int total_ram = 0, total_static_ram = 0;
 	
 #if 0
 	for(i = 0; i < c->total_functions; ++i) {
@@ -71,8 +70,8 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 			function_id = i;
 			
 			// calculate the required ram
-			total_ram = delta_calculate_total_ram(&c->functions[i]);
-			total_static_ram = delta_calculate_total_static_ram(&c->functions[i]);
+			c->functions[i].total_ram = delta_calculate_total_ram(&c->functions[i]);
+			c->functions[i].total_static_ram = delta_calculate_total_static_ram(&c->functions[i]);
 			
 			break;
 		}
@@ -101,16 +100,16 @@ delta_jit_function delta_compile_jit(struct DeltaVM *c, char *function_name)
 	
 	// create a new RAM
 	struct DeltaVariable **ram = (struct DeltaVariable**)
-		calloc(total_ram, sizeof(struct DeltaVariable*));
-	for(i = 0; i < total_ram; ++i)
+		calloc(c->functions[function_id].total_ram, sizeof(struct DeltaVariable*));
+	for(i = 0; i < c->functions[function_id].total_ram; ++i)
 		ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
 	
 	// static RAM for interfunction communications
 	static struct DeltaVariable **static_ram = NULL;
 	if(static_ram == NULL) {
 		static_ram = (struct DeltaVariable**)
-			calloc(total_static_ram, sizeof(struct DeltaVariable*));
-		for(i = 0; i < total_static_ram; ++i)
+			calloc(c->functions[function_id].total_static_ram, sizeof(struct DeltaVariable*));
+		for(i = 0; i < c->functions[function_id].total_static_ram; ++i)
 			static_ram[i] = (struct DeltaVariable*) malloc(sizeof(struct DeltaVariable));
 	}
 	

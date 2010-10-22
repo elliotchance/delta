@@ -51,8 +51,14 @@ void delta_vm_print_variable(struct DeltaVariable *v)
 }
 
 
+const char *delta_vartype_as_string[] = {
+	"NULL", "BOOLEAN", "NUMBER", "STRING", "ARRAY", "RESOURCE", "OBJECT", "FUNCTION", "UNKNOWN"
+};
+
+
 void delta_vm_print_ram(struct DeltaVM *vm)
 {
+	assert(vm != NULL);
 	int i, j;
 	
 	for(i = 0; i < vm->total_functions; ++i) {
@@ -60,9 +66,10 @@ void delta_vm_print_ram(struct DeltaVM *vm)
 		if(vm->functions[i].jit_ptr == NULL)
 			printf("Not compiled\n");
 		else {
-			for(j = 0; j < vm->functions[i].total_vars; ++j) {
-				printf("ram[%d](%d, %d) = ", j, vm->functions[i].ram[j]->type,
-					   vm->functions[i].ram[j]->size);
+			for(j = 0; j < vm->functions[i].total_ram; ++j) {
+				assert(vm->functions[i].ram[j] != NULL);
+				DeltaVariableType type = vm->functions[i].ram[j]->type;
+				printf("ram[%d](%s) = ", j, delta_vartype_as_string[type]);
 				delta_vm_print_variable(vm->functions[i].ram[j]);
 				printf("\n");
 			}

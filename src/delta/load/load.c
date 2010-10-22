@@ -67,6 +67,7 @@ struct DeltaVM* delta_load_file(const char* in_file)
 	
 	// write functions to output file
 	for(i = 0; i < vm->total_functions; ++i) {
+		vm->functions[i].jit_ptr = NULL;
 		vm->functions[i].name = delta_read_string(f);
 		//printf("  %s", vm->functions[i].name);
 		vm->functions[i].is_static = delta_read_int(f);

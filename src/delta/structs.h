@@ -174,6 +174,8 @@ struct DeltaCompiledFunction
 	int alloc_constants, total_constants;
 	struct DeltaVariable *constants;
 	
+	int total_ram;
+	int total_static_ram;
 	struct DeltaVariable **ram;
 };
 

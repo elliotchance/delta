@@ -403,7 +403,7 @@
 /**
  * @brief For finding variable safe types.
  */
-#define DELTA_TYPE_UNKNOWN 10
+#define DELTA_TYPE_UNKNOWN 8
 
 
 /**
