@@ -323,7 +323,8 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 				d.arg[0] = var_dest;
 				d.arg[1] = var_id;
 				d.arg[2] = method_name_c;
-				for(int i = 1; i < arg_count[arg_depth]; ++i)
+				int i;
+				for(i = 1; i < arg_count[arg_depth]; ++i)
 					d.arg[2 + i] = arg_ptr[arg_depth][i - 1];
 				
 				DELTA_WRITE_BYTECODE(BYTECODE_MET, function_name, function_id, d);

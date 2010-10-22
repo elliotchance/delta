@@ -166,12 +166,12 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			int pos = delta_strpos(tokens[highest_op_pos - 1], "[");
 			int pos2 = delta_strpos(tokens[highest_op_pos - 1], ".");
 			if(pos > 0) {
-				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+				char *rawname = delta_copy_substring(tokens[highest_op_pos - 1], 0, pos);
+				var_dest = delta_get_variable_id(c, c->total_functions, rawname,
 												 tokens[highest_op_pos]);
 				
 				if(var_dest < 0) {
-					fprintf(stderr, "Cannot resolve or write to '%s'\n",
-							tokens[highest_op_pos - 1]);
+					fprintf(stderr, "Cannot resolve (ref1) or write to '%s'\n", rawname);
 					exit(1);
 				}
 				
@@ -188,7 +188,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 												 tokens[highest_op_pos]);
 				
 				if(var_dest < 0) {
-					fprintf(stderr, "Cannot resolve or write to '%s'\n",
+					fprintf(stderr, "Cannot resolve (ref2) or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
@@ -206,7 +206,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 												 tokens[highest_op_pos]);
 				assert(var_dest >= 0);
 				if(var_dest < 0) {
-					fprintf(stderr, "Cannot resolve or write to '%s'\n",
+					fprintf(stderr, "Cannot resolve (ref3) or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
