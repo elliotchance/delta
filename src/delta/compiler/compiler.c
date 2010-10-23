@@ -93,7 +93,7 @@ int delta_compile_file(struct DeltaCompiler *c, const char* input_file)
 	// compile as a block
 	int i;
 	delta_function_reset();
-	delta_compile_block(c, "", whole_file, 0, total_bytes);
+	delta_compile_block(c, "", whole_file, 0, total_bytes, 0);
 	
 	// the main function is the function that will not have a name
 	++c->total_functions;

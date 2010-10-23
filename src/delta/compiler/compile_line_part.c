@@ -55,7 +55,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length, int
 	}
 	
 	if(!strncmp(delta_trim(line), "public", 6)) {
-		delta_compile_block(c, line, "", 0, strlen(line));
+		delta_compile_block(c, line, "", 0, strlen(line), function_id);
 		return -1;
 	}
 	

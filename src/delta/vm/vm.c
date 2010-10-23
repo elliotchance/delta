@@ -289,7 +289,7 @@ int delta_calculate_total_ram(struct DeltaCompiledFunction *f)
 	}
 	
 	//printf("ram required = %d\n", r + 1);
-	return r + 51;
+	return r + 1;
 }
 
 

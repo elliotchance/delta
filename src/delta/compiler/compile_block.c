@@ -19,11 +19,12 @@
 #include <assert.h>
 
 
-int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, int at, int end)
+int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, int at, int end,
+						int function_id)
 {
 	// prepare
 	char* line = (char*) malloc(1024);
-	int i, line_pos = 0, function_id = 0, identifier_len = 0, this_function_id = 0;
+	int i, line_pos = 0, identifier_len = 0, this_function_id = 0;
 	char **split_semi = NULL; // this is used for 'for' statements
 	char *short_identifier = "";
 	int full_break = 0;
@@ -310,7 +311,7 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 					break;
 			}
 			
-			delta_compile_block(c, new_identifier, block, orig, i);
+			delta_compile_block(c, new_identifier, block, orig, i, function_id);
 			line_pos = 0;
 			continue;
 		}

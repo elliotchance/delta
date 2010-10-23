@@ -361,8 +361,11 @@ DELTA_INS(AS1)
 {
 	// FIXME: we must be an array
 	
+	// we must make copies of the key and value
 	char *key = delta_cast_new_string(d->varg[1], NULL);
-	delta_array_push_kv(&DELTA_DEST->value.array, key, d->varg[2]);
+	struct DeltaVariable *value = delta_new_null();
+	DELTA_COPY_VARIABLE(value, d->varg[2]);
+	delta_array_push_kv(&DELTA_DEST->value.array, key, value);
 }
 
 

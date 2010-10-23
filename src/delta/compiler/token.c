@@ -62,7 +62,7 @@ int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 		pos = strlen(varname);
 	
 	printf("\nFinding '%s' in %s\n", varname, c->functions[function_id].name);
-	for(i = 0; i < 1; ++i) {
+	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
 		printf(" '%s' != '%s'\n", c->functions[function_id].vars[i].name, varname);
 		if(!strncmp(c->functions[function_id].vars[i].name, varname, pos))
 			return 1;
