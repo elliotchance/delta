@@ -12,6 +12,12 @@
 
 int delta_compile_line(struct DeltaCompiler *c, char* line, int length, int function_id)
 {
+	// deal with "var" differently
+	if(strlen(delta_trim(line)) > 3 && !strncmp(delta_trim(line), "var", 3)) {
+		delta_compile_line_part(c, line, strlen(line), function_id);
+		return 1;
+	}
+	
 	// split the line on commas
 	int total_parts = 0, i, last = -1;
 	int bcount1 = 0; // ()
@@ -90,8 +96,8 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length, int func
 		} else {
 			// only evaluate the code after the '=>' operator.
 			arg_ptr[arg_depth - 1][(i * 2) + 2] =
-			delta_compile_line_part(c, parts[i] + strlen(key) + 2,
-									strlen(parts[i]) - strlen(key) - 2, function_id);
+				delta_compile_line_part(c, parts[i] + strlen(key) + 2,
+										strlen(parts[i]) - strlen(key) - 2, function_id);
 		}
 		
 		--arg_depth;

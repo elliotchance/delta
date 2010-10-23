@@ -145,7 +145,8 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		strncpy(expr, identifier + expr_at, expr_end - expr_at);
 		
 		// split up the expression on the ';'
-		split_semi = delta_split_semicolons(expr);
+		int temp;
+		split_semi = delta_split(expr, ";", &temp);
 		
 		// compile the 'before', we dont need the return register because its a stand alone line
 		// that doesn't have anything to do with the loop iterations

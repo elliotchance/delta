@@ -38,18 +38,51 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length, int
 		line = delta_trim(line);
 		line = delta_copy_substring(line, 4, strlen(line));
 		
-		// make sure the variable name is valid
-		if(tolower(line[0]) != line[0])
-			delta_error_push(c, line_number,
-							 "Variables names must start with a non-capital letter.");
-		
-		int total_vars = c->functions[function_id].total_vars;
-		c->functions[function_id].vars[total_vars].type = DELTA_TYPE_NUMBER;
-		c->functions[function_id].vars[total_vars].name = (char*) malloc(strlen(line) + 1);
-		strcpy(c->functions[function_id].vars[total_vars].name, line);
-		c->functions[function_id].vars[total_vars].ram_location = ++var_temp;
-		printf("%s defined in %s\n", c->functions[function_id].vars[total_vars].name, c->functions[function_id].name);
-		++c->functions[function_id].total_vars;
+		int elements;
+		char **element = delta_split(line, ",", &elements);
+		int i;
+		for(i = 0; i < elements; ++i) {
+			char *temp = delta_trim(element[i]);
+			
+			// make sure the variable name is valid
+			if(tolower(temp[0]) != temp[0])
+				delta_error_push(c, line_number,
+								 "Variables names must start with a non-capital letter.");
+			
+			// might have a default value
+			int value_location = delta_strpos(temp, "=");
+			
+			if(value_location < 0) {
+				int total_vars = c->functions[function_id].total_vars;
+				c->functions[function_id].vars[total_vars].type = DELTA_TYPE_NUMBER;
+				c->functions[function_id].vars[total_vars].name = (char*) malloc(strlen(temp) + 1);
+				strcpy(c->functions[function_id].vars[total_vars].name, temp);
+				c->functions[function_id].vars[total_vars].ram_location = ++var_temp;
+				++c->functions[function_id].total_vars;
+			}
+			else {
+				printf("value = %s\n", temp + value_location + 1);
+				int default_value = delta_compile_line_part(c, temp + value_location + 1,
+															strlen(temp) - value_location - 1,
+															function_id);
+				char *varname = delta_trim(delta_copy_substring(temp, 0, value_location));
+				printf("default_value = %s\n", varname);
+				
+				int total_vars = c->functions[function_id].total_vars;
+				c->functions[function_id].vars[total_vars].type = DELTA_TYPE_NUMBER;
+				c->functions[function_id].vars[total_vars].name =
+					(char*) malloc(strlen(varname) + 1);
+				strncpy(c->functions[function_id].vars[total_vars].name, varname,
+						strlen(varname));
+				c->functions[function_id].vars[total_vars].ram_location = ++var_temp;
+				++c->functions[function_id].total_vars;
+				
+				DELTA_WRITE_BYTECODE(BYTECODE_SET, "", function_id,
+					new_DeltaInstruction2(NULL, BYTECODE_SET,
+										  c->functions[function_id].vars[total_vars].ram_location,
+										  default_value));
+			}
+		}
 		
 		return -1;
 	}

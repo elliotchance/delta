@@ -16,11 +16,12 @@ int    delta_strpos(char *haystack, char *needle);
 int    delta_strrchr(char *haystack, char needle);
 void   delta_escape_string(char *in, int length);
 int    stricmp(const char *s1, const char *s2);
-char** delta_split_semicolons(char *expr);
+char** delta_split(char *haystack, char *needle, int* elements);
 char*  delta_trim(char *str);
 int    delta_is_magic_string(char *str);
 char*  delta_translate_magic_string(char *str);
 char*  delta_int_to_string(int value);
+int    delta_strpos_off(char *haystack, char *needle, int offset);
 
 
 #endif

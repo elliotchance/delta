@@ -104,7 +104,19 @@ char* delta_extract_argument_key(char *arg)
 int delta_strpos(char *haystack, char *needle)
 {
 	char *p = strstr(haystack, needle);
-	if (p)
+	if(p)
+		return p - haystack;
+	return -1;
+}
+
+
+/**
+ * @brief Find the first occurrance with an offset.
+ */
+int delta_strpos_off(char *haystack, char *needle, int offset)
+{
+	char *p = strstr(haystack + offset, needle);
+	if(p)
 		return p - haystack;
 	return -1;
 }
@@ -173,25 +185,36 @@ void delta_escape_string(char *in, int length)
 }
 
 
-char** delta_split_semicolons(char *expr)
+char** delta_split(char *haystack, char *needle, int* elements)
 {
-	char **r = (char**) calloc(3, sizeof(char*));
-	r[0] = (char*) malloc(128);
-	r[1] = (char*) malloc(128);
-	r[2] = (char*) malloc(128);
-	bzero(r[0], 128);
-	bzero(r[1], 128);
-	bzero(r[2], 128);
-	int i, len = strlen(expr), ri = 0, ci = 0;
+	int offset = 0;
 	
-	for(i = 0; i < len; ++i) {
-		if(expr[i] == ';') {
-			++ri;
-			ci = 0;
-		}
-		else
-			r[ri][ci++] = expr[i];
+	// first count all the elements
+	*elements = 0;
+	while(1) {
+		int pos = delta_strpos_off(haystack, needle, offset);
+		if(pos < 0)
+			break;
+		
+		offset += pos + strlen(needle);
+		++*elements;
 	}
+	++*elements;
+	
+	char **r = (char**) calloc(*elements, sizeof(char*));
+	offset = 0;
+	int i;
+	for(i = 0; 1; ++i) {
+		int pos = delta_strpos_off(haystack, needle, offset);
+		if(pos < 0)
+			break;
+		
+		r[i] = (char*) malloc(pos - offset + 1);
+		strncpy(r[i], haystack + offset, pos);
+		offset += pos + strlen(needle);
+	}
+	r[*elements - 1] = (char*) malloc(strlen(haystack) - offset + 1);
+	strcpy(r[*elements - 1], haystack + offset);
 	
 	return r;
 }
