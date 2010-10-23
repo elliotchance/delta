@@ -289,7 +289,7 @@ int delta_calculate_total_ram(struct DeltaCompiledFunction *f)
 	}
 	
 	//printf("ram required = %d\n", r + 1);
-	return r + 1;
+	return r + 51;
 }
 
 
@@ -310,6 +310,6 @@ int delta_calculate_total_static_ram(struct DeltaCompiledFunction *f)
 			r = f->constants[i].ram_location;
 	}
 	
-	//printf("static ram required = %d\n", -r + 1);
-	return -r + 1;
+	//printf("static ram required = %d\n", -r + 2);
+	return -r + 2;
 }

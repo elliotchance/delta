@@ -26,7 +26,6 @@ extern char *class_name;
 int                   delta_is_constructor(char *name);
 int                   delta_push_label(struct DeltaCompiler *c, char *name);
 int                   delta_compile_file(struct DeltaCompiler *c, const char* input_file);
-int                   delta_compile_line(struct DeltaCompiler *c, char* line, int length);
 void                  delta_die(const char* msg);
 void                  delta_function_reset();
 struct DeltaCompiler* delta_compiler_init();

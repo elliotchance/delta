@@ -12,6 +12,7 @@
 #include "delta/macros.h"
 #include "delta/compiler/bytecode_writer.h"
 #include "delta/compiler/compile_line_part.h"
+#include "delta/compiler/compile_line.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -60,11 +61,14 @@ int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 	if(pos < 0)
 		pos = strlen(varname);
 	
-	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
+	printf("\nFinding '%s' in %s\n", varname, c->functions[function_id].name);
+	for(i = 0; i < 1; ++i) {
+		printf(" '%s' != '%s'\n", c->functions[function_id].vars[i].name, varname);
 		if(!strncmp(c->functions[function_id].vars[i].name, varname, pos))
 			return 1;
 	}
 	
+	printf("Failed to find '%s'\n", varname);
 	return 0;
 }
 
@@ -158,7 +162,7 @@ int delta_get_variable_id(struct DeltaCompiler *c, int function_id, char* name, 
 		// value out into a temp place
 		if(location >= 0 && element != NULL && strcmp(next_op, "=")) {
 			int var_dest = ++var_temp;
-			int var_dimention = delta_compile_line_part(c, element, strlen(element));
+			int var_dimention = delta_compile_line_part(c, element, strlen(element), function_id);
 			
 			DELTA_WRITE_BYTECODE(BYTECODE_AG1, "", function_id,
 								 new_DeltaInstruction3(NULL, BYTECODE_AG1, var_dest, location,
@@ -297,7 +301,7 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 		// evaluate the subexpression
 		char* r = (char*) malloc(*offset - orig - 1);
 		strncpy(r, line + orig + 1, *offset - orig - 2);
-		delta_compile_line(c, r, strlen(r));
+		delta_compile_line(c, r, strlen(r), function_id);
 		
 		// if there was a function, apply it now
 		if(found > 0) {

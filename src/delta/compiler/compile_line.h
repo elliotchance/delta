@@ -4,4 +4,5 @@
 
 #include "delta/structs.h"
 
-int delta_compile_line(struct DeltaCompiler *c, char* line, int length);
+
+int delta_compile_line(struct DeltaCompiler *c, char* line, int length, int function_id);

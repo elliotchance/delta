@@ -12,6 +12,7 @@
 #include "delta/jit/jit_compiler.h"
 #include <math.h>
 #include <string.h>
+#include <assert.h>
 
 
 /**

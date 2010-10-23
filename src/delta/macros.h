@@ -16,9 +16,9 @@
 { \
 	struct DeltaInstruction _dI = new_DeltaInstructionN(__BYTECODE);\
 	delta_bytecode_writer_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
-		c->total_functions); \
+		function_id); \
 	arg_ptr[arg_depth][0] = var_dest; \
-	DeltaFunction_push(c, c->total_functions, _dI); \
+	DeltaFunction_push(c, function_id, _dI); \
 }
 
 
@@ -27,8 +27,8 @@
 	struct DeltaInstruction _dI = \
 		new_DeltaInstruction3(NULL, __BYTECODE, var_dest, var_id1, var_id2); \
 	delta_bytecode_writer_line(c, __BYTECODE, #__BYTECODE, line_number, "", _dI, \
-		c->total_functions); \
-	DeltaFunction_push(c, c->total_functions, _dI); \
+		function_id); \
+	DeltaFunction_push(c, function_id, _dI); \
 }
 
 

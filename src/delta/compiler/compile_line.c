@@ -10,7 +10,7 @@
 #include <string.h>
 
 
-int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
+int delta_compile_line(struct DeltaCompiler *c, char* line, int length, int function_id)
 {
 	// split the line on commas
 	int total_parts = 0, i, last = -1;
@@ -76,22 +76,22 @@ int delta_compile_line(struct DeltaCompiler *c, char* line, int length)
 			blank_key = 1;
 			key = (char*) malloc(8);
 			sprintf(key, "%d", i);
-			key_addr = delta_push_string_constant(c, c->total_functions, key, 0);
+			key_addr = delta_push_string_constant(c, function_id, key, 0);
 		}
 		else
-			key_addr = delta_compile_line_part(c, key, strlen(key));
+			key_addr = delta_compile_line_part(c, key, strlen(key), function_id);
 		
 		arg_ptr[arg_depth - 1][(i * 2) + 1] = key_addr;
 		
 		if(blank_key) {
 			// evaluate whole code.
 			arg_ptr[arg_depth - 1][(i * 2) + 2] =
-			delta_compile_line_part(c, parts[i], strlen(parts[i]));
+				delta_compile_line_part(c, parts[i], strlen(parts[i]), function_id);
 		} else {
 			// only evaluate the code after the '=>' operator.
 			arg_ptr[arg_depth - 1][(i * 2) + 2] =
 			delta_compile_line_part(c, parts[i] + strlen(key) + 2,
-									strlen(parts[i]) - strlen(key) - 2);
+									strlen(parts[i]) - strlen(key) - 2, function_id);
 		}
 		
 		--arg_depth;

@@ -18,15 +18,16 @@
 #include <assert.h>
 
 
-int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
+int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length, int function_id)
 {
 	if(!strncmp(delta_trim(line), "return", 6)) {
 		int pos = delta_strpos(line, "r") + 6;
-		int var_id1 = delta_compile_line_part(c, line + pos, length - pos);
+		int var_id1 = delta_compile_line_part(c, line + pos, length - pos, function_id);
+		printf("var_id1 = %d\n", var_id1);
 		
-		DELTA_WRITE_BYTECODE(BYTECODE_SET, "", c->total_functions,
+		DELTA_WRITE_BYTECODE(BYTECODE_SET, "", function_id,
 							 new_DeltaInstruction2(NULL, BYTECODE_SET, RETURN_REGISTER, var_id1));
-		DELTA_WRITE_BYTECODE(BYTECODE_RTN, "", c->total_functions,
+		DELTA_WRITE_BYTECODE(BYTECODE_RTN, "", function_id,
 							 new_DeltaInstruction0(NULL, BYTECODE_RTN));
 		
 		return var_id1;
@@ -42,12 +43,13 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			delta_error_push(c, line_number,
 							 "Variables names must start with a non-capital letter.");
 		
-		int total_vars = c->functions[c->total_functions].total_vars;
-		c->functions[c->total_functions].vars[total_vars].type = DELTA_TYPE_NUMBER;
-		c->functions[c->total_functions].vars[total_vars].name = (char*) malloc(strlen(line) + 1);
-		strcpy(c->functions[c->total_functions].vars[total_vars].name, line);
-		c->functions[c->total_functions].vars[total_vars].ram_location = ++var_temp;
-		++c->functions[c->total_functions].total_vars;
+		int total_vars = c->functions[function_id].total_vars;
+		c->functions[function_id].vars[total_vars].type = DELTA_TYPE_NUMBER;
+		c->functions[function_id].vars[total_vars].name = (char*) malloc(strlen(line) + 1);
+		strcpy(c->functions[function_id].vars[total_vars].name, line);
+		c->functions[function_id].vars[total_vars].ram_location = ++var_temp;
+		printf("%s defined in %s\n", c->functions[function_id].vars[total_vars].name, c->functions[function_id].name);
+		++c->functions[function_id].total_vars;
 		
 		return -1;
 	}
@@ -74,38 +76,38 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		// skip any spaces before token
 		delta_skip_spaces(line, &i);
 		
-		token = delta_read_token(c, c->total_functions, line, &i);
+		token = delta_read_token(c, function_id, line, &i);
 		token = delta_replace_constant(c, token);
 		if(strlen(token) > 0)
 			tokens[total_tokens++] = token;
 		
 		if(delta_is_number(token)) {
 			++var_temp;
-			sprintf(token, "#%d", delta_push_number_constant(c, c->total_functions, atof(token)));
+			sprintf(token, "#%d", delta_push_number_constant(c, function_id, atof(token)));
 		}
 		else if(delta_is_string(token)) {
 			if(delta_is_magic_string(token)) {
 				token = delta_translate_magic_string(token);
 				//printf("token = '%s'\n", token);
-				int res_reg = delta_compile_line_part(c, token, strlen(token));
+				int res_reg = delta_compile_line_part(c, token, strlen(token), function_id);
 				sprintf(token, "#%d", res_reg);
 			} else {
 				int escape = (token[0] == '"');
 				char *str = delta_copy_substring(token, 1, strlen(token) - 1);
-				sprintf(token, "#%d", delta_push_constant(c, c->total_functions, str, escape));
+				sprintf(token, "#%d", delta_push_constant(c, function_id, str, escape));
 			}
 		}
 		else if(!stricmp(token, "true")) {
 			++var_temp;
-			sprintf(token, "#%d", delta_push_boolean_constant(c, c->total_functions, DELTA_TRUE));
+			sprintf(token, "#%d", delta_push_boolean_constant(c, function_id, DELTA_TRUE));
 		}
 		else if(!stricmp(token, "false")) {
 			++var_temp;
-			sprintf(token, "#%d", delta_push_boolean_constant(c, c->total_functions, DELTA_FALSE));
+			sprintf(token, "#%d", delta_push_boolean_constant(c, function_id, DELTA_FALSE));
 		}
 		else if(!stricmp(token, "null")) {
 			++var_temp;
-			sprintf(token, "#%d", delta_push_null_constant(c, c->total_functions));
+			sprintf(token, "#%d", delta_push_null_constant(c, function_id));
 		}
 		else if(delta_is_keyword(token)) {
 			// fine
@@ -113,18 +115,18 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		else if(token[0] == '#') {
 			// fine
 		}
-		else if(!delta_is_declared(c, c->total_functions, token)) {
+		else if(!delta_is_declared(c, function_id, token)) {
 			// look for member variable
 			int pos = delta_strpos(token, ".");
 			if(pos >= 0) {
 				// turn the member variable name into a constant string
 				int var_dest = ++var_temp;
 				char *member_var = delta_copy_substring(token, pos + 1, strlen(token));
-				int var_arg0 = delta_push_string_constant(c, c->total_functions, member_var, 0);
+				int var_arg0 = delta_push_string_constant(c, function_id, member_var, 0);
 			}
 			else {
 				// cannot be found
-				char buf[256];
+				char* buf = (char*) malloc(256);
 				sprintf(buf, "Variable %s is not declared.", token);
 				delta_error_push(c, line_number, buf);
 			}
@@ -141,7 +143,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 	if(total_tokens == 0)
 		return var_temp;
 	else if(total_tokens == 1)
-		return delta_get_variable_id(c, c->total_functions, tokens[0], NULL);
+		return delta_get_variable_id(c, function_id, tokens[0], NULL);
 	
 	// convert to bytecode
 	i = 0;
@@ -159,7 +161,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		if(!strcmp(tokens[highest_op_pos], "=")) {
 			// resolve the address for the left and right
 			int var_dest;
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+			int var_id1 = delta_get_variable_id(c, function_id, tokens[highest_op_pos + 1],
 												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
 			
@@ -167,7 +169,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 			int pos2 = delta_strpos(tokens[highest_op_pos - 1], ".");
 			if(pos > 0) {
 				char *rawname = delta_copy_substring(tokens[highest_op_pos - 1], 0, pos);
-				var_dest = delta_get_variable_id(c, c->total_functions, rawname,
+				var_dest = delta_get_variable_id(c, function_id, rawname,
 												 tokens[highest_op_pos]);
 				
 				if(var_dest < 0) {
@@ -177,14 +179,14 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				
 				char *line2 = delta_copy_substring(tokens[highest_op_pos - 1], pos + 1,
 												   strlen(tokens[highest_op_pos - 1]) - 1);
-				int var_dimention = delta_compile_line_part(c, line2, strlen(line2));
+				int var_dimention = delta_compile_line_part(c, line2, strlen(line2), function_id);
 				
-				DELTA_WRITE_BYTECODE(BYTECODE_AS1, "", c->total_functions,
+				DELTA_WRITE_BYTECODE(BYTECODE_AS1, "", function_id,
 									 new_DeltaInstruction3(NULL, BYTECODE_AS1, var_dest,
 														   var_dimention, var_id1));
 			}
 			else if(pos2 > 0) {
-				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+				var_dest = delta_get_variable_id(c, function_id, tokens[highest_op_pos - 1],
 												 tokens[highest_op_pos]);
 				
 				if(var_dest < 0) {
@@ -195,23 +197,23 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 				
 				char *line2 = delta_copy_substring(tokens[highest_op_pos - 1], pos2 + 1,
 												   strlen(tokens[highest_op_pos - 1]));
-				int var_dimention = delta_push_string_constant(c, c->total_functions, line2, 0);
+				int var_dimention = delta_push_string_constant(c, function_id, line2, 0);
 				
-				DELTA_WRITE_BYTECODE(BYTECODE_OST, "", c->total_functions,
+				DELTA_WRITE_BYTECODE(BYTECODE_OST, "", function_id,
 									 new_DeltaInstruction3(NULL, BYTECODE_OST, var_dest,
 														   var_dimention, var_id1));
 			}
 			else {
-				var_dest = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+				var_dest = delta_get_variable_id(c, function_id, tokens[highest_op_pos - 1],
 												 tokens[highest_op_pos]);
-				assert(var_dest >= 0);
+				//assert(var_dest >= 0);
 				if(var_dest < 0) {
 					fprintf(stderr, "Cannot resolve (ref3) or write to '%s'\n",
 							tokens[highest_op_pos - 1]);
 					exit(1);
 				}
 				
-				DELTA_WRITE_BYTECODE(BYTECODE_SET, "", c->total_functions,
+				DELTA_WRITE_BYTECODE(BYTECODE_SET, "", function_id,
 									 new_DeltaInstruction2(NULL, BYTECODE_SET, var_dest, var_id1));
 			}
 			result_register = var_dest;
@@ -234,10 +236,10 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "&&") ||
 		   !strcmp(tokens[highest_op_pos], "||")) {
 			// resolve the address for the left and right
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+			int var_id1 = delta_get_variable_id(c, function_id, tokens[highest_op_pos - 1],
 												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
-			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+			int var_id2 = delta_get_variable_id(c, function_id, tokens[highest_op_pos + 1],
 												tokens[highest_op_pos]);
 			assert(var_id2 >= 0);
 			int var_dest = ++var_temp;
@@ -300,10 +302,10 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length)
 		   !strcmp(tokens[highest_op_pos], "&&=") ||
 		   !strcmp(tokens[highest_op_pos], "||=")) {
 			// resolve the address for the left and right
-			int var_id1 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos - 1],
+			int var_id1 = delta_get_variable_id(c, function_id, tokens[highest_op_pos - 1],
 												tokens[highest_op_pos]);
 			assert(var_id1 >= 0);
-			int var_id2 = delta_get_variable_id(c, c->total_functions, tokens[highest_op_pos + 1],
+			int var_id2 = delta_get_variable_id(c, function_id, tokens[highest_op_pos + 1],
 												tokens[highest_op_pos]);
 			assert(var_id2 >= 0);
 			int var_dest = var_id1;
