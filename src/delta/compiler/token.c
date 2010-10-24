@@ -55,20 +55,24 @@ int delta_is_keyword(char* word)
 
 int delta_is_declared(struct DeltaCompiler *c, int function_id, char* varname)
 {
+	// argument
+	if(varname[0] == '$')
+		return 1;
+	
 	assert(function_id >= 0);
 	int i, pos = delta_strpos(varname, "[");
 	
 	if(pos < 0)
 		pos = strlen(varname);
 	
-	printf("\nFinding '%s' in %s\n", varname, c->functions[function_id].name);
+	//printf("\nFinding '%s' in %s\n", varname, c->functions[function_id].name);
 	for(i = 0; i < c->functions[function_id].total_vars; ++i) {
-		printf(" '%s' != '%s'\n", c->functions[function_id].vars[i].name, varname);
+		//printf(" '%s' != '%s'\n", c->functions[function_id].vars[i].name, varname);
 		if(!strncmp(c->functions[function_id].vars[i].name, varname, pos))
 			return 1;
 	}
 	
-	printf("Failed to find '%s'\n", varname);
+	//printf("Failed to find '%s'\n", varname);
 	return 0;
 }
 
@@ -281,7 +285,7 @@ char* delta_read_token(struct DeltaCompiler *c, int function_id, char* line, int
 			strncpy(function_name, line + orig, found);
 		}
 		
-		printf("'%s'\n", function_name);
+		//printf("'%s'\n", function_name);
 		orig += found;
 		
 		// count the length of the subexpression

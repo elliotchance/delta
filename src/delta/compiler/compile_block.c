@@ -150,6 +150,12 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 		
 		// compile the 'before', we dont need the return register because its a stand alone line
 		// that doesn't have anything to do with the loop iterations
+		/*printf("split_semi = ");
+		int i;
+		for(i = 0; i < temp; ++i) {
+			printf("'%s' ", split_semi[i]);
+		}
+		printf("\n");*/
 		delta_compile_line_part(c, split_semi[0], strlen(split_semi[0]), function_id);
 		
 		// loop label
@@ -352,14 +358,12 @@ int delta_compile_block(struct DeltaCompiler *c, char *identifier, char *block, 
 	}
 	else if(!strcmp(short_identifier, "while")) {
 		// jump back to the while expression for the next iteration
-		printf("{%d} BYTECODE_GTO ( %d )\n", function_id, label_id - 1);
-		DeltaFunction_push(c, function_id,
-						   new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
+		DELTA_WRITE_BYTECODE(BYTECODE_GTO, "", function_id,
+							 new_DeltaInstruction1(NULL, BYTECODE_GTO, label_id - 1));
 		
 		// patch the forward jump when the loops ends
-		printf("{%d} BYTECODE_PAT ( %d ) <- while\n", function_id, label_id);
-		DeltaFunction_push(c, function_id,
-						   new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
+		DELTA_WRITE_BYTECODE(BYTECODE_PAT, "", function_id,
+							 new_DeltaInstruction1(NULL, BYTECODE_PAT, label_id));
 		--label_id;
 	}
 	else if(!strcmp(short_identifier, "for")) {

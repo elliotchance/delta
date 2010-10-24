@@ -210,8 +210,11 @@ char** delta_split(char *haystack, char *needle, int* elements)
 			break;
 		
 		r[i] = (char*) malloc(pos - offset + 1);
-		strncpy(r[i], haystack + offset, pos);
-		offset += pos + strlen(needle);
+		//if(i > 0)
+		//	strncpy(r[i], haystack + offset, pos - strlen(needle));
+		//else
+			strncpy(r[i], haystack + offset, pos - offset);
+		offset = pos + strlen(needle);
 	}
 	r[*elements - 1] = (char*) malloc(strlen(haystack) - offset + 1);
 	strcpy(r[*elements - 1], haystack + offset);

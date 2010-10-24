@@ -23,7 +23,7 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length, int
 	if(!strncmp(delta_trim(line), "return", 6)) {
 		int pos = delta_strpos(line, "r") + 6;
 		int var_id1 = delta_compile_line_part(c, line + pos, length - pos, function_id);
-		printf("var_id1 = %d\n", var_id1);
+		//printf("var_id1 = %d\n", var_id1);
 		
 		DELTA_WRITE_BYTECODE(BYTECODE_SET, "", function_id,
 							 new_DeltaInstruction2(NULL, BYTECODE_SET, RETURN_REGISTER, var_id1));
@@ -61,12 +61,12 @@ int delta_compile_line_part(struct DeltaCompiler *c, char* line, int length, int
 				++c->functions[function_id].total_vars;
 			}
 			else {
-				printf("value = %s\n", temp + value_location + 1);
+				//printf("value = %s\n", temp + value_location + 1);
 				int default_value = delta_compile_line_part(c, temp + value_location + 1,
 															strlen(temp) - value_location - 1,
 															function_id);
 				char *varname = delta_trim(delta_copy_substring(temp, 0, value_location));
-				printf("default_value = %s\n", varname);
+				//printf("default_value = %s\n", varname);
 				
 				int total_vars = c->functions[function_id].total_vars;
 				c->functions[function_id].vars[total_vars].type = DELTA_TYPE_NUMBER;
