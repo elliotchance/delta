@@ -27,6 +27,7 @@ struct DeltaArrayValue
 
 struct DeltaINI
 {
+	char *module_base;
 	int module_count;
 	char **module_paths;
 };

@@ -6,6 +6,7 @@
 #include "../macros.h"
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
 
 
 int delta_is_number(char *word)
@@ -185,21 +186,46 @@ void delta_escape_string(char *in, int length)
 }
 
 
+char* delta_join(char* glue, char** items, int start, int len)
+{
+	// length of result
+	int total = 1 + ((len - start) * strlen(glue));
+	int i;
+	for(i = start; i < len; ++i)
+		total += strlen(items[i]);
+	
+	// join
+	char *r = (char*) malloc(total);
+	r[0] = 0;
+	int offset = 0;
+	for(i = start; i < len; ++i) {
+		if(i > start) {
+			strcpy(r + offset, glue);
+			offset += strlen(glue);
+		}
+		
+		strcpy(r + offset, items[i]);
+		offset += strlen(items[i]);
+	}
+	
+	return r;
+}
+
+
 char** delta_split(char *haystack, char *needle, int* elements)
 {
 	int offset = 0;
 	
 	// first count all the elements
-	*elements = 0;
+	*elements = 1;
 	while(1) {
 		int pos = delta_strpos_off(haystack, needle, offset);
 		if(pos < 0)
 			break;
 		
-		offset += pos + strlen(needle);
+		offset = pos + strlen(needle);
 		++*elements;
 	}
-	++*elements;
 	
 	char **r = (char**) calloc(*elements, sizeof(char*));
 	offset = 0;
@@ -225,6 +251,9 @@ char** delta_split(char *haystack, char *needle, int* elements)
 
 char* delta_trim(char *line)
 {
+	if(line == NULL)
+		return NULL;
+	
 	int left = 0, right = strlen(line) - 1, off = 0;
 	
 	// start
@@ -304,4 +333,74 @@ char* delta_int_to_string(int value)
 	char *buf = (char*) malloc(32);
 	sprintf(buf, "%d", value);
 	return buf;
+}
+
+
+char* delta_combine_paths(char* path1, char* path2)
+{
+	if(strcmp(path2, "") && path2[0] == '/')
+		return path2;
+	
+	// to compinsate for windows paths we swtich the backslash for
+	// forward slash
+	for(int i = 0; i < strlen(path1); ++i) {
+		if(path1[i] == '\\')
+			path1[i] = '/';
+	}
+	for(int i = 0; i < strlen(path2); ++i) {
+		if(path2[i] == '\\')
+			path2[i] = '/';
+	}
+	
+	// take off the last slash
+	if(path1[strlen(path1) - 1] == '/')
+		path1 = delta_copy_substring(path1, 0, strlen(path1) - 1);
+	if(path2[strlen(path2) - 1] == '/')
+		path2 = delta_copy_substring(path2, 0, strlen(path2) - 1);
+	
+	int p1len, p2len;
+	char **p1 = delta_split(path1, "/", &p1len);
+	char **p2 = delta_split(path2, "/", &p2len);
+	for(int i = 0; i < p2len; ++i) {
+		if(!strcmp(p2[i], ".") || !strcmp(p2[i], "")) {
+			// ignore these
+		} else if(!strcmp(p2[i], ".."))
+			p1 = delta_pop(p1, &p1len);
+		else
+			p1 = delta_push(p1, &p1len, p2[i]);
+	}
+	
+	return delta_join("/", p1, 0, p1len);
+}
+
+
+char** delta_pop(char **array, int *size)
+{
+	//free(array[*size - 1]);
+	--*size;
+	char **r = (char**) calloc(sizeof(char*), *size);
+	int i;
+	for(i = 0; i < *size; ++i)
+		r[i] = array[i];
+	return r;
+}
+
+
+char** delta_push(char **array, int *size, char *element)
+{
+	char **r = (char**) calloc(sizeof(char*), *size + 1);
+	int i;
+	for(i = 0; i < *size; ++i)
+		r[i] = array[i];
+	r[i] = element;
+	++*size;
+	return r;
+}
+
+
+char* delta_cwd()
+{
+	char *cwd = (char*) malloc(256);
+	getcwd(cwd, 255);
+	return cwd;
 }

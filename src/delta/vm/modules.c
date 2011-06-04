@@ -6,8 +6,10 @@
 #include "delta/vm/vm.h"
 #include "delta/structs/DeltaFunction.h"
 #include "delta/platform.h"
+#include "delta/compiler/strings.h"
 #include <assert.h>
 #include <dlfcn.h>
+#include <sys/stat.h>
 
 
 struct DeltaINI *delta_ini = NULL;
@@ -39,9 +41,10 @@ int delta_load_module_defines(struct DeltaCompiler *c, char *path)
 	int count;
 	
 	// load dynamically loaded library
-	void *module = dlopen(path, RTLD_LAZY);
+	char *apath = path; //delta_combine_paths(delta_ini->module_base, path);
+	void *module = dlopen(apath, RTLD_NOW);
 	if(!module) {
-		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
+		fprintf(stderr, "Could not open %s: %s\n", apath, dlerror());
 		return DELTA_FAILURE;
 	}
 	
@@ -67,9 +70,10 @@ int delta_load_module(struct DeltaVM *vm, char *path)
 	int function_count, count, i, j;
 	
 	// load dynamically loaded library
-	void *module = dlopen(path, RTLD_LAZY);
+	char *apath = path; //delta_combine_paths(delta_ini->module_base, path);
+	void *module = dlopen(apath, RTLD_NOW);
 	if(!module) {
-		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
+		fprintf(stderr, "Could not open %s: %s\n", apath, dlerror());
 		return DELTA_FAILURE;
 	}
 	
@@ -130,9 +134,10 @@ int delta_load_compiler_module(struct DeltaCompiler *c, char *path)
 	int function_count, count, i, j;
 	
 	// load dynamically loaded library
-	void *module = dlopen(path, RTLD_LAZY);
+	char *apath = path; //delta_combine_paths(delta_ini->module_base, path);
+	void *module = dlopen(apath, RTLD_NOW);
 	if(!module) {
-		fprintf(stderr, "Could not open %s: %s\n", path, dlerror());
+		fprintf(stderr, "Could not open %s: %s\n", apath, dlerror());
 		return DELTA_FAILURE;
 	}
 	
@@ -180,32 +185,82 @@ int delta_load_compiler_module(struct DeltaCompiler *c, char *path)
 }
 
 
+int delta_file_exists(char *path)
+{
+	struct stat stFileInfo;
+	int intStat = stat(path, &stFileInfo);
+	return (intStat == 0);
+}
+
+
+struct DeltaINI* new_DeltaINI()
+{
+	struct DeltaINI *r = (struct DeltaINI*) malloc(sizeof(struct DeltaINI));
+	
+	r->module_base = NULL;
+	r->module_count = 0;
+	r->module_paths = NULL;
+	
+	return r;
+}
+
+
 void delta_load_ini()
 {
-	delta_ini = (struct DeltaINI*) malloc(sizeof(struct DeltaINI));
+	// init
+	delta_ini = new_DeltaINI();
 	
-	delta_ini->module_count = 6;
-	delta_ini->module_paths = (char**) calloc(delta_ini->module_count, sizeof(char*));
+	// find INI
+	FILE *ini = NULL;
+	char *ini_path = delta_combine_paths(delta_cwd(), "delta.ini");
+	if(delta_file_exists(ini_path)) {
+		ini = fopen(ini_path, "r");
+	}
+	else {
+		printf("Could not find %s\n", ini_path);
+		exit(0);
+	}
+
+	// read lines
+	char line[1024];
+	while(fgets(line, sizeof(line), ini) != NULL) {
+		char *l = delta_trim(line);
+		
+		// ignore comments
+		if(l[0] == '#')
+			continue;
+		
+		// map to INI struct
+		int parts_len;
+		char **parts = delta_split(l, "=", &parts_len);
+		char *k = delta_trim(parts[0]), *v = delta_trim(parts[1]);
+		
+		if(!strcmp(k, "module_base"))
+			delta_ini->module_base = delta_combine_paths(delta_cwd(), v);
+		if(!strcmp(k, "module_add"))
+			delta_ini->module_paths = delta_push(delta_ini->module_paths,
+												 &delta_ini->module_count, v);
+		
+	}
+	//printf("delta_ini->module_base = '%s'\n", delta_ini->module_base);
+	
+	fclose(ini);
+	
+	// Mac OS X has stupid policies for dlopen() and ignores absolute paths, we have to manually set
+	// the DYLD_LIBRARY_PATH
+#ifdef DELTA_PLATFORM_MAC
+	setenv("DYLD_LIBRARY_PATH", delta_ini->module_base, 1);
+	printf("DYLD_LIBRARY_PATH = '%s'\n", getenv("DYLD_LIBRARY_PATH"));
+#endif
+	
+	delta_ini->module_paths[0] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_core.dylib";
+	delta_ini->module_paths[1] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_mapm.dylib";
+	delta_ini->module_paths[2] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_mysql.dylib";
+	delta_ini->module_paths[3] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_sqlite3.dylib";
+	delta_ini->module_paths[4] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_thread.dylib";
+	delta_ini->module_paths[5] = "/Users/elliot/Xcode/delta/build/Debug/libdelta_zlib.dylib";
 	
 	// TODO: issue #14: delta.ini loading
-	
-#ifdef DELTA_PLATFORM_MAC
-	delta_ini->module_paths[0] = "libdelta_core.dylib";
-	delta_ini->module_paths[1] = "libdelta_mapm.dylib";
-	delta_ini->module_paths[2] = "libdelta_mysql.dylib";
-	delta_ini->module_paths[3] = "libdelta_sqlite3.dylib";
-	delta_ini->module_paths[4] = "libdelta_thread.dylib";
-	delta_ini->module_paths[5] = "libdelta_zlib.dylib";
-#endif	
-	
-#ifdef DELTA_PLATFORM_LINUX
-	delta_ini->module_paths[0] = "../lib/libdelta_core.so.1";
-	delta_ini->module_paths[1] = "../lib/libdelta_mapm.so.1";
-	delta_ini->module_paths[2] = "../lib/libdelta_mysql.so.1";
-	delta_ini->module_paths[3] = "../lib/libdelta_sqlite3.so.1";
-	delta_ini->module_paths[4] = "../lib/libdelta_thread.so.1";
-	delta_ini->module_paths[5] = "../lib/libdelta_zlib.so.1";
-#endif
 }
 
 

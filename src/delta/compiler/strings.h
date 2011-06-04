@@ -22,6 +22,11 @@ int    delta_is_magic_string(char *str);
 char*  delta_translate_magic_string(char *str);
 char*  delta_int_to_string(int value);
 int    delta_strpos_off(char *haystack, char *needle, int offset);
+char*  delta_join(char* glue, char** items, int start, int len);
+char*  delta_combine_paths(char* path1, char* path2);
+char** delta_pop(char **array, int *size);
+char** delta_push(char **array, int *size, char *element);
+char*  delta_cwd();
 
 
 #endif

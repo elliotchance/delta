@@ -12,6 +12,7 @@
 #include "delta/load/save.h"
 #include "delta/load/load.h"
 #include "delta/vm/vm.h"
+#include "delta/compiler/strings.h"
 #include "delta/compiler/compiler.h"
 #include "delta/jit/jit_compiler.h"
 #include "delta/jit/virtual_compiler.h"
@@ -29,13 +30,13 @@
 //#define VIRTUAL_COMPILE 1
 
 
-void main_compile()
+void main_compile(char *in, char *out)
 {
 	struct DeltaCompiler *c = delta_compiler_init();
 	delta_load_defines(c);
 	delta_load_compiler_modules(c);
-	delta_compile_file(c, "test.delta");
-	delta_save_file(c, "test.dc", "test.delta");
+	delta_compile_file(c, in);
+	delta_save_file(c, out, in);
 	
 	// stop on errors
 	if(c->errors)
@@ -45,9 +46,9 @@ void main_compile()
 }
 
 
-void main_run()
+void main_run(char *out)
 {
-	struct DeltaVM *vm = delta_load_file("test.dc");
+	struct DeltaVM *vm = delta_load_file(out);
 	delta_set_vm(vm);
 	delta_load_modules(vm);
 #ifndef VIRTUAL_COMPILE
@@ -69,16 +70,35 @@ void main_run()
 	printf("==> END\n\n");
 	printf("time: %.3f\n", (double) (clock() - start) / (double) CLOCKS_PER_SEC);
 	
-	delta_vm_print_ram(vm);
+	//delta_vm_print_ram(vm);
 	free_DeltaVM(vm);
 }
 
 
-int main()
+int main(int argc, char **argv)
 {
-	delta_load_ini();
-	// FIXME: turn delta_needs_compile() on when ready
-	//if(delta_needs_compile("test.delta", "test.dc"))
-		main_compile();
-	main_run();
+	
+	// environment
+	char *cwd = delta_cwd();
+	printf("cwd = '%s'\n", cwd);
+	
+	// no args
+	if(argc == 1) {
+		printf("No files given.\n");
+		exit(0);
+	}
+	
+	int i;
+	for(i = 1; i < argc; ++i) {
+		char *in = argv[i];
+		char *out = (char*) malloc(strlen(in));
+		sprintf(out, "%s.dc", delta_copy_substring(in, 0, strlen(in) - 6));
+		//printf("'%s' -> '%s'\n", delta_combine_paths(cwd, in), delta_combine_paths(cwd, out));
+		
+		delta_load_ini();
+		// FIXME: turn delta_needs_compile() on when ready
+		//if(delta_needs_compile(in, out))
+			main_compile(in, out);
+		main_run(out);
+	}
 }
